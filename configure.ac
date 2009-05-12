@@ -1,7 +1,7 @@
 AC_INIT
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(config)
-AC_CONFIG_SRCDIR([lib/zcloud/store.h])
+AC_CONFIG_SRCDIR([lib/store.h])
 AC_CONFIG_HEADER([config/config.h])
 AM_INIT_AUTOMAKE(libzcloud, "1.0alpha")
 AC_PREREQ(2.59)
