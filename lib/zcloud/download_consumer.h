@@ -56,12 +56,12 @@ void zcloud_download_consumer_get_type(void);
 #define ZCLOUD_DOWNLOAD_CONSUMER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_DOWNLOAD_CONSUMER, ZCloudDownloadConsumerClass))
 
 typedef struct _ZCloud {
-    GTypeInstance parent;
+    GObjectInstance parent;
 
 } ZCloudDownloadConsumer;
 
 typedef struct _ZCloudClass {
-    GTypeClass parent_class;
+    GObjectClass parent_class;
 
     gsize (*write)(ZCloudUploadProducer *self, gpointer buffer, gsize bytes, GError **error);
     void (*reset)(ZCloudUploadProducer *self, GError **error);

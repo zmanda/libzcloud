@@ -56,12 +56,12 @@ void zcloud__get_type(void);
 #define ZCLOUD__GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_, ZCloudClass))
 
 typedef struct _ZCloud {
-    GTypeInstance parent;
+    GObjectInstance parent;
 
 } ZCloud;
 
 typedef struct _ZCloudClass {
-    GTypeClass parent_class;
+    GObjectClass parent_class;
 
 } ZCloudClass;
 

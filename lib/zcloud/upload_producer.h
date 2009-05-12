@@ -56,12 +56,12 @@ void zcloud_upload_producer_get_type(void);
 #define ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_UPLOAD_PRODUCER, ZCloudUploadProducerClass))
 
 typedef struct _ZCloudUploadProducer {
-    GTypeInstance parent;
+    GObjectInstance parent;
 
 } ZCloudUploadProducer;
 
 typedef struct _ZCloudUploadProducerClass {
-    GTypeClass parent_class;
+    GObjectClass parent_class;
 
     gsize (*read)(ZCloudUploadProducer *self, gpointer buffer, gsize bytes, GError **error);
     gsize (*get_size)(ZCloudUploadProducer *self, GError **error);

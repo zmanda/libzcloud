@@ -56,13 +56,13 @@ void zcloud_address_template_get_type(void);
 #define ZCLOUD_ADDRESS_TEMPLATE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_ADDRESS_TEMPLATE, ZCloudAddressTemplateClass))
 
 typedef struct _ZCloudAddressTemplate {
-    GTypeInstance parent;
+    GObjectInstance parent;
 
     GPtrArray *template_parts;
 } ZCloudAddressTemplate;
 
 typedef struct _ZCloudAddressTemplateClass {
-    GTypeClass parent_class;
+    GObjectClass parent_class;
 
     ZCloudAddress* (*interpolate)(ZCloudAddressTemplate *self, ...);
     ZCloudAddress* (*interpolate_sa)(ZCloudAddressTemplate *self, GPtrArray *substitution_parts);

@@ -62,13 +62,13 @@ void zcloud_store_get_type(void);
 #define ZCLOUD_STORE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_STORE, ZCloudStoreClass))
 
 typedef struct _ZCloudStore {
-    GTypeInstance parent;
+    GObjectInstance parent;
 
     GHashTable *simple_properties;
 } ZCloudStore;
 
 typedef struct _ZCloudStoreClass {
-    GTypeClass parent_class;
+    GObjectClass parent_class;
 
     gboolean (*create)(
         ZCloudStore *self,

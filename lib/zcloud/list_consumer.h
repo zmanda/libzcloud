@@ -56,12 +56,12 @@ void zcloud_list_consumer_get_type(void);
 #define ZCLOUD_LIST_CONSUMER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_LIST_CONSUMER, ZCloudListConsumerClass))
 
 typedef struct _ZCloudListConsumer {
-    GTypeInstance parent;
+    GObjectInstance parent;
 
 } ZCloudListConsumer;
 
 typedef struct _ZCloudListConsumerClass {
-    GTypeClass parent_class;
+    GObjectClass parent_class;
 
     void (*got_result)(ZCloudListConsumer *self, ZCloudAddress *address);
 } ZCloudListConsumerClass;

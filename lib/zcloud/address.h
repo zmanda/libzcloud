@@ -56,12 +56,12 @@ void zcloud_address_get_type(void);
 #define ZCLOUD_ADDRESS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_ADDRESS, ZCloudAddressClass))
 
 typedef struct _ZCloudAddress {
-    GTypeInstance parent;
+    GObjectInstance parent;
 
 } ZCloudAddress;
 
 typedef struct _ZCloudAddressClass {
-    GTypeClass parent_class;
+    GObjectClass parent_class;
 
     gchar* (*to_string)(ZCloudAddress *self);
 } ZCloudAddressClass;
