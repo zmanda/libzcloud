@@ -44,7 +44,7 @@
 AC_INIT
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(config)
-AC_CONFIG_SRCDIR([lib/store.h])
+AC_CONFIG_SRCDIR([lib/store.c])
 AC_CONFIG_HEADER([config/config.h])
 AM_INIT_AUTOMAKE(libzcloud, "1.0alpha")
 AC_PREREQ(2.59)
@@ -71,12 +71,12 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_CHECK_FUNCS([bzero regcomp])
 
+# load plugins
+m4_include([plugins/configure.m4])
+
 AC_CONFIG_FILES([
     Makefile
     lib/Makefile
-])
-
-AC_CONFIG_SUBDIRS([
 ])
 
 AC_OUTPUT

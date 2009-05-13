@@ -41,5 +41,6 @@
 # 
 #  ***** END LICENSE BLOCK ***** */
 
-ACLOCAL_AMFLAGS = -Iconfig
-SUBDIRS = lib $(PLUGIN_SUBDIRS)
+ZCLOUD_DEFINE_PLUGIN([disk], [yes], [no-network plugin for testing], [
+    AC_PATH_PROG(CURL, curl)
+])

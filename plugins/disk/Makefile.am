@@ -41,5 +41,4 @@
 # 
 #  ***** END LICENSE BLOCK ***** */
 
-ACLOCAL_AMFLAGS = -Iconfig
-SUBDIRS = lib $(PLUGIN_SUBDIRS)
+bin_PROGRAMS = foo
