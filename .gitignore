@@ -5,3 +5,4 @@ config/config.h.in
 Makefile
 Makefile.in
 config/config.h.in~
+plugins/configure.m4
