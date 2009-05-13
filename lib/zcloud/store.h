@@ -46,12 +46,12 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include "zcloud/address.h"
-#include "zcloud/address_template.h"
-#include "zcloud/download_consumer.h"
-#include "zcloud/list_consumer.h"
-#include "zcloud/progress_listener.h"
-#include "zcloud/upload_producer.h"
+#include "address.h"
+#include "address_template.h"
+#include "download_consumer.h"
+#include "list_consumer.h"
+#include "progress_listener.h"
+#include "upload_producer.h"
 
 G_BEGIN_DECLS
 

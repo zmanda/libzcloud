@@ -46,7 +46,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include "zcloud/address.h"
+#include "address.h"
 
 G_BEGIN_DECLS
 
