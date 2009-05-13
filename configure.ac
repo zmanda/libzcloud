@@ -80,6 +80,7 @@ m4_include([plugins/configure.m4])
 AC_CONFIG_FILES([
     Makefile
     lib/Makefile
+    bin/Makefile
 ])
 
 AC_OUTPUT

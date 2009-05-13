@@ -41,5 +41,10 @@
 # 
 #  ***** END LICENSE BLOCK ***** */
 
-ACLOCAL_AMFLAGS = -Iconfig -I config/macro-archive -I config/libzcloud
-SUBDIRS = lib $(PLUGIN_SUBDIRS) bin
+INCLUDES = -I$(top_srcdir)/lib
+AM_CPPFLAGS = $(GLIB_CFLAGS)
+LDADD = $(GLIB_LIBS)
+
+bin_PROGRAMS = zcloud
+zcloud_SOURCES = zcloud.c
+zcloud_LDADD = $(top_builddir)/lib/libzcloud.la
