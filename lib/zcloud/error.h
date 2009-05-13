@@ -41,47 +41,27 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "config.h"
-#include <gmodule.h>
-#include "zcloud/zcloud.h"
+/*
+ * Error handling
+ */
 
-ZCloudStore *
-zcloud_new(void)
-{
-    return ZCLOUD_STORE(g_object_new(ZCLOUD_TYPE_STORE, NULL));
-}
+#ifndef ZCLOUD_ERROR_H
+#define ZCLOUD_ERROR_H
 
-gboolean
-zcloud_init(GError **error)
-{
-    if (!g_module_supported()) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
-    }
+#include <glib.h>
 
-    return TRUE;
-}
+G_BEGIN_DECLS
 
-gboolean
-zcloud_load_plugin(
-    const gchar *plugin_name,
-    GError **error)
-{
-    gchar *path;
-    GModule *module;
+/* a quark which can be used to identify GError objects from libzcloud */
+#define ZCLOUD_ERROR zcloud_error_quark()
+GQuark zcloud_error_quark(void);
 
-    path = g_module_build_path(ZCPLUGINDIR, plugin_name);
-    module = g_module_open(path, 0);
-    if (!module) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
-    }
+/* error codes for GErrors in the ZCLOUD domain */
+typedef enum ZCloudError_e {
+    ZCERR_NONE = 0,
+    ZCERR_UNKNOWN = 1,
+} ZCloudError;
 
-    return TRUE;
-}
+G_END_DECLS
+
+#endif

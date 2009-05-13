@@ -43,3 +43,10 @@
 
 ACLOCAL_AMFLAGS = -Iconfig -I config/macro-archive -I config/libzcloud
 SUBDIRS = lib $(PLUGIN_SUBDIRS)
+
+INCLUDES = -I$(top_srcdir)/lib
+AM_CPPFLAGS = $(GLIB_CFLAGS)
+
+bin_PROGRAMS = test
+test_SOURCES = test.c
+test_LDADD = lib/libzcloud.la

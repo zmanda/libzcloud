@@ -44,6 +44,7 @@
 #ifndef ZCLOUD_H
 #define ZCLOUD_H
 
+/* classes */
 #include "store.h"
 #include "address.h"
 #include "address_template.h"
@@ -52,9 +53,14 @@
 #include "progress_listener.h"
 #include "upload_producer.h"
 
+/* miscellaneous */
+#include "error.h"
+
 G_BEGIN_DECLS
 
 ZCloudStore *zcloud_new(void);
+gboolean zcloud_init(GError **error);
+gboolean zcloud_load_plugin(const gchar *plugin_name, GError **error);
 
 G_END_DECLS
 

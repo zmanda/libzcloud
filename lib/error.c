@@ -42,46 +42,15 @@
  * ***** END LICENSE BLOCK ***** */
 
 #include "config.h"
-#include <gmodule.h>
-#include "zcloud/zcloud.h"
+#include "zcloud/error.h"
 
-ZCloudStore *
-zcloud_new(void)
+GQuark
+zcloud_error_quark(void)
 {
-    return ZCLOUD_STORE(g_object_new(ZCLOUD_TYPE_STORE, NULL));
-}
+    static GQuark quark = 0;
 
-gboolean
-zcloud_init(GError **error)
-{
-    if (!g_module_supported()) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
-    }
+    if (!quark)
+        quark = g_quark_from_static_string ("zcloud-error-quark");
 
-    return TRUE;
-}
-
-gboolean
-zcloud_load_plugin(
-    const gchar *plugin_name,
-    GError **error)
-{
-    gchar *path;
-    GModule *module;
-
-    path = g_module_build_path(ZCPLUGINDIR, plugin_name);
-    module = g_module_open(path, 0);
-    if (!module) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
-    }
-
-    return TRUE;
+    return quark;
 }

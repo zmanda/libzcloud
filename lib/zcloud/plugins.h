@@ -41,47 +41,20 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "config.h"
-#include <gmodule.h>
-#include "zcloud/zcloud.h"
+/* This file need only be included by plugin modules' source files, not by
+ * libzcloud users.  It defines the data formats and functions used to
+ * set up communication between libzcloud and its plugins. */
 
-ZCloudStore *
-zcloud_new(void)
-{
-    return ZCLOUD_STORE(g_object_new(ZCLOUD_TYPE_STORE, NULL));
-}
+#ifndef ZCLOUD_PLUGINS_H
+#define ZCLOUD_PLUGINS_H
 
-gboolean
-zcloud_init(GError **error)
-{
-    if (!g_module_supported()) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
-    }
+#include <glib.h>
+#include <glib-object.h>
 
-    return TRUE;
-}
+G_BEGIN_DECLS
 
-gboolean
-zcloud_load_plugin(
-    const gchar *plugin_name,
-    GError **error)
-{
-    gchar *path;
-    GModule *module;
+void zcloud_register_plugin(const gchar *plugin_name);
 
-    path = g_module_build_path(ZCPLUGINDIR, plugin_name);
-    module = g_module_open(path, 0);
-    if (!module) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
-    }
+G_END_DECLS
 
-    return TRUE;
-}
+#endif

@@ -41,4 +41,12 @@
 # 
 #  ***** END LICENSE BLOCK ***** */
 
-bin_PROGRAMS = foo
+INCLUDES = -I $(top_srcdir)/lib
+AM_CPPFLAGS = $(GLIB_CFLAGS)
+
+zcplugin_LTLIBRARIES = libdisk.la
+libdisk_la_LDFLAGS = -avoid-version
+libdisk_la_LIBADD = \
+    $(top_builddir)/lib/libzcloud.la
+libdisk_la_SOURCES = \
+    init.c

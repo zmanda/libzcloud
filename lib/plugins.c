@@ -42,46 +42,12 @@
  * ***** END LICENSE BLOCK ***** */
 
 #include "config.h"
-#include <gmodule.h>
-#include "zcloud/zcloud.h"
+#include "zcloud/plugins.h"
+#include <glib/gprintf.h>
 
-ZCloudStore *
-zcloud_new(void)
+void
+zcloud_register_plugin(
+    const gchar *plugin_name)
 {
-    return ZCLOUD_STORE(g_object_new(ZCLOUD_TYPE_STORE, NULL));
-}
-
-gboolean
-zcloud_init(GError **error)
-{
-    if (!g_module_supported()) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
-gboolean
-zcloud_load_plugin(
-    const gchar *plugin_name,
-    GError **error)
-{
-    gchar *path;
-    GModule *module;
-
-    path = g_module_build_path(ZCPLUGINDIR, plugin_name);
-    module = g_module_open(path, 0);
-    if (!module) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
-    }
-
-    return TRUE;
+    g_printf("got registration for %s\n", plugin_name);
 }

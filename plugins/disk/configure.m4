@@ -42,5 +42,4 @@
 #  ***** END LICENSE BLOCK ***** */
 
 ZCLOUD_DEFINE_PLUGIN([disk], [yes], [no-network plugin for testing], [
-    AC_PATH_PROG(CURL, curl)
 ])

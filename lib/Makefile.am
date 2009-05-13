@@ -61,7 +61,9 @@ libzcloud_la_SOURCES = \
     address.c \
     address_template.c \
     download_consumer.c \
+    error.c \
     list_consumer.c \
+    plugins.c \
     progress_listener.c \
     store.c \
     upload_producer.c \
