@@ -49,7 +49,8 @@ zcinclude_HEADERS = \
 	zcloud/list_consumer.h \
 	zcloud/progress_listener.h \
 	zcloud/store.h \
-	zcloud/upload_producer.h
+	zcloud/upload_producer.h \
+    zcloud/zcloud.h
 
 INCLUDES = -I. -I$(top_srcdir)/config
 AM_CPPFLAGS = $(GLIB_CFLAGS)
@@ -63,4 +64,5 @@ libzcloud_la_SOURCES = \
     list_consumer.c \
     progress_listener.c \
     store.c \
-    upload_producer.c
+    upload_producer.c \
+    zcloud.c
