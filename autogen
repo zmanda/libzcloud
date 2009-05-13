@@ -46,7 +46,7 @@
 cd `dirname $0`
 
 # if you change this, please also change it in the root Makefile.am
-includes="-I config"
+includes="-I config -I config/macro-archive -I config/libzcloud"
 
 # clean up
 rm -f aclocal.m4
