@@ -40,46 +40,35 @@
 #  <http://www.gnu.org/licenses/>.
 # 
 #  ***** END LICENSE BLOCK ***** */
+#
+# SYNOPSIS
+#
+#   ZCLOUD_WITH_ZCPLUGINDIR
+#
+# OVERVIEW
+#
+#   Allow user to specify the zcplugindir, defaulting to ${libdir}/libzcloud-plugins.
+#   Define ZCPLUGINDIR and substitute $zcplugindir with the result.
+#
+AC_DEFUN([ZCLOUD_WITH_ZCPLUGINDIR],
+[
+    AC_ARG_WITH(zcplugindir,
+	AS_HELP_STRING([--with-zcplugindir=DIR],
+	    [plugin directory @<:@libdir/libzcloud-plugins@:>@]),
+	[
+	    case "$withval" in
+	    "" | y | ye | yes | n | no)
+		AC_MSG_ERROR([Invalid --with-zcplugindir value])
+	      ;;
+	    *) zcplugindir="$withval"
+	      ;;
+	    esac
+	], [
+	    : ${zcplugindir='${libdir}/libzcloud-plugins'} # (variable will be evaluated below)
+	]
+    )
 
-AC_INIT
-AC_CONFIG_AUX_DIR(config)
-AC_CONFIG_MACRO_DIR(config)
-AC_CONFIG_SRCDIR([lib/store.c])
-AC_CONFIG_HEADER([config/config.h])
-AM_INIT_AUTOMAKE(libzcloud, "1.0alpha")
-AC_PREREQ(2.59)
-
-# Libtool
-AM_PROG_LIBTOOL
-AC_SUBST(LIBTOOL_DEPS)
-
-# Checks for programs.
-AC_PROG_CC
-
-# Checks for libraries.
-ZCLOUD_CHECK_GLIB
-
-# Checks for header files.
-AC_HEADER_DIRENT
-AC_HEADER_STDC
-AC_CHECK_HEADERS([stdlib.h string.h strings.h unistd.h])
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_TYPE_SIZE_T
-
-# Checks for library functions.
-AC_CHECK_FUNCS([bzero regcomp])
-
-# Set up directories
-ZCLOUD_WITH_ZCPLUGINDIR
-
-# load plugins
-m4_include([plugins/configure.m4])
-
-AC_CONFIG_FILES([
-    Makefile
-    lib/Makefile
+    AC_SUBST([zcplugindir])
+    AC_DEFINE_DIR([ZCPLUGINDIR], [zcplugindir],
+      [Default libzcloud plugin directory])
 ])
-
-AC_OUTPUT
