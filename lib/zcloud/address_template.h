@@ -40,14 +40,17 @@
  * <http://www.gnu.org/licenses/>.
  *
  * ***** END LICENSE BLOCK ***** */
-#ifndef ZCLOUD_ADDRESS_TEMPLATE
-#define ZCLOUD_ADDRESS_TEMPLATE
+
+#ifndef ZCLOUD_ADDRESS_TEMPLATE_H
+#define ZCLOUD_ADDRESS_TEMPLATE_H
+
 #include <glib.h>
 #include <glib-object.h>
+#include "zcloud/address.h"
 
 G_BEGIN_DECLS
 
-void zcloud_address_template_get_type(void);
+GType zcloud_address_template_get_type(void);
 #define ZCLOUD_TYPE_ADDRESS_TEMPLATE (zcloud__get_type())
 #define ZCLOUD_ADDRESS_TEMPLATE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_ADDRESS_TEMPLATE, ZCloudAddressTemplate))
 #define ZCLOUD_ADDRESS_TEMPLATE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_ADDRESS_TEMPLATE, ZCloudAddressTemplateClass))
@@ -55,21 +58,22 @@ void zcloud_address_template_get_type(void);
 #define ZCLOUD_IS_ADDRESS_TEMPLATE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_ADDRESS_TEMPLATE))
 #define ZCLOUD_ADDRESS_TEMPLATE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_ADDRESS_TEMPLATE, ZCloudAddressTemplateClass))
 
-typedef struct _ZCloudAddressTemplate {
-    GObjectInstance parent;
+typedef struct ZCloudAddressTemplate_s {
+    GObject parent;
 
     GPtrArray *template_parts;
 } ZCloudAddressTemplate;
 
-typedef struct _ZCloudAddressTemplateClass {
+typedef struct ZCloudAddressTemplateClass_s {
     GObjectClass parent_class;
 
-    ZCloudAddress* (*interpolate)(ZCloudAddressTemplate *self, ...);
+    /* TODO: accept a va_list here */
+    /* ZCloudAddress* (*interpolate)(ZCloudAddressTemplate *self, ...); */
     ZCloudAddress* (*interpolate_sa)(ZCloudAddressTemplate *self, GPtrArray *substitution_parts);
-    gchar* (*to_string)(ZCloudAddress *self);
+    gchar* (*to_string)(ZCloudAddressTemplate *self);
 } ZCloudAddressTemplateClass;
 
-ZCloudAddress* zcloud_address_template_interpolate(ZCloudAddressTemplate *self, ...);
+/* ZCloudAddress* zcloud_address_template_interpolate(ZCloudAddressTemplate *self, ...); */
 
 ZCloudAddress* zcloud_address_template_interpolate_sa(ZCloudAddressTemplate *self, GPtrArray *substitution_parts);
 

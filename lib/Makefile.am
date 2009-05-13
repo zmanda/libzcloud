@@ -51,9 +51,16 @@ zcinclude_HEADERS = \
 	zcloud/store.h \
 	zcloud/upload_producer.h
 
-INCLUDES = . $(top_srcdir)/config
+INCLUDES = -I. -I$(top_srcdir)/config
 AM_CPPFLAGS = $(GLIB_CFLAGS)
 
 lib_LTLIBRARIES = libzcloud.la
 libzcloud_la_LIBADD = $(GLIB_LIBS)
-libzcloud_la_SOURCES = libzcloud.c
+libzcloud_la_SOURCES = \
+    address.c \
+    address_template.c \
+    download_consumer.c \
+    list_consumer.c \
+    progress_listener.c \
+    store.c \
+    upload_producer.c

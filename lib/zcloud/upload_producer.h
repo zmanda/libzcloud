@@ -40,14 +40,16 @@
  * <http://www.gnu.org/licenses/>.
  *
  * ***** END LICENSE BLOCK ***** */
-#ifndef ZCLOUD_UPLOAD_PRODUCER
-#define ZCLOUD_UPLOAD_PRODUCER
+
+#ifndef ZCLOUD_UPLOAD_PRODUCER_H
+#define ZCLOUD_UPLOAD_PRODUCER_H
+
 #include <glib.h>
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-void zcloud_upload_producer_get_type(void);
+GType zcloud_upload_producer_get_type(void);
 #define ZCLOUD_TYPE_UPLOAD_PRODUCER (zcloud_upload_producer_get_type())
 #define ZCLOUD_UPLOAD_PRODUCER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_UPLOAD_PRODUCER, ZCloudUploadProducer))
 #define ZCLOUD_UPLOAD_PRODUCER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_UPLOAD_PRODUCER, ZCloudUploadProducerClass))
@@ -55,12 +57,12 @@ void zcloud_upload_producer_get_type(void);
 #define ZCLOUD_IS_UPLOAD_PRODUCER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_UPLOAD_PRODUCER))
 #define ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_UPLOAD_PRODUCER, ZCloudUploadProducerClass))
 
-typedef struct _ZCloudUploadProducer {
-    GObjectInstance parent;
+typedef struct ZCloudUploadProducer_s {
+    GObject parent;
 
 } ZCloudUploadProducer;
 
-typedef struct _ZCloudUploadProducerClass {
+typedef struct ZCloudUploadProducerClass_s {
     GObjectClass parent_class;
 
     gsize (*read)(ZCloudUploadProducer *self, gpointer buffer, gsize bytes, GError **error);

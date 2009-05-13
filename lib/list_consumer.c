@@ -41,38 +41,52 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifndef ZCLOUD_DOWNLOAD_CONSUMER_H
-#define ZCLOUD_DOWNLOAD_CONSUMER_H
+#include "zcloud/list_consumer.h"
 
-#include <glib.h>
-#include <glib-object.h>
+GType
+zcloud_list_consumer_get_type(void)
+{
+    static GType type = 0;
 
-G_BEGIN_DECLS
+    if G_UNLIKELY(type == 0) {
+        static const GTypeInfo info = {
+            sizeof (ZCloudListConsumerClass),
+            (GBaseInitFunc) NULL,
+            (GBaseFinalizeFunc) NULL,
+            (GClassInitFunc) NULL,
+            (GClassFinalizeFunc) NULL,
+            NULL /* class_data */,
+            sizeof (ZCloudListConsumer),
+            0 /* n_preallocs */,
+            (GInstanceInitFunc) NULL,
+            NULL
+        };
 
-GType zcloud_download_consumer_get_type(void);
-#define ZCLOUD_TYPE_DOWNLOAD_CONSUMER (zcloud_download_consumer_get_type())
-#define ZCLOUD_DOWNLOAD_CONSUMER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_DOWNLOAD_CONSUMER, ZCloudDownloadConsumer))
-#define ZCLOUD_DOWNLOAD_CONSUMER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_DOWNLOAD_CONSUMER, ZCloudDownloadConsumerClass))
-#define ZCLOUD_IS_DOWNLOAD_CONSUMER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZCLOUD_TYPE_DOWNLOAD_CONSUMER))
-#define ZCLOUD_IS_DOWNLOAD_CONSUMER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_DOWNLOAD_CONSUMER))
-#define ZCLOUD_DOWNLOAD_CONSUMER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_DOWNLOAD_CONSUMER, ZCloudDownloadConsumerClass))
+        type = g_type_register_static (G_TYPE_OBJECT, "ZCloudListConsumer", &info,
+                                       (GTypeFlags)G_TYPE_FLAG_ABSTRACT);
+    }
 
-typedef struct ZCloudDownloadConsumer_s {
-    GObject parent;
+    return type;
+}
 
-} ZCloudDownloadConsumer;
+/*
+ * method stubs
+ */
 
-typedef struct ZCloudDownloadConsumerClass_s {
-    GObjectClass parent_class;
+#define mkstub(methname, ...) \
+    ZCloudListConsumerClass *c = ZCLOUD_LIST_CONSUMER_GET_CLASS(self); \
+    g_assert(c->methname != NULL); \
+    return (c->methname)(self, __VA_ARGS__);
+#define mkstub0(methname) \
+    ZCloudListConsumerClass *c = ZCLOUD_LIST_CONSUMER_GET_CLASS(self); \
+    g_assert(c->methname != NULL); \
+    return (c->methname)(self);
 
-    gsize (*write)(ZCloudDownloadConsumer *self, gpointer buffer, gsize bytes, GError **error);
-    void (*reset)(ZCloudDownloadConsumer *self, GError **error);
-} ZCloudDownloadConsumerClass;
-
-gsize zcloud_download_consumer_write(ZCloudDownloadConsumer *self, gpointer buffer, gsize bytes, GError **error);
-
-void zcloud_download_consumer_reset(ZCloudDownloadConsumer *self, GError **error);
-
-G_END_DECLS
-
-#endif
+void
+zcloud_list_consumer_got_result(
+    ZCloudListConsumer *self,
+    ZCloudAddress *address)
+{
+    mkstub(got_result,
+        address);
+}

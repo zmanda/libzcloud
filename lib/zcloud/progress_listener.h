@@ -40,30 +40,32 @@
  * <http://www.gnu.org/licenses/>.
  *
  * ***** END LICENSE BLOCK ***** */
-#ifndef ZCLOUD_PROGRESS_LISTENER
-#define ZCLOUD_PROGRESS_LISTENER
+
+#ifndef ZCLOUD_PROGRESS_LISTENER_H
+#define ZCLOUD_PROGRESS_LISTENER_H
+
 #include <glib.h>
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-void zcloud__get_type(void);
-#define ZCLOUD_TYPE_ (zcloud__get_type())
-#define ZCLOUD_(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_STORE, ZCloud))
-#define ZCLOUD_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_, ZCloudClass))
-#define ZCLOUD_IS_(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZCLOUD_TYPE_))
-#define ZCLOUD_IS__CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_))
-#define ZCLOUD__GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_, ZCloudClass))
+GType zcloud_progress_listener_get_type(void);
+#define ZCLOUD_TYPE_PROGRESS_LISTENER (zcloud_progress_listener_get_type())
+#define ZCLOUD_PROGRESS_LISTENER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_PROGRESS_LISTENER, ZCloudProgressListener))
+#define ZCLOUD_PROGRESS_LISTENER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_PROGRESS_LISTENER, ZCloudProgressListenerClass))
+#define ZCLOUD_IS_PROGRESS_LISTENER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZCLOUD_TYPE_PROGRESS_LISTENER))
+#define ZCLOUD_IS_PROGRESS_LISTENER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_PROGRESS_LISTENER))
+#define ZCLOUD_PROGRESS_LISTENER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_PROGRESS_LISTENER, ZCloudProgressListenerClass))
 
-typedef struct _ZCloud {
-    GObjectInstance parent;
+typedef struct ZCloudProgressListener_s {
+    GObject parent;
 
-} ZCloud;
+} ZCloudProgressListener;
 
-typedef struct _ZCloudClass {
+typedef struct ZCloudProgressListenerClass_s {
     GObjectClass parent_class;
 
-} ZCloudClass;
+} ZCloudProgressListenerClass;
 
 G_END_DECLS
 

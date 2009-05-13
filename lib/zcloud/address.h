@@ -40,14 +40,16 @@
  * <http://www.gnu.org/licenses/>.
  *
  * ***** END LICENSE BLOCK ***** */
-#ifndef ZCLOUD_ADDRESS
-#define ZCLOUD_ADDRESS
+
+#ifndef ZCLOUD_ADDRESS_H
+#define ZCLOUD_ADDRESS_H
+
 #include <glib.h>
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-void zcloud_address_get_type(void);
+GType zcloud_address_get_type(void);
 #define ZCLOUD_TYPE_ADDRESS (zcloud_address_get_type())
 #define ZCLOUD_ADDRESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_ADDRESS, ZCloudAddress))
 #define ZCLOUD_ADDRESS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_ADDRESS, ZCloudAddressClass))
@@ -55,18 +57,19 @@ void zcloud_address_get_type(void);
 #define ZCLOUD_IS_ADDRESS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_ADDRESS))
 #define ZCLOUD_ADDRESS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_ADDRESS, ZCloudAddressClass))
 
-typedef struct _ZCloudAddress {
-    GObjectInstance parent;
+typedef struct ZCloudAddress_s {
+    GObject parent;
 
 } ZCloudAddress;
 
-typedef struct _ZCloudAddressClass {
+typedef struct ZCloudAddressClass_s {
     GObjectClass parent_class;
+    
+    gchar * (*to_string)(ZCloudAddress *self);
 
-    gchar* (*to_string)(ZCloudAddress *self);
 } ZCloudAddressClass;
 
-ghcar* zcloud_address_to_string(ZCloudAddress *self);
+gchar* zcloud_address_to_string(ZCloudAddress *self);
 
 G_END_DECLS
 

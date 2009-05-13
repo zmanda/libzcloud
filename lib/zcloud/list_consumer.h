@@ -40,14 +40,17 @@
  * <http://www.gnu.org/licenses/>.
  *
  * ***** END LICENSE BLOCK ***** */
-#ifndef ZCLOUD_LIST_CONSUMER
-#define ZCLOUD_LIST_CONSUMER
+
+#ifndef ZCLOUD_LIST_CONSUMER_H
+#define ZCLOUD_LIST_CONSUMER_H
+
 #include <glib.h>
 #include <glib-object.h>
+#include "zcloud/address.h"
 
 G_BEGIN_DECLS
 
-void zcloud_list_consumer_get_type(void);
+GType zcloud_list_consumer_get_type(void);
 #define ZCLOUD_TYPE_LIST_CONSUMER (zcloud_list_consumer_get_type())
 #define ZCLOUD_LIST_CONSUMER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_LIST_CONSUMER, ZCloudListConsumer))
 #define ZCLOUD_LIST_CONSUMER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_LIST_CONSUMER, ZCloudListConsumerClass))
@@ -55,12 +58,12 @@ void zcloud_list_consumer_get_type(void);
 #define ZCLOUD_IS_LIST_CONSUMER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_LIST_CONSUMER))
 #define ZCLOUD_LIST_CONSUMER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_LIST_CONSUMER, ZCloudListConsumerClass))
 
-typedef struct _ZCloudListConsumer {
-    GObjectInstance parent;
+typedef struct ZCloudListConsumer_s {
+    GObject parent;
 
 } ZCloudListConsumer;
 
-typedef struct _ZCloudListConsumerClass {
+typedef struct ZCloudListConsumerClass_s {
     GObjectClass parent_class;
 
     void (*got_result)(ZCloudListConsumer *self, ZCloudAddress *address);

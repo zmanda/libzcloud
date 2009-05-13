@@ -40,8 +40,10 @@
  * <http://www.gnu.org/licenses/>.
  *
  * ***** END LICENSE BLOCK ***** */
+
 #ifndef ZCLOUD_STORE_H
 #define ZCLOUD_STORE_H
+
 #include <glib.h>
 #include <glib-object.h>
 #include "zcloud/address.h"
@@ -53,7 +55,7 @@
 
 G_BEGIN_DECLS
 
-void zcloud_store_get_type(void);
+GType zcloud_store_get_type(void);
 #define ZCLOUD_TYPE_STORE (zcloud_store_get_type())
 #define ZCLOUD_STORE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_STORE, ZCloudStore))
 #define ZCLOUD_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_STORE, ZCloudStoreClass))
@@ -61,13 +63,13 @@ void zcloud_store_get_type(void);
 #define ZCLOUD_IS_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_STORE))
 #define ZCLOUD_STORE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_STORE, ZCloudStoreClass))
 
-typedef struct _ZCloudStore {
-    GObjectInstance parent;
+typedef struct ZCloudStore_s {
+    GObject parent;
 
     GHashTable *simple_properties;
 } ZCloudStore;
 
-typedef struct _ZCloudStoreClass {
+typedef struct ZCloudStoreClass_s {
     GObjectClass parent_class;
 
     gboolean (*create)(
@@ -99,7 +101,7 @@ typedef struct _ZCloudStoreClass {
         GError **error);
     gboolean (*list)(
         ZCloudStore *self,
-        ZCloudAddressTeplate *template,
+        ZCloudAddressTemplate *template,
         ZCloudListConsumer *list,
         ZCloudProgressListener *progress,
         GError **error);
@@ -147,7 +149,7 @@ gboolean zcloud_store_exists(
 
 gboolean zcloud_store_list(
     ZCloudStore *self,
-    ZCloudAddressTeplate *template,
+    ZCloudAddressTemplate *template,
     ZCloudListConsumer *list,
     ZCloudProgressListener *progress,
     GError **error);
@@ -157,7 +159,7 @@ ZCloudAddress *zcloud_store_parse_address(
     gchar *address_str,
     GError **error);
 
-ZCloudAddress *zcloud_store_parse_address_template(
+ZCloudAddressTemplate *zcloud_store_parse_address_template(
     ZCloudStore *self,
     gchar *address_template_str,
     GError **error);
