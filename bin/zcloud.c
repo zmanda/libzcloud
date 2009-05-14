@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
     store = zcloud_new(argv[1], &error);
     if (!store) {
-        fprintf(stderr, "Could not load store for prefix '%s': %s\n", prefix, error->message);
+        fprintf(stderr, "Could not load store for prefix '%s': %s\n", argv[1], error->message);
         g_error_free(error);
         return 1;
     }
