@@ -55,6 +55,7 @@
 
 /* miscellaneous */
 #include "error.h"
+#include "plugins.h"
 
 G_BEGIN_DECLS
 

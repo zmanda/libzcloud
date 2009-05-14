@@ -48,7 +48,7 @@
 const gchar *
 g_module_check_init(GModule *module)
 {
-    zcloud_register_plugin("disk");
+    zcloud_register_plugin("disk", "disk", NULL);
     return NULL;
 }
 

@@ -53,9 +53,46 @@
 
 G_BEGIN_DECLS
 
+typedef struct ZCloudStorePlugin_s {
+    /* prefix identifying the plugin */
+    gchar *prefix;
+
+    /* name of the module defining this store plugin */
+    gchar *module_basename;
+
+    /* GType for the store class, or NULL if the plugin isn't loaded */
+    GType *type;
+} ZCloudStorePlugin;
+
 /* Plugins call this function from g_module_check_init.  It is invalid to
- * call this at any other time.  */
-void zcloud_register_plugin(const gchar *plugin_name);
+ * call this at any other time.
+ *
+ * @param module_name: name of the module registering this plugin
+ * @param prefix: prefix for this plugin
+ * @param type: GType to instantiate for this plugin
+ */
+void zcloud_register_plugin(const gchar *module_name, const gchar *prefix, GType *type);
+
+/* Get a ZCloudStorePlugin object by prefix
+ *
+ * @param prefix: the store prefix
+ * @returns: corresponding ZCStorePlugin, or NULL if not found
+ */
+ZCloudStorePlugin *zcloud_get_store_plugin_by_prefix(gchar *prefix);
+
+/* Get all ZCloudStorePlugin objects
+ *
+ * @returns: GSList containing all ZCloudStorePlugin objects
+ */
+GSList *zcloud_get_all_store_plugins(void);
+
+/* Load the module for the given store plugin if necessary, and ensure that the
+ * ZCStorePlugin's 'type' field is non-NULL on return.
+ *
+ * @param store_plugin: the plugin to load
+ * @returns: FALSE on error, with ERROR set properly
+ */
+gboolean zcloud_load_store_plugin(ZCStorePlugin *store_plugin, GError **error);
 
 G_END_DECLS
 

@@ -44,7 +44,21 @@
 #include "internal.h"
 #include "zcloud/zcloud.h"
 
-/* List of all ZCStorePlugin objects */
+typedef struct ZCModule_s {
+    /* short name of the module (e.g., "disk" or "cloudsplosion") */
+    gchar *basename;
+
+    /* full pathname of the loadable module (shared object or DLL) */
+    gchar *module_path;
+
+    /* full pathname of the XML file defining this module */
+    gchar *xml_path;
+
+    /* the module itself, or NULL if not loaded */
+    GModule *module;
+} ZCModule;
+
+/* List of all ZCloudStorePlugin objects */
 static GSList *all_store_plugins;
 
 /* List of all ZCModule objects */
@@ -63,7 +77,7 @@ struct markup_parser_state {
     gchar *filename;
 
     ZCModule *current_module;
-    ZCStorePlugin *current_plugin;
+    ZCloudStorePlugin *current_plugin;
 };
 
 /* Functions for a SAX parser to parse the module XML files */
@@ -162,7 +176,7 @@ markup_start_element(GMarkupParseContext *context,
 
         all_modules = g_slist_append(all_modules, module);
     } else if (g_strcasecmp(element_name, "store-plugin") == 0) {
-        ZCStorePlugin *plugin;
+        ZCloudStorePlugin *plugin;
         gchar *prefix;
         const gchar **i1, **i2;
 
@@ -199,16 +213,16 @@ markup_start_element(GMarkupParseContext *context,
         }
             
         /* check for duplicate prefix */
-        if (zc_get_store_plugin_by_prefix(prefix)) {
+        if (zcloud_get_store_plugin_by_prefix(prefix)) {
             markup_error(state, context, error,
                         G_MARKUP_ERROR_INVALID_CONTENT,
                         "store plugin prefix '%s' is already defined", prefix);
             return;
         }
 
-        plugin = state->current_plugin = g_new0(ZCStorePlugin, 1);
+        plugin = state->current_plugin = g_new0(ZCloudStorePlugin, 1);
         plugin->module = state->current_module;
-        plugin->prefix = prefix;
+        plugin->pub.prefix = prefix;
         plugin->type = NULL;
 
         all_store_plugins = g_slist_append(all_store_plugins, plugin);
@@ -280,7 +294,7 @@ markup_text(GMarkupParseContext *context,
 
 }
 
-/* Load and parse a single XML file, creating the corresponding ZCStorePlugin and
+/* Load and parse a single XML file, creating the corresponding ZCloudStorePlugin and
  * ZCModule objects along the way.
  *
  * Side effect: populates all_store_plugins and all_modules
@@ -432,21 +446,63 @@ scan_plugin_dirs(
     return TRUE;
 }
 
+/*
+ * Public functions
+ */
 
+void
+zcloud_register_plugin(
+    const gchar *module_name,
+    const gchar *prefix,
+    GType *type)
+{
+}
 
+ZCloudStorePlugin *
+zcloud_get_store_plugin_by_prefix(
+    gchar *prefix)
+{
+    GSList *iter = all_store_plugins;
+    while (iter) {
+        ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
 
+        if (0 == strcmp(plugin->pub.prefix, prefix))
+            return (ZCloudStorePlugin *)plugin;
+    }
 
-static gboolean
-zcloud_load_plugin(
-    const gchar *plugin_name,
+    return NULL;
+}
+
+GSList *
+zcloud_get_all_store_plugins(void)
+{
+    return all_store_plugins;
+}
+
+gboolean
+zcloud_load_store_plugin(
+    ZCloudStorePlugin *store_plugin,
     GError **error)
 {
     gchar *path;
-    GModule *module;
+    ZCModule *module;
+    GSList *iter;
 
-    path = g_module_build_path(ZCPLUGINDIR, plugin_name);
+    g_assert(store_plugin != NULL);
 
-    module = g_module_open(path, 0);
+    if (store_plugin->type != NULL) {
+        return TRUE;
+
+
+    /* find the corresponding module */
+    for (iter = all_modules; iter; iter = iter->next) {
+        module = (ZCModule *)iter->data;
+        if (0 == strcmp(module->basename, store_plugin->module_basename))
+            break;
+        module = NULL
+    }
+
+    module = g_module_open(store_plugin->, 0);
 
     if (!module) {
         g_set_error(error,
@@ -460,42 +516,8 @@ zcloud_load_plugin(
 }
 
 /*
- * Public functions
- */
-
-void
-zcloud_register_plugin(
-    const gchar *module_name,
-    const gchar *prefix,
-    GType *type)
-{
-}
-
-/*
  * Internal functions
  */
-
-ZCStorePlugin *
-zc_get_store_plugin_by_prefix(
-    gchar *prefix)
-{
-    GSList *iter = all_store_plugins;
-    while (iter) {
-        ZCStorePlugin *plugin = (ZCStorePlugin *)iter->data;
-
-        if (0 == strcmp(plugin->prefix, prefix))
-            return plugin;
-    }
-
-    return NULL;
-}
-
-GSList *
-zc_get_all_store_plugins(void)
-{
-    return all_store_plugins;
-}
-
 
 gboolean
 zc_plugins_init(GError **error)

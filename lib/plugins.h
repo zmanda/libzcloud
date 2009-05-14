@@ -46,62 +46,12 @@
 
 G_BEGIN_DECLS
 
-typedef struct ZCModule_s {
-    /* short name of the module (e.g., "disk" or "cloudsplosion") */
-    gchar *basename;
-
-    /* full pathname of the loadable module (shared object or DLL) */
-    gchar *module_path;
-
-    /* full pathname of the XML file defining this module */
-    gchar *xml_path;
-
-    /* the module itself, or NULL if not loaded */
-    GModule *module;
-} ZCModule;
-
-typedef struct ZCStorePlugin_s {
-    /* module defining this store plugin */
-    ZCModule *module;
-
-    /* prefix identifying the plugin */
-    gchar *prefix;
-
-    /* GType for the store class, or NULL if the plugin isn't loaded */
-    GType *type;
-} ZCStorePlugin;
-
 /* Initialize the plugins, loading all of the relevant plugin information.
  *
  * @returns: FALSE on error, with ERROR set properly
  */
 G_GNUC_INTERNAL
 gboolean zc_plugins_init(GError **error);
-
-/* Get a ZCStorePlugin object by prefix
- *
- * @param prefix: the store prefix
- * @returns: corresponding ZCStorePlugin, or NULL if not found
- */
-G_GNUC_INTERNAL
-ZCStorePlugin *zc_get_store_plugin_by_prefix(gchar *prefix);
-
-/* Get all ZCStorePlugin objects
- *
- * @returns: GSList containing all ZCStorePlugin objects
- */
-G_GNUC_INTERNAL
-GSList *zc_get_all_store_plugins(void);
-
-/* Load the module for the given store plugin, and ensure
- * that the ZCStorePlugin's 'type' field is non-NULL on
- * return.
- *
- * @param store_plugin: the plugin to load
- * @returns: FALSE on error, with ERROR set properly
- */
-//G_GNUC_INTERNAL
-gboolean zc_load_store_plugin(ZCStorePlugin *store_plugin);
 
 G_END_DECLS
 

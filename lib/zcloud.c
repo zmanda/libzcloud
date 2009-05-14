@@ -58,8 +58,8 @@ zcloud_init(GError **error)
     if (!zc_plugins_init(error))
         return FALSE;
 
-    for (iter = zc_get_all_store_plugins(); iter; iter = iter->next) {
-        ZCStorePlugin *plugin = (ZCStorePlugin *)iter->data;
+    for (iter = zcloud_get_all_store_plugins(); iter; iter = iter->next) {
+        ZCloudStorePlugin *plugin = (ZCStorePlugin *)iter->data;
         printf("plugin->prefix=%s\n", plugin->prefix);
     }
 

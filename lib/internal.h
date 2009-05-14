@@ -80,12 +80,11 @@
 #ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
 #endif
-#ifdef HAVE_XXX_H
-#include <xxx.h>
-#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+
+#include "zcloud/zcloud.h"
 
 /* set up G_GNUC_INTERNAL to work regardless of glib version, even if that means
  * leaking symbols on older systems.  This macro is used to mark any functions
