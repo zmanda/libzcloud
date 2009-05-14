@@ -60,6 +60,7 @@ GQuark zcloud_error_quark(void);
 typedef enum ZCloudError_e {
     ZCERR_NONE = 0,
     ZCERR_UNKNOWN = 1,
+    ZCERR_MODULE = 2,           /* error loading a module */
 } ZCloudError;
 
 G_END_DECLS

@@ -53,16 +53,34 @@
 
 G_BEGIN_DECLS
 
+typedef struct ZCloudModule_s {
+    /* short name of the module (e.g., "disk" or "cloudsplosion") */
+    gchar *basename;
+
+    /* full pathname of the loadable module (shared object or DLL) */
+    gchar *module_path;
+
+    /* full pathname of the XML file defining this module */
+    gchar *xml_path;
+
+    /* TRUE if this module is loaded */
+    gboolean loaded;
+} ZCloudModule;
+
 typedef struct ZCloudStorePlugin_s {
     /* prefix identifying the plugin */
     gchar *prefix;
 
-    /* name of the module defining this store plugin */
-    gchar *module_basename;
+    /* the module defining this store plugin */
+    ZCloudModule *module;
 
-    /* GType for the store class, or NULL if the plugin isn't loaded */
-    GType *type;
+    /* GType for the store class, or 0 if the plugin isn't loaded */
+    GType type;
 } ZCloudStorePlugin;
+
+/*
+ * Plugin registration
+ */
 
 /* Plugins call this function from g_module_check_init.  It is invalid to
  * call this at any other time.
@@ -70,15 +88,21 @@ typedef struct ZCloudStorePlugin_s {
  * @param module_name: name of the module registering this plugin
  * @param prefix: prefix for this plugin
  * @param type: GType to instantiate for this plugin
+ * @returns: NULL on success, or an error string on failure (return this string
+ *   from g_module_check_init)
  */
-void zcloud_register_plugin(const gchar *module_name, const gchar *prefix, GType *type);
+gchar *zcloud_register_store_plugin(const gchar *module_name, const gchar *prefix, GType type);
+
+/*
+ * Low-level interface
+ */
 
 /* Get a ZCloudStorePlugin object by prefix
  *
  * @param prefix: the store prefix
- * @returns: corresponding ZCStorePlugin, or NULL if not found
+ * @returns: corresponding ZCloudStorePlugin, or NULL if not found
  */
-ZCloudStorePlugin *zcloud_get_store_plugin_by_prefix(gchar *prefix);
+ZCloudStorePlugin *zcloud_get_store_plugin_by_prefix(const gchar *prefix);
 
 /* Get all ZCloudStorePlugin objects
  *
@@ -87,12 +111,12 @@ ZCloudStorePlugin *zcloud_get_store_plugin_by_prefix(gchar *prefix);
 GSList *zcloud_get_all_store_plugins(void);
 
 /* Load the module for the given store plugin if necessary, and ensure that the
- * ZCStorePlugin's 'type' field is non-NULL on return.
+ * ZCloudStorePlugin's 'type' field is non-NULL on return.
  *
  * @param store_plugin: the plugin to load
  * @returns: FALSE on error, with ERROR set properly
  */
-gboolean zcloud_load_store_plugin(ZCStorePlugin *store_plugin, GError **error);
+gboolean zcloud_load_store_plugin(ZCloudStorePlugin *store_plugin, GError **error);
 
 G_END_DECLS
 

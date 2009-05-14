@@ -42,26 +42,11 @@
  * ***** END LICENSE BLOCK ***** */
 
 #include "internal.h"
-#include "zcloud/zcloud.h"
-
-typedef struct ZCModule_s {
-    /* short name of the module (e.g., "disk" or "cloudsplosion") */
-    gchar *basename;
-
-    /* full pathname of the loadable module (shared object or DLL) */
-    gchar *module_path;
-
-    /* full pathname of the XML file defining this module */
-    gchar *xml_path;
-
-    /* the module itself, or NULL if not loaded */
-    GModule *module;
-} ZCModule;
 
 /* List of all ZCloudStorePlugin objects */
 static GSList *all_store_plugins;
 
-/* List of all ZCModule objects */
+/* Hash of all ZCloudModule objects, by basename */
 static GSList *all_modules;
 
 /*
@@ -76,7 +61,7 @@ struct markup_parser_state {
     /* filename of the XML file */
     gchar *filename;
 
-    ZCModule *current_module;
+    ZCloudModule *current_module;
     ZCloudStorePlugin *current_plugin;
 };
 
@@ -127,7 +112,7 @@ markup_start_element(GMarkupParseContext *context,
 
     if (g_strcasecmp(element_name, "zcloud-module") == 0) {
         GSList *iter;
-        ZCModule *module;
+        ZCloudModule *module;
         gchar *basename;
         const gchar **i1, **i2;
 
@@ -159,7 +144,7 @@ markup_start_element(GMarkupParseContext *context,
 
         /* check for duplicate module */
         for (iter = all_modules; iter; iter = iter->next) {
-            module = (ZCModule *)iter->data;
+            module = (ZCloudModule *)iter->data;
             if (0 == strcmp(module->basename, basename)) {
                 markup_error(state, context, error,
                             G_MARKUP_ERROR_INVALID_CONTENT,
@@ -168,11 +153,11 @@ markup_start_element(GMarkupParseContext *context,
             }
         }
 
-        module = state->current_module = g_new0(ZCModule, 1);
+        module = state->current_module = g_new0(ZCloudModule, 1);
         module->basename = basename;
         module->module_path = g_module_build_path(state->dir_name, basename);
         module->xml_path = g_strdup(state->filename);
-        module->module = NULL;
+        module->loaded = FALSE;
 
         all_modules = g_slist_append(all_modules, module);
     } else if (g_strcasecmp(element_name, "store-plugin") == 0) {
@@ -222,8 +207,7 @@ markup_start_element(GMarkupParseContext *context,
 
         plugin = state->current_plugin = g_new0(ZCloudStorePlugin, 1);
         plugin->module = state->current_module;
-        plugin->pub.prefix = prefix;
-        plugin->type = NULL;
+        plugin->prefix = prefix;
 
         all_store_plugins = g_slist_append(all_store_plugins, plugin);
     } else {
@@ -295,7 +279,7 @@ markup_text(GMarkupParseContext *context,
 }
 
 /* Load and parse a single XML file, creating the corresponding ZCloudStorePlugin and
- * ZCModule objects along the way.
+ * ZCloudModule objects along the way.
  *
  * Side effect: populates all_store_plugins and all_modules
  *
@@ -311,6 +295,7 @@ load_module_xml(
 {
     GMarkupParseContext *ctxt = NULL;
     int fd = -1;
+    gboolean success = FALSE;
     struct markup_parser_state state = { NULL, NULL, NULL, NULL };
     static GMarkupParser parser = {
         markup_start_element,
@@ -358,6 +343,8 @@ load_module_xml(
         goto error;
     }
 
+    success = TRUE;
+
 error:
     /* free everything */
     if (ctxt)
@@ -367,7 +354,7 @@ error:
     if (state.filename)
         g_free(state.filename);
 
-    return (*error)? FALSE : TRUE;
+    return success;
 }
 
 /* Get the list of directories to search for plugins.  This comes from $ZCPLUGINPATH
@@ -450,23 +437,44 @@ scan_plugin_dirs(
  * Public functions
  */
 
-void
-zcloud_register_plugin(
+gchar *
+zcloud_register_store_plugin(
     const gchar *module_name,
     const gchar *prefix,
-    GType *type)
+    GType type)
 {
+    ZCloudStorePlugin *plugin;
+
+    plugin = zcloud_get_store_plugin_by_prefix(prefix);
+    if (!plugin) {
+        /* (this probably leaks memory -- GLib is vague on the topic) */
+        return g_strdup_printf("zcloud_register_store_plugin: no plugin with "
+                "prefix '%s' is defined", prefix);
+    }
+
+    if (plugin->type != 0) {
+        return g_strdup_printf("zcloud_register_store_plugin: "
+                "prefix '%s' is already registered", prefix);
+    }
+
+    if (0 != strcmp(plugin->module->basename, module_name)) {
+        return g_strdup_printf("zcloud_register_store_plugin: "
+                "prefix '%s' belongs to module '%s'",
+                prefix, plugin->module->basename);
+    }
+
+    plugin->type = type;
 }
 
 ZCloudStorePlugin *
 zcloud_get_store_plugin_by_prefix(
-    gchar *prefix)
+    const gchar *prefix)
 {
     GSList *iter = all_store_plugins;
     while (iter) {
         ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
 
-        if (0 == strcmp(plugin->pub.prefix, prefix))
+        if (0 == strcmp(plugin->prefix, prefix))
             return (ZCloudStorePlugin *)plugin;
     }
 
@@ -484,35 +492,67 @@ zcloud_load_store_plugin(
     ZCloudStorePlugin *store_plugin,
     GError **error)
 {
-    gchar *path;
-    ZCModule *module;
+    static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
     GSList *iter;
+    gchar *path;
+    ZCloudModule *zcmod;
+    GModule *gmod;
 
     g_assert(store_plugin != NULL);
 
-    if (store_plugin->type != NULL) {
+    /* this entire function gets serialized */
+    g_static_mutex_lock(&mutex);
+
+    /* check whether the type is loaded after acquiring the mutex */
+    if (store_plugin->type != 0) {
+        g_static_mutex_unlock(&mutex);
         return TRUE;
-
-
-    /* find the corresponding module */
-    for (iter = all_modules; iter; iter = iter->next) {
-        module = (ZCModule *)iter->data;
-        if (0 == strcmp(module->basename, store_plugin->module_basename))
-            break;
-        module = NULL
     }
 
-    module = g_module_open(store_plugin->, 0);
+    zcmod = store_plugin->module;
 
-    if (!module) {
+    if (zcmod->loaded) {
         g_set_error(error,
                     ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
+                    ZCERR_MODULE,
+                    "module '%s' has already failed to load", zcmod->basename);
+        goto error;
     }
 
+    /* this process should load all of the plugins for this module, and
+     * fail with g_critical if not. */
+    gmod = g_module_open(zcmod->module_path, 0);
+
+    if (!gmod) {
+        g_set_error(error,
+                    ZCLOUD_ERROR,
+                    ZCERR_MODULE,
+                    "%s", g_module_error());
+        goto error;
+    }
+    g_module_make_resident(gmod);
+
+    /* check that it lived up to its advertisement */
+    for (iter = all_store_plugins; iter; iter = iter->next) {
+        ZCloudStorePlugin *pl = (ZCloudStorePlugin *)iter->data;
+        if (pl->module == zcmod && pl->type == 0) {
+            g_set_error(error,
+                        ZCLOUD_ERROR,
+                        ZCERR_MODULE,
+                "module '%s' did not register store prefix '%s' as promised in '%s'",
+                    zcmod->basename, pl->prefix, zcmod->xml_path);
+            goto error;
+        }
+    }
+
+    zcmod->loaded = TRUE;
+
+    g_static_mutex_unlock(&mutex);
     return TRUE;
+
+error:
+    g_static_mutex_unlock(&mutex);
+    return FALSE;
 }
 
 /*

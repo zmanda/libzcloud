@@ -59,13 +59,18 @@
 
 G_BEGIN_DECLS
 
-/* Call this before calling any other zcloud functions.
+/* Call this before calling any other zcloud functions.  If this fails,
+ * do not call it again.
  *
  * @returns: FALSE on error, with ERROR set properly
  */
 gboolean zcloud_init(GError **error);
 
-ZCloudStore *zcloud_new(void);
+/* Create a new ZCloudStore object with the given prefix.
+ *
+ * @returns: NULL on error, with ERROR set properly
+ */
+ZCloudStore *zcloud_new(const gchar *prefix, GError **error);
 
 G_END_DECLS
 

@@ -48,7 +48,7 @@
 const gchar *
 g_module_check_init(GModule *module)
 {
-    zcloud_register_plugin("disk", "disk", NULL);
+    zcloud_register_store_plugin("disk", "disk", 99); /* XXX 99 is not a valid GType */
     return NULL;
 }
 

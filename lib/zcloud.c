@@ -42,26 +42,47 @@
  * ***** END LICENSE BLOCK ***** */
 
 #include "internal.h"
-#include <stdio.h> /* TEMPORARY */
 #include "zcloud/zcloud.h"
 
 ZCloudStore *
-zcloud_new(void)
+zcloud_new(const gchar *prefix, GError **error)
 {
-    return ZCLOUD_STORE(g_object_new(ZCLOUD_TYPE_STORE, NULL));
+    ZCloudStorePlugin *plugin = zcloud_get_store_plugin_by_prefix(prefix);
+    ZCloudStore *store;
+
+    if (!plugin) {
+        g_set_error(error,
+                    ZCLOUD_ERROR,
+                    ZCERR_MODULE,
+                    "unknown store prefix '%s'",
+                    prefix);
+        return NULL;
+    }
+
+    if (!zcloud_load_store_plugin(plugin, error))
+        return NULL;
+
+    return ZCLOUD_STORE(g_object_new(plugin->type, NULL));
 }
 
 gboolean
 zcloud_init(GError **error)
 {
+    static gboolean initialized = FALSE;
     GSList *iter;
+
+    if (initialized)
+        return TRUE;
+
+    if (!g_thread_supported ()) g_thread_init (NULL);
+
+    /* TODO: can this be called multiple times? */
+    g_type_init();
+
     if (!zc_plugins_init(error))
         return FALSE;
 
-    for (iter = zcloud_get_all_store_plugins(); iter; iter = iter->next) {
-        ZCloudStorePlugin *plugin = (ZCStorePlugin *)iter->data;
-        printf("plugin->prefix=%s\n", plugin->prefix);
-    }
+    initialized = TRUE;
 
     return TRUE;
 }
