@@ -10,11 +10,13 @@ int main()
         return 1;
     }
 
+    /*
     if (!zcloud_load_plugin("disk", &error)) {
         fprintf(stderr, "Could not load plugin 'disk': %s\n", error->message);
         g_error_free(error);
         return 1;
     }
+    */
 
     fprintf(stderr, "SUCCESS\n");
 }

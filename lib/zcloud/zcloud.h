@@ -58,9 +58,13 @@
 
 G_BEGIN_DECLS
 
-ZCloudStore *zcloud_new(void);
+/* Call this before calling any other zcloud functions.
+ *
+ * @returns: FALSE on error, with ERROR set properly
+ */
 gboolean zcloud_init(GError **error);
-gboolean zcloud_load_plugin(const gchar *plugin_name, GError **error);
+
+ZCloudStore *zcloud_new(void);
 
 G_END_DECLS
 

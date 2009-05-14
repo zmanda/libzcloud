@@ -41,22 +41,66 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/* This file need only be included by plugin modules' source files, not by
- * libzcloud users.  It defines the data formats and functions used to
- * set up communication between libzcloud and its plugins. */
+/* This header file is *only* for use internally to libzcloud - that is, it is
+ * only included by source files that become part of libzcloud.la.
+ */
 
-#ifndef ZCLOUD_PLUGINS_H
-#define ZCLOUD_PLUGINS_H
+#ifndef ZCLOUD_INTERNAL_H
+#define ZCLOUD_INTERNAL_H
 
+/* get our autoconf definitions */
+#include "config.h"
+
+/* include glib and friends */
 #include <glib.h>
+#include <gmodule.h>
 #include <glib-object.h>
 
-G_BEGIN_DECLS
+/* basic system includes - anything purpose-specific should be included only
+ * in the source file(s) that need it */
 
-/* Plugins call this function from g_module_check_init.  It is invalid to
- * call this at any other time.  */
-void zcloud_register_plugin(const gchar *plugin_name);
+#ifdef HAVE_ERRNO_H
+#include <errno.h>
+#endif
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h>
+#endif
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+#ifdef HAVE_STRING_H
+#include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+#include <sys/stat.h>
+#endif
+#ifdef HAVE_XXX_H
+#include <xxx.h>
+#endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
-G_END_DECLS
+/* set up G_GNUC_INTERNAL to work regardless of glib version, even if that means
+ * leaking symbols on older systems.  This macro is used to mark any functions
+ * which should not be available from the final, linked libzcloud, but which are
+ * referenced in multiple source files within the library -- in other words, any
+ * functions defined in internal header files.
+ *
+ * Note that internal functions have the prefix "zc_" rather than "zcloud_"
+ */
+#ifndef G_HAVE_GNUC_VISIBILITY
+#ifndef G_GNUC_INTERNAL
+#define G_GNUC_INTERNAL
+#endif
+#endif
+
+#include "plugins.h"
 
 #endif

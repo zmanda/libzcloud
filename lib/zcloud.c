@@ -41,8 +41,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "config.h"
-#include <gmodule.h>
+#include "internal.h"
+#include <stdio.h> /* TEMPORARY */
 #include "zcloud/zcloud.h"
 
 ZCloudStore *
@@ -54,33 +54,13 @@ zcloud_new(void)
 gboolean
 zcloud_init(GError **error)
 {
-    if (!g_module_supported()) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
+    GSList *iter;
+    if (!zc_plugins_init(error))
         return FALSE;
-    }
 
-    return TRUE;
-}
-
-gboolean
-zcloud_load_plugin(
-    const gchar *plugin_name,
-    GError **error)
-{
-    gchar *path;
-    GModule *module;
-
-    path = g_module_build_path(ZCPLUGINDIR, plugin_name);
-    module = g_module_open(path, 0);
-    if (!module) {
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_UNKNOWN,
-                    "%s", g_module_error());
-        return FALSE;
+    for (iter = zc_get_all_store_plugins(); iter; iter = iter->next) {
+        ZCStorePlugin *plugin = (ZCStorePlugin *)iter->data;
+        printf("plugin->prefix=%s\n", plugin->prefix);
     }
 
     return TRUE;

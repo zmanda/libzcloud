@@ -41,21 +41,67 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/* This file need only be included by plugin modules' source files, not by
- * libzcloud users.  It defines the data formats and functions used to
- * set up communication between libzcloud and its plugins. */
-
-#ifndef ZCLOUD_PLUGINS_H
-#define ZCLOUD_PLUGINS_H
-
-#include <glib.h>
-#include <glib-object.h>
+#ifndef ZC_PLUGINS_H
+#define ZC_PLUGINS_H
 
 G_BEGIN_DECLS
 
-/* Plugins call this function from g_module_check_init.  It is invalid to
- * call this at any other time.  */
-void zcloud_register_plugin(const gchar *plugin_name);
+typedef struct ZCModule_s {
+    /* short name of the module (e.g., "disk" or "cloudsplosion") */
+    gchar *basename;
+
+    /* full pathname of the loadable module (shared object or DLL) */
+    gchar *module_path;
+
+    /* full pathname of the XML file defining this module */
+    gchar *xml_path;
+
+    /* the module itself, or NULL if not loaded */
+    GModule *module;
+} ZCModule;
+
+typedef struct ZCStorePlugin_s {
+    /* module defining this store plugin */
+    ZCModule *module;
+
+    /* prefix identifying the plugin */
+    gchar *prefix;
+
+    /* GType for the store class, or NULL if the plugin isn't loaded */
+    GType *type;
+} ZCStorePlugin;
+
+/* Initialize the plugins, loading all of the relevant plugin information.
+ *
+ * @returns: FALSE on error, with ERROR set properly
+ */
+G_GNUC_INTERNAL
+gboolean zc_plugins_init(GError **error);
+
+/* Get a ZCStorePlugin object by prefix
+ *
+ * @param prefix: the store prefix
+ * @returns: corresponding ZCStorePlugin, or NULL if not found
+ */
+G_GNUC_INTERNAL
+ZCStorePlugin *zc_get_store_plugin_by_prefix(gchar *prefix);
+
+/* Get all ZCStorePlugin objects
+ *
+ * @returns: GSList containing all ZCStorePlugin objects
+ */
+G_GNUC_INTERNAL
+GSList *zc_get_all_store_plugins(void);
+
+/* Load the module for the given store plugin, and ensure
+ * that the ZCStorePlugin's 'type' field is non-NULL on
+ * return.
+ *
+ * @param store_plugin: the plugin to load
+ * @returns: FALSE on error, with ERROR set properly
+ */
+//G_GNUC_INTERNAL
+gboolean zc_load_store_plugin(ZCStorePlugin *store_plugin);
 
 G_END_DECLS
 
