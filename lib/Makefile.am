@@ -49,6 +49,8 @@ public_headers = zcloud/zcloud.h \
 	zcloud/address.h \
 	zcloud/address_template.h \
 	zcloud/download_consumer.h \
+    zcloud/error.h \
+    zcloud/plugins.h \
 	zcloud/list_consumer.h \
 	zcloud/progress_listener.h \
 	zcloud/store.h \

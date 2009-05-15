@@ -45,6 +45,8 @@ INCLUDES = -I $(top_srcdir)/lib
 AM_CPPFLAGS = $(GLIB_CFLAGS)
 
 zcplugin_DATA = disk.xml
+EXTRA_DIST = $(zcplugin_DATA)
+
 zcplugin_LTLIBRARIES = libdisk.la
 libdisk_la_LDFLAGS = -avoid-version
 libdisk_la_LIBADD = \
