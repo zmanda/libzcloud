@@ -25,7 +25,7 @@ is_gsize(gsize got, gsize expected, const char *desc)
     } else {
         fprintf(stderr, "NOT OK %s\n", desc? desc : "");
         /* XXX: G_GSIZE_FORMAT only exists in GLib 2.3.1+ */
-        fprintf(stderr, "\tgot: " G_GSIZE_FORMAT " expected: " G_GSIZE_FORMAT "\n",
+        fprintf(stderr, "\tgot: %" G_GSIZE_FORMAT " expected: %" G_GSIZE_FORMAT "\n",
             got, expected);
         return FALSE;
     }
@@ -129,7 +129,7 @@ main()
         g_error_free(err);
         ret = 1;
     }
-    if (!is_gsize(size, 0, "check reported size for test string")) {
+    if (!is_gsize(size, buf_len, "check reported size for test string")) {
         ret = 1;
     }
     md5 = zcloud_upload_producer_calculate_md5(o_p, &err);

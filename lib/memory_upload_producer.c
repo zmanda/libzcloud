@@ -101,7 +101,8 @@ zcloud_memory_upload_producer_get_type(void)
             NULL /* value_table */
         };
 
-        type = g_type_register_static(G_TYPE_OBJECT, "ZCloudMemoryUploadProducer",
+        type = g_type_register_static(ZCLOUD_TYPE_UPLOAD_PRODUCER,
+                                      "ZCloudMemoryUploadProducer",
                                       &info, (GTypeFlags) 0);
     }
 
@@ -183,6 +184,9 @@ zc_memory_producer_set_property(GObject *object,
         break;
     case ZCLOUD_PROP_MEMORY_UPLOAD_PRODUCER_BUFFER_LENGTH:
         self->buffer_length = g_value_get_uint(value);
+        break;
+    case ZCLOUD_PROP_MEMORY_UPLOAD_PRODUCER_BUFFER_POSITION:
+        self->buffer_position = g_value_get_uint(value);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
