@@ -44,8 +44,6 @@
 #ifndef ZCLOUD_MEMORY_UPLOAD_PRODUCER_H
 #define ZCLOUD_MEMORY_UPLOAD_PRODUCER_H
 
-#include <glib.h>
-#include <glib-object.h>
 #include "zcloud/upload_producer.h"
 
 G_BEGIN_DECLS

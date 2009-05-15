@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "zcloud/upload_producer.h"
-#include "zcloud/memory_upload_producer.h"
+#include "zcloud.h"
 
 gboolean
 not_error(GError *err, const char *desc)

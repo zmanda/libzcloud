@@ -44,8 +44,8 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <string.h>
-#include "zcloud/upload_producer.h"
-#include "zcloud/memory_upload_producer.h"
+#include <openssl/md5.h>
+#include "zcloud.h"
 
 /* class mechanics */
 static void
@@ -172,7 +172,7 @@ zc_memory_producer_get_property(GObject *object,
 static void
 zc_memory_producer_set_property(GObject *object,
     guint property_id,
-    GValue *value,
+    const GValue *value,
     GParamSpec *pspec)
 {
     ZCloudMemoryUploadProducer *self = ZCLOUD_MEMORY_UPLOAD_PRODUCER(object);
@@ -190,7 +190,8 @@ zc_memory_producer_set_property(GObject *object,
     }
 }
 
-gsize zcloud_upload_producer_read(
+static gsize
+zc_memory_producer_read(
     ZCloudUploadProducer *o,
     gpointer buffer,
     gsize bytes,
