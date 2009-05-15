@@ -97,8 +97,7 @@ main()
     g_type_init();
     buf_len = strlen(buf);
 
-    o = g_object_new(ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER,
-        "buffer", buf, "buffer-length", (guint) 0);
+    o = zcloud_memory_upload_producer(buf, 0);
     o_p = ZCLOUD_UPLOAD_PRODUCER(o);
     size = zcloud_upload_producer_get_size(o_p, &err);
     if (!not_error(err, "no error while getting size of zero-length buffer")) {
@@ -121,8 +120,7 @@ main()
     g_free(md5_s);
     g_object_unref(o);
 
-    o = g_object_new(ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER,
-        "buffer", buf, "buffer-length", (guint) buf_len);
+    o = zcloud_memory_upload_producer(buf, buf_len);
     o_p = ZCLOUD_UPLOAD_PRODUCER(o);
     size = zcloud_upload_producer_get_size(o_p, &err);
     if (!not_error(err, "no error while getting size of test string")) {

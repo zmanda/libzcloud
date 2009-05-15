@@ -74,6 +74,10 @@ typedef struct ZCloudMemoryUploadProducerClass_s {
     ZCloudUploadProducerClass parent_class;
 } ZCloudMemoryUploadProducerClass;
 
+/* constructor */
+ZCloudMemoryUploadProducer *
+zcloud_memory_upload_producer(guint8 *buffer, guint buffer_length);
+
 G_END_DECLS
 
 #endif
