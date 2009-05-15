@@ -41,36 +41,20 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifndef ZC_PLUGINS_H
-#define ZC_PLUGINS_H
+#include "internal.h"
 
-G_BEGIN_DECLS
+/* list all test files here, with their setup functions */
+void zc_test_plugins();                 /* plugins-test.c */
 
-/* Initialize the plugins, loading all of the relevant plugin information.
- *
- * @returns: FALSE on error, with ERROR set properly
- */
-G_GNUC_INTERNAL
-gboolean zc_plugins_init(GError **error);
+/* This function is effectively main() for the libzcloud tests; it is called
+ * from libzcloud-main.c */
+int
+zcloud_do_tests(int *argc, char ***argv)
+{
+    g_test_init(argc, argv, NULL);
 
-/*
- * testing utility functions
- */
+    /* and call the setup functions here */
+    zc_test_plugins();
 
-/* Clear all of the plugin metadata; note that this can *not* be called after
- * modules have been loaded!
- */
-G_GNUC_INTERNAL
-void zc_plugins_clear(void);
-
-/* Load the XML file given by 'dir_name/file' */
-G_GNUC_INTERNAL
-gboolean
-zc_load_module_xml(
-    const gchar *dir_name,
-    const gchar *file,
-    GError **error);
-
-G_END_DECLS
-
-#endif
+    return g_test_run();
+}

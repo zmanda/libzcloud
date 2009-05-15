@@ -71,15 +71,38 @@ libzcloud_source = \
     upload_producer.c \
     zcloud.c
 
+test_source = \
+    test-driver.c \
+    plugins-test.c
+
+##
 # compiler settings
+
 INCLUDES = -I. -I$(top_srcdir)/config
 AM_CPPFLAGS = $(GLIB_CFLAGS)
 
+##
 # install the headers
+
 zcincludedir = $(includedir)/zcloud
 zcinclude_HEADERS = $(public_headers)
 
-# and install the library
+##
+# install the library
+
 lib_LTLIBRARIES = libzcloud.la
 libzcloud_la_LIBADD = $(GLIB_LIBS)
 libzcloud_la_SOURCES = $(internal_headers) $(libzcloud_source)
+
+##
+# test
+
+TESTS = test
+check_PROGRAMS = test
+test_SOURCES = test-main.c
+test_LDADD = libzcloud-test.la
+
+# tests get their own library, including the test functions
+noinst_LTLIBRARIES = libzcloud-test.la
+libzcloud_test_la_LIBADD = $(GLIB_LIBS)
+libzcloud_test_la_SOURCES = test-driver.c $(test_source) $(internal_headers) $(libzcloud_source)
