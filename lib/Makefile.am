@@ -74,7 +74,7 @@ libzcloud_source = \
     memory_upload_producer.c
 
 # compiler settings
-INCLUDES = -I. -I$(top_srcdir)/config
+INCLUDES = -I. -I$(top_srcdir)/config $(OPENSSL_INCLUDES)
 AM_CPPFLAGS = $(GLIB_CFLAGS)
 
 # install the headers
@@ -84,7 +84,8 @@ include_HEADERS = zcloud.h
 
 # and install the library
 lib_LTLIBRARIES = libzcloud.la
-libzcloud_la_LIBADD = $(GLIB_LIBS)
+libzcloud_la_LDFLAGS = $(OPENSSL_LDFLAGS)
+libzcloud_la_LIBADD = $(GLIB_LIBS) $(OPENSSL_LIBS)
 libzcloud_la_SOURCES = $(libzcloud_source)
 noinst_HEADERS = internal.h $(internal_headers)
 
