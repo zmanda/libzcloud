@@ -54,7 +54,8 @@ public_headers = \
 	zcloud/list_consumer.h \
 	zcloud/progress_listener.h \
 	zcloud/store.h \
-	zcloud/upload_producer.h
+	zcloud/upload_producer.h \
+	zcloud/upload_producers/memory.h
 
 internal_headers = \
     internal/plugins.h
@@ -69,7 +70,8 @@ libzcloud_source = \
     progress_listener.c \
     store.c \
     upload_producer.c \
-    zcloud.c
+    zcloud.c \
+    memory_upload_producer.c
 
 # compiler settings
 INCLUDES = -I. -I$(top_srcdir)/config
@@ -85,3 +87,10 @@ lib_LTLIBRARIES = libzcloud.la
 libzcloud_la_LIBADD = $(GLIB_LIBS)
 libzcloud_la_SOURCES = $(libzcloud_source)
 noinst_HEADERS = internal.h $(internal_headers)
+
+TESTS = memory_upload_producer_test
+
+noinst_PROGRAMS = $(TESTS)
+
+memory_upload_producer_test_SOURCES = memory_upload_producer-test.c
+memory_upload_producer_test_LDADD = libzcloud.la

@@ -41,48 +41,42 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifndef ZCLOUD_UPLOAD_PRODUCER_H
-#define ZCLOUD_UPLOAD_PRODUCER_H
+#ifndef ZCLOUD_MEMORY_UPLOAD_PRODUCER_H
+#define ZCLOUD_MEMORY_UPLOAD_PRODUCER_H
+
+#include <glib.h>
+#include <glib-object.h>
+#include "zcloud/upload_producer.h"
 
 G_BEGIN_DECLS
 
-GType zcloud_upload_producer_get_type(void);
-#define ZCLOUD_TYPE_UPLOAD_PRODUCER (zcloud_upload_producer_get_type())
-#define ZCLOUD_UPLOAD_PRODUCER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_UPLOAD_PRODUCER, ZCloudUploadProducer))
-#define ZCLOUD_UPLOAD_PRODUCER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_UPLOAD_PRODUCER, ZCloudUploadProducerClass))
-#define ZCLOUD_IS_UPLOAD_PRODUCER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZCLOUD_TYPE_UPLOAD_PRODUCER))
-#define ZCLOUD_IS_UPLOAD_PRODUCER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_UPLOAD_PRODUCER))
-#define ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_UPLOAD_PRODUCER, ZCloudUploadProducerClass))
+GType zcloud_memory_upload_producer_get_type(void);
+#define ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER (zcloud_memory_upload_producer_get_type())
+#define ZCLOUD_MEMORY_UPLOAD_PRODUCER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER, ZCloudMemoryUploadProducer))
+#define ZCLOUD_MEMORY_UPLOAD_PRODUCER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER, ZCloudMemoryUploadProducerClass))
+#define ZCLOUD_IS_MEMORY_UPLOAD_PRODUCER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER))
+#define ZCLOUD_IS_MEMORY_UPLOAD_PRODUCER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER))
+#define ZCLOUD_MEMORY_UPLOAD_PRODUCER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER, ZCloudMemoryUploadProducerClass))
 
-#define ZCLOUD_MD5_HASH_BYTE_LEN 16
+enum {
+    PROP_0,
 
-typedef struct ZCloudUploadProducer_s {
-    GObject parent;
+    ZCLOUD_PROP_MEMORY_UPLOAD_PRODUCER_BUFFER,
+    ZCLOUD_PROP_MEMORY_UPLOAD_PRODUCER_BUFFER_LENGTH,
+    ZCLOUD_PROP_MEMORY_UPLOAD_PRODUCER_BUFFER_POSITION,
+};
 
-} ZCloudUploadProducer;
+typedef struct ZCloudMemoryUploadProducer_s {
+    ZCloudUploadProducer parent;
 
-typedef struct ZCloudUploadProducerClass_s {
-    GObjectClass parent_class;
+    guint8 *buffer;
+    guint buffer_length;
+    guint buffer_position;
+} ZCloudMemoryUploadProducer;
 
-    gsize (*read)(ZCloudUploadProducer *self, gpointer buffer, gsize bytes, GError **error);
-    gsize (*get_size)(ZCloudUploadProducer *self, GError **error);
-    GByteArray* (*calculate_md5)(ZCloudUploadProducer *self, GError **error);
-    void (*reset)(ZCloudUploadProducer *self, GError **error);
-} ZCloudUploadProducerClass;
-
-gsize zcloud_upload_producer_read(
-    ZCloudUploadProducer *self,
-    gpointer buffer,
-    gsize bytes,
-    GError **error);
-
-gsize zcloud_upload_producer_get_size(ZCloudUploadProducer *self, GError **error);
-
-GByteArray* zcloud_upload_producer_calculate_md5(
-    ZCloudUploadProducer *self,
-    GError **error);
-
-void zcloud_upload_producer_reset(ZCloudUploadProducer *self, GError **error);
+typedef struct ZCloudMemoryUploadProducerClass_s {
+    ZCloudUploadProducerClass parent_class;
+} ZCloudMemoryUploadProducerClass;
 
 G_END_DECLS
 
