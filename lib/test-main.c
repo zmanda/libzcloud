@@ -41,36 +41,12 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifndef ZC_PLUGINS_H
-#define ZC_PLUGINS_H
+/* The sole purpose of this file is to provide a main() which can call
+ * zcloud_do_tests; zcloud_do_tests is in libzcloud-test.la, and has access
+ * to internal symbols */
 
-G_BEGIN_DECLS
-
-/* Initialize the plugins, loading all of the relevant plugin information.
- *
- * @returns: FALSE on error, with ERROR set properly
- */
-G_GNUC_INTERNAL
-gboolean zc_plugins_init(GError **error);
-
-/*
- * testing utility functions
- */
-
-/* Clear all of the plugin metadata; note that this can *not* be called after
- * modules have been loaded!
- */
-G_GNUC_INTERNAL
-void zc_plugins_clear(void);
-
-/* Load the XML file given by 'dir_name/file' */
-G_GNUC_INTERNAL
-gboolean
-zc_load_module_xml(
-    const gchar *dir_name,
-    const gchar *file,
-    GError **error);
-
-G_END_DECLS
-
-#endif
+int zcloud_do_tests(int *argc, char ***argv);
+int main(int argc, char **argv)
+{
+    return zcloud_do_tests(&argc, &argv);
+}

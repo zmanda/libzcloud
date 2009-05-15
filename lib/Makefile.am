@@ -49,8 +49,8 @@ public_headers = \
 	zcloud/address.h \
 	zcloud/address_template.h \
 	zcloud/download_consumer.h \
-    zcloud/error.h \
-    zcloud/plugins.h \
+	zcloud/error.h \
+	zcloud/plugins.h \
 	zcloud/list_consumer.h \
 	zcloud/progress_listener.h \
 	zcloud/store.h \
@@ -73,25 +73,42 @@ libzcloud_source = \
     zcloud.c \
     memory_upload_producer.c
 
+test_source = \
+    test-driver.c \
+    plugins-test.c
+
+##
 # compiler settings
 INCLUDES = -I. -I$(top_srcdir)/config $(OPENSSL_INCLUDES)
 AM_CPPFLAGS = $(GLIB_CFLAGS)
 
+##
 # install the headers
+
 zcincludedir = $(includedir)/zcloud
 zcinclude_HEADERS = $(public_headers)
 include_HEADERS = zcloud.h
 
-# and install the library
+##
+# install the library
+
 lib_LTLIBRARIES = libzcloud.la
-libzcloud_la_LDFLAGS = $(OPENSSL_LDFLAGS)
-libzcloud_la_LIBADD = $(GLIB_LIBS) $(OPENSSL_LIBS)
-libzcloud_la_SOURCES = $(libzcloud_source)
-noinst_HEADERS = internal.h $(internal_headers)
 
-TESTS = memory_upload_producer_test
+libzcloud_la_LIBADD = $(GLIB_LIBS)
+libzcloud_la_SOURCES = internal.h $(internal_headers) $(libzcloud_source)
 
-noinst_PROGRAMS = $(TESTS)
+##
+# test
+
+TESTS = test
+check_PROGRAMS = test memory_upload_producer_test
+test_SOURCES = test-main.c
+test_LDADD = libzcloud-test.la
 
 memory_upload_producer_test_SOURCES = memory_upload_producer-test.c
-memory_upload_producer_test_LDADD = libzcloud.la
+memory_upload_producer_test_LDADD = libzcloud.la libzcloud-test.la
+
+# tests get their own library, including the test functions
+noinst_LTLIBRARIES = libzcloud-test.la
+libzcloud_test_la_LIBADD = $(GLIB_LIBS)
+libzcloud_test_la_SOURCES = test-driver.c $(test_source) $(internal_headers) $(libzcloud_source)

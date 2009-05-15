@@ -287,8 +287,8 @@ markup_text(GMarkupParseContext *context,
  * @param file: filename
  * @returns: FALSE on error, with ERROR set properly
  */
-static gboolean
-load_module_xml(
+gboolean
+zc_load_module_xml(
     const gchar *dir_name,
     const gchar *file,
     GError **error)
@@ -399,7 +399,7 @@ scan_plugin_dir(
         size_t len = strlen(elt);
         /* if the file ends in .xml, load it */
         if (len > 4 && 0 == g_ascii_strcasecmp(".xml", elt + len - 4)) {
-            if (!load_module_xml(dir_name, elt, error)) {
+            if (!zc_load_module_xml(dir_name, elt, error)) {
                 g_dir_close(dir);
                 return FALSE;
             }
@@ -576,3 +576,40 @@ zc_plugins_init(GError **error)
     return TRUE;
 }
 
+void
+zc_plugins_clear(void)
+{
+    GSList *iter;
+
+    for (iter = all_store_plugins; iter; iter = iter->next) {
+        ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
+
+        g_assert(plugin->type == 0);
+
+        if (plugin->prefix)
+            g_free(plugin->prefix);
+
+        g_free(plugin);
+    }
+    g_slist_free(all_store_plugins);
+    all_store_plugins = NULL;
+
+    for (iter = all_modules; iter; iter = iter->next) {
+        ZCloudModule *module = (ZCloudModule *)iter->data;
+
+        g_assert(!module->loaded);
+
+        if (module->basename)
+            g_free(module->basename);
+
+        if (module->module_path)
+            g_free(module->module_path);
+
+        if (module->xml_path)
+            g_free(module->xml_path);
+
+        g_free(module);
+    }
+    g_slist_free(all_modules);
+    all_modules = NULL;
+}
