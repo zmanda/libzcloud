@@ -41,8 +41,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "config.h"
-#include "zcloud/error.h"
+#include "internal.h"
 
 GQuark
 zcloud_error_quark(void)

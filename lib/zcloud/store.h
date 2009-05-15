@@ -44,8 +44,6 @@
 #ifndef ZCLOUD_STORE_H
 #define ZCLOUD_STORE_H
 
-#include <glib.h>
-#include <glib-object.h>
 #include "address.h"
 #include "address_template.h"
 #include "download_consumer.h"

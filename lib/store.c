@@ -41,7 +41,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "zcloud/store.h"
+#include "internal.h"
 
 GType
 zcloud_store_get_type(void)

@@ -41,9 +41,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+#include "zcloud.h"
 #include <gmodule.h>
-#include "zcloud/zcloud.h"
-#include "zcloud/plugins.h"
 
 const gchar *
 g_module_check_init(GModule *module)

@@ -44,9 +44,6 @@
 #ifndef ZCLOUD_PROGRESS_LISTENER_H
 #define ZCLOUD_PROGRESS_LISTENER_H
 
-#include <glib.h>
-#include <glib-object.h>
-
 G_BEGIN_DECLS
 
 GType zcloud_progress_listener_get_type(void);

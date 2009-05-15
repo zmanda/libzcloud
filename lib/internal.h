@@ -84,8 +84,6 @@
 #include <unistd.h>
 #endif
 
-#include "zcloud/zcloud.h"
-
 /* set up G_GNUC_INTERNAL to work regardless of glib version, even if that means
  * leaking symbols on older systems.  This macro is used to mark any functions
  * which should not be available from the final, linked libzcloud, but which are
@@ -100,6 +98,10 @@
 #endif
 #endif
 
-#include "plugins.h"
+/* include internal headers */
+#include "internal/plugins.h"
+
+/* finish by including the public header */
+#include "zcloud.h"
 
 #endif

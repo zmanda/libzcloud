@@ -44,9 +44,6 @@
 #ifndef ZCLOUD_UPLOAD_PRODUCER_H
 #define ZCLOUD_UPLOAD_PRODUCER_H
 
-#include <glib.h>
-#include <glib-object.h>
-
 G_BEGIN_DECLS
 
 GType zcloud_upload_producer_get_type(void);

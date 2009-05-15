@@ -41,7 +41,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "zcloud/address_template.h"
+#include "internal.h"
 
 GType
 zcloud_address_template_get_type(void)

@@ -41,7 +41,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "zcloud/list_consumer.h"
+#include "internal.h"
 
 GType
 zcloud_list_consumer_get_type(void)

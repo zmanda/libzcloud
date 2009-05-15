@@ -41,7 +41,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "zcloud/progress_listener.h"
+#include "internal.h"
 
 GType
 zcloud_progress_listener_get_type(void)

@@ -48,9 +48,6 @@
 #ifndef ZCLOUD_PLUGINS_H
 #define ZCLOUD_PLUGINS_H
 
-#include <glib.h>
-#include <glib-object.h>
-
 G_BEGIN_DECLS
 
 typedef struct ZCloudModule_s {

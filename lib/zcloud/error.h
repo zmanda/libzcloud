@@ -48,8 +48,6 @@
 #ifndef ZCLOUD_ERROR_H
 #define ZCLOUD_ERROR_H
 
-#include <glib.h>
-
 G_BEGIN_DECLS
 
 /* a quark which can be used to identify GError objects from libzcloud */

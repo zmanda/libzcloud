@@ -45,7 +45,7 @@
 # File Lists
 #
 
-public_headers = zcloud/zcloud.h \
+public_headers = \
 	zcloud/address.h \
 	zcloud/address_template.h \
 	zcloud/download_consumer.h \
@@ -56,18 +56,16 @@ public_headers = zcloud/zcloud.h \
 	zcloud/store.h \
 	zcloud/upload_producer.h
 
-internal_headers = internal.h \
-    plugins.h
+internal_headers = \
+    internal/plugins.h
 
 libzcloud_source = \
     address.c \
     address_template.c \
     download_consumer.c \
     error.c \
-    internal.h \
     list_consumer.c \
     plugins.c \
-    plugins.h \
     progress_listener.c \
     store.c \
     upload_producer.c \
@@ -80,8 +78,10 @@ AM_CPPFLAGS = $(GLIB_CFLAGS)
 # install the headers
 zcincludedir = $(includedir)/zcloud
 zcinclude_HEADERS = $(public_headers)
+include_HEADERS = zcloud.h
 
 # and install the library
 lib_LTLIBRARIES = libzcloud.la
 libzcloud_la_LIBADD = $(GLIB_LIBS)
-libzcloud_la_SOURCES = $(internal_headers) $(libzcloud_source)
+libzcloud_la_SOURCES = $(libzcloud_source)
+noinst_HEADERS = internal.h $(internal_headers)

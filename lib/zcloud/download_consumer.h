@@ -44,9 +44,6 @@
 #ifndef ZCLOUD_DOWNLOAD_CONSUMER_H
 #define ZCLOUD_DOWNLOAD_CONSUMER_H
 
-#include <glib.h>
-#include <glib-object.h>
-
 G_BEGIN_DECLS
 
 GType zcloud_download_consumer_get_type(void);

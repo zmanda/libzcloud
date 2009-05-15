@@ -44,18 +44,21 @@
 #ifndef ZCLOUD_H
 #define ZCLOUD_H
 
+#include <glib.h>
+#include <glib-object.h>
+
 /* classes */
-#include "store.h"
-#include "address.h"
-#include "address_template.h"
-#include "download_consumer.h"
-#include "list_consumer.h"
-#include "progress_listener.h"
-#include "upload_producer.h"
+#include "zcloud/store.h"
+#include "zcloud/address.h"
+#include "zcloud/address_template.h"
+#include "zcloud/download_consumer.h"
+#include "zcloud/list_consumer.h"
+#include "zcloud/progress_listener.h"
+#include "zcloud/upload_producer.h"
 
 /* miscellaneous */
-#include "error.h"
-#include "plugins.h"
+#include "zcloud/error.h"
+#include "zcloud/plugins.h"
 
 G_BEGIN_DECLS
 

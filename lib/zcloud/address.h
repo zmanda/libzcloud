@@ -44,9 +44,6 @@
 #ifndef ZCLOUD_ADDRESS_H
 #define ZCLOUD_ADDRESS_H
 
-#include <glib.h>
-#include <glib-object.h>
-
 G_BEGIN_DECLS
 
 GType zcloud_address_get_type(void);

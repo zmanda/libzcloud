@@ -44,8 +44,6 @@
 #ifndef ZCLOUD_LIST_CONSUMER_H
 #define ZCLOUD_LIST_CONSUMER_H
 
-#include <glib.h>
-#include <glib-object.h>
 #include "address.h"
 
 G_BEGIN_DECLS

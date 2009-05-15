@@ -42,7 +42,7 @@
  * ***** END LICENSE BLOCK ***** */
 
 #include <stdio.h>
-#include "zcloud/zcloud.h"
+#include "zcloud.h"
 
 int main(int argc, char **argv)
 {

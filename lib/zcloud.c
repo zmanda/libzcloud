@@ -42,7 +42,6 @@
  * ***** END LICENSE BLOCK ***** */
 
 #include "internal.h"
-#include "zcloud/zcloud.h"
 
 ZCloudStore *
 zcloud_new(const gchar *prefix, GError **error)
