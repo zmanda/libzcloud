@@ -470,8 +470,8 @@ ZCloudStorePlugin *
 zcloud_get_store_plugin_by_prefix(
     const gchar *prefix)
 {
-    GSList *iter = all_store_plugins;
-    while (iter) {
+    GSList *iter;
+    for (iter = all_store_plugins; iter; iter = iter->next) {
         ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
 
         if (0 == strcmp(plugin->prefix, prefix))
