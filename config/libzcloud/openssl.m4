@@ -73,18 +73,20 @@ AC_DEFUN([ZCLOUD_CHECK_OPENSSL], [
         ]
         )
     
+    # note that we #include <openssl/foo.h>, so the OpenSSL headers have to be in
+    # an 'openssl' subdirectory
+
     OPENSSL_INCLUDES=
+    found=false
     for ssldir in $ssldirs; do
         if test -f "$ssldir/include/openssl/ssl.h"; then
-            OPENSSL_INCLUDES="-I$ssldir/include/openssl"
-            break
-        elif test -f "$ssldir/include/ssl.h"; then
-            OPENSSL_INCLUDES="-I$ssldir/include"
+            found=true
+            test "$ssldir" = "/usr" || OPENSSL_INCLUDES="-I$ssldir/include"
             break
         fi
     done
 
-    if test x"$OPENSSL_INCLUDES" = x""; then
+    if ! $found; then
         AC_MSG_RESULT([no])
         AC_MSG_FAILURE([Cannot find ssl.h])
     fi
