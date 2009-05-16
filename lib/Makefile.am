@@ -81,6 +81,7 @@ test_source = \
 INCLUDES = -I. -I$(top_srcdir)/config
 AM_CPPFLAGS = $(GLIB_CFLAGS) $(ZC_WARNING_CFLAGS)
 AM_LDFLAGS = $(ZC_LDFLAGS)
+AM_LIBTOOLFLAGS = --silent
 
 ##
 # install the headers

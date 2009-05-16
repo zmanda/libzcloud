@@ -58,9 +58,6 @@ AC_PROG_CC
 
 # Compiler and linker flags
 
-# make libtool less verbose
-ZCLOUD_ADD_LDFLAG([-silent])
-
 # get gcc to check a lot of things for us
 ZCLOUD_ADD_GCC_WARNING_OPTION([-Wparentheses])
 ZCLOUD_ADD_GCC_WARNING_OPTION([-Wdeclaration-after-statement])

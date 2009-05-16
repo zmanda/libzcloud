@@ -73,16 +73,3 @@ AC_DEFUN([ZCLOUD_ADD_GCC_WARNING_OPTION], [
     AC_REQUIRE([ZCLOUD_INIT_COMPILER_FLAGS])
     AX_CFLAGS_GCC_OPTION($1, ZC_WARNING_CFLAGS)
 ])
-
-# SYNOPSIS
-#
-#   ZCLOUD_ADD_LDFLAG(option)
-#
-# DESCRIPTION
-#
-#   Adds OPTION to LDFLAGS.  Since libtool is, effectively, the linker, there
-#   is no need to detect linkers.
-AC_DEFUN([ZCLOUD_ADD_LDFLAG], [
-    AC_REQUIRE([ZCLOUD_INIT_COMPILER_FLAGS])
-    ZC_LDFLAGS="$ZC_LDFLAGS $1"
-])
