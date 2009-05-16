@@ -147,6 +147,8 @@ zcloud_store_list(
     ZCloudProgressListener *progress,
     GError **error)
 {
+    mkstub(list,
+        template, list, progress, error);
 }
 
 ZCloudAddress *

@@ -268,7 +268,7 @@ markup_text(GMarkupParseContext *context,
 
     /* if there's any non whitespace, then this is unexpected */
     for (i = 0; i < text_len; i++) {
-        if (!isspace(text[i])) {
+        if (!g_ascii_isspace(text[i])) {
             markup_error(state, context, error,
                         G_MARKUP_ERROR_INVALID_CONTENT,
                         "unexpected text");
@@ -464,6 +464,7 @@ zcloud_register_store_plugin(
     }
 
     plugin->type = type;
+    return NULL;
 }
 
 ZCloudStorePlugin *
@@ -494,7 +495,6 @@ zcloud_load_store_plugin(
 {
     static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
     GSList *iter;
-    gchar *path;
     ZCloudModule *zcmod;
     GModule *gmod;
 

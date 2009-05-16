@@ -46,6 +46,9 @@
 /* list all test files here, with their setup functions */
 void zc_test_plugins();                 /* plugins-test.c */
 
+/* TOOD: put this prototype somewhere */
+int zcloud_do_tests(int *argc, char ***argv);
+
 /* This function is effectively main() for the libzcloud tests; it is called
  * from libzcloud-main.c */
 int

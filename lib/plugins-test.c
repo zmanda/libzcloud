@@ -231,8 +231,10 @@ test_plugin_info(void)
  * Initialization
  */
 
+/* TODO: move prototype somewhere */
+void zc_test_plugins(void);
 void
-zc_test_plugins()
+zc_test_plugins(void)
 {
     g_test_add_func("/plugins/xml/simple", test_xml_simple);
     g_test_add_func("/plugins/xml/badattr", test_xml_badattr);

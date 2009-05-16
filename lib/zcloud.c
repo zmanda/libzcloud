@@ -47,7 +47,6 @@ ZCloudStore *
 zcloud_new(const gchar *prefix, GError **error)
 {
     ZCloudStorePlugin *plugin = zcloud_get_store_plugin_by_prefix(prefix);
-    ZCloudStore *store;
 
     if (!plugin) {
         g_set_error(error,
@@ -68,7 +67,6 @@ gboolean
 zcloud_init(GError **error)
 {
     static gboolean initialized = FALSE;
-    GSList *iter;
 
     if (initialized)
         return TRUE;

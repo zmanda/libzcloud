@@ -79,7 +79,8 @@ test_source = \
 # compiler settings
 
 INCLUDES = -I. -I$(top_srcdir)/config
-AM_CPPFLAGS = $(GLIB_CFLAGS)
+AM_CPPFLAGS = $(GLIB_CFLAGS) $(ZC_WARNING_CFLAGS)
+AM_LDFLAGS = $(ZC_LDFLAGS)
 
 ##
 # install the headers

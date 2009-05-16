@@ -42,8 +42,8 @@
 #  ***** END LICENSE BLOCK ***** */
 
 INCLUDES = -I$(top_srcdir)/lib
-AM_CPPFLAGS = $(GLIB_CFLAGS)
-LDADD = $(GLIB_LIBS)
+AM_CPPFLAGS = $(GLIB_CFLAGS) $(ZC_WARNING_CFLAGS)
+AM_LDFLAGS = $(ZC_LDFLAGS)
 
 bin_PROGRAMS = zcloud
 zcloud_SOURCES = zcloud.c

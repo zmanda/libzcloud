@@ -41,74 +41,48 @@
 # 
 #  ***** END LICENSE BLOCK ***** */
 
-AC_INIT
-AC_CONFIG_AUX_DIR(config)
-AC_CONFIG_MACRO_DIR(config)
-AC_CONFIG_SRCDIR([lib/store.c])
-AC_CONFIG_HEADER([config/config.h])
-AM_INIT_AUTOMAKE(libzcloud, "1.0alpha")
-AC_PREREQ(2.59)
+# SYNOPSIS
+#
+#   ZCLOUD_INIT_COMPILER_FLAGS
+#
+# DESCRIPTION
+#
+#   Set up extra compiler flags, mostly for GCC.  Sets up ZC_WARNING_CFLAGS,
+#   which can be added to AM_CFLAGS in Makefiles.  Sets up ZC_LDFLAGS, also for
+#   inclusion in Makefiles
+#
+AC_DEFUN([ZCLOUD_INIT_COMPILER_FLAGS], [
+    AC_REQUIRE([AC_PROG_GCC_TRADITIONAL])
 
-# Libtool
-AM_PROG_LIBTOOL
-AC_SUBST(LIBTOOL_DEPS)
-
-# Checks for programs.
-AC_PROG_CC
-
-# Compiler and linker flags
-
-# make libtool less verbose
-ZCLOUD_ADD_LDFLAG([-silent])
-
-# get gcc to check a lot of things for us
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wparentheses])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wdeclaration-after-statement])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wmissing-prototypes])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wstrict-prototypes])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wmissing-declarations])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wformat])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wformat-security])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wsign-compare])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wfloat-equal])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wold-style-definition])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wno-strict-aliasing])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wno-unknown-pragmas])
-
-# Checks for libraries.
-ZCLOUD_CHECK_GLIB
-
-# Checks for header files.
-AC_HEADER_DIRENT
-AC_HEADER_STDC
-AC_CHECK_HEADERS([ \
-    errno.h \
-    fcntl.h \
-    stdlib.h \
-    string.h \
-    strings.h \
-    sys/types.h \
-    sys/stat.h \
-    unistd.h \
+    # Warn for just about everything
+    AX_CFLAGS_GCC_OPTION(-Wall, ZC_WARNING_CFLAGS)
+    
+    AC_SUBST([ZC_WARNING_CFLAGS])
+    AC_SUBST([ZC_LDFLAGS])
 ])
 
-# Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_TYPE_SIZE_T
-
-# Checks for library functions.
-AC_CHECK_FUNCS([bzero regcomp])
-
-# Set up directories
-ZCLOUD_WITH_ZCPLUGINDIR
-
-# load plugins
-m4_include([plugins/configure.m4])
-
-AC_CONFIG_FILES([
-    Makefile
-    lib/Makefile
-    bin/Makefile
+# SYNOPSIS
+#
+#   ZCLOUD_ADD_GCC_WARNING_OPTION(option)
+#
+# DESCRIPTION
+#
+#   Adds OPTION to ZC_WARNING_CFLAGS if the compiler is gcc and if it accepts
+#   the option.
+AC_DEFUN([ZCLOUD_ADD_GCC_WARNING_OPTION], [
+    AC_REQUIRE([ZCLOUD_INIT_COMPILER_FLAGS])
+    AX_CFLAGS_GCC_OPTION($1, ZC_WARNING_CFLAGS)
 ])
 
-AC_OUTPUT
+# SYNOPSIS
+#
+#   ZCLOUD_ADD_LDFLAG(option)
+#
+# DESCRIPTION
+#
+#   Adds OPTION to LDFLAGS.  Since libtool is, effectively, the linker, there
+#   is no need to detect linkers.
+AC_DEFUN([ZCLOUD_ADD_LDFLAG], [
+    AC_REQUIRE([ZCLOUD_INIT_COMPILER_FLAGS])
+    ZC_LDFLAGS="$ZC_LDFLAGS $1"
+])
