@@ -73,18 +73,11 @@ zcloud_address_get_type(void)
  * method stubs
  */
 
-#define mkstub(methname, ...) \
-    ZCloudAddressClass *c = ZCLOUD_ADDRESS_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self, __VA_ARGS__);
-#define mkstub0(methname) \
-    ZCloudAddressClass *c = ZCLOUD_ADDRESS_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self);
-
 gchar *
 zcloud_address_to_string(
     ZCloudAddress *self)
 {
-    mkstub0(to_string);
+    ZCloudAddressClass *c = ZCLOUD_ADDRESS_GET_CLASS(self);
+    g_assert(c->to_string != NULL);
+    return (c->to_string)(self);
 }

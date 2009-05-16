@@ -63,12 +63,12 @@ typedef struct ZCloudDownloadConsumerClass_s {
     GObjectClass parent_class;
 
     gsize (*write)(ZCloudDownloadConsumer *self, gpointer buffer, gsize bytes, GError **error);
-    void (*reset)(ZCloudDownloadConsumer *self, GError **error);
+    gboolean (*reset)(ZCloudDownloadConsumer *self, GError **error);
 } ZCloudDownloadConsumerClass;
 
 gsize zcloud_download_consumer_write(ZCloudDownloadConsumer *self, gpointer buffer, gsize bytes, GError **error);
 
-void zcloud_download_consumer_reset(ZCloudDownloadConsumer *self, GError **error);
+gboolean zcloud_download_consumer_reset(ZCloudDownloadConsumer *self, GError **error);
 
 G_END_DECLS
 

@@ -73,20 +73,12 @@ zcloud_list_consumer_get_type(void)
  * method stubs
  */
 
-#define mkstub(methname, ...) \
-    ZCloudListConsumerClass *c = ZCLOUD_LIST_CONSUMER_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self, __VA_ARGS__);
-#define mkstub0(methname) \
-    ZCloudListConsumerClass *c = ZCLOUD_LIST_CONSUMER_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self);
-
 void
 zcloud_list_consumer_got_result(
     ZCloudListConsumer *self,
     ZCloudAddress *address)
 {
-    mkstub(got_result,
-        address);
+    ZCloudListConsumerClass *c = ZCLOUD_LIST_CONSUMER_GET_CLASS(self);
+    g_assert(c->got_result != NULL);
+    (c->got_result)(self, address);
 }

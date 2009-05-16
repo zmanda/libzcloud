@@ -72,13 +72,3 @@ zcloud_progress_listener_get_type(void)
 /*
  * method stubs
  */
-
-#define mkstub(methname, ...) \
-    ZCloudProgressListenerClass *c = ZCLOUD_PROGRESS_LISTENER_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self, __VA_ARGS__);
-#define mkstub0(methname) \
-    ZCloudProgressListenerClass *c = ZCLOUD_PROGRESS_LISTENER_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self);
-

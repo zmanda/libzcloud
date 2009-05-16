@@ -73,15 +73,6 @@ zcloud_store_get_type(void)
  * method stubs
  */
 
-#define mkstub(methname, ...) \
-    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self, __VA_ARGS__);
-#define mkstub0(methname, ...) \
-    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self);
-
 gboolean
 zcloud_store_create(
     ZCloudStore *self,
@@ -89,8 +80,9 @@ zcloud_store_create(
     ZCloudProgressListener *progress,
     GError **error)
 {
-    mkstub(create,
-        address, progress, error);
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self);
+    g_assert(c->create != NULL);
+    return (c->create)(self, address, progress, error);
 }
 
 gboolean
@@ -101,8 +93,9 @@ zcloud_store_upload(
     ZCloudProgressListener *progress,
     GError **error)
 {
-    mkstub(upload,
-        address, upload, progress, error);
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
+    g_assert(c->upload != NULL); \
+    return (c->upload)(self, address, upload, progress, error);
 }
 
 gboolean
@@ -113,8 +106,9 @@ zcloud_store_download(
     ZCloudProgressListener *progress,
     GError **error)
 {
-    mkstub(download,
-        address, download, progress, error);
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
+    g_assert(c->download != NULL); \
+    return (c->download)(self, address, download, progress, error);
 }
 
 gboolean
@@ -124,8 +118,9 @@ zcloud_store_delete(
     ZCloudProgressListener *progress,
     GError **error)
 {
-    mkstub(delete,
-        address, progress, error);
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
+    g_assert(c->delete != NULL); \
+    return (c->delete)(self, address, progress, error);
 }
 
 gboolean
@@ -135,8 +130,9 @@ zcloud_store_exists(
     ZCloudProgressListener *progress,
     GError **error)
 {
-    mkstub(exists,
-        address, progress, error);
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
+    g_assert(c->exists != NULL); \
+    return (c->exists)(self, address, progress, error);
 }
 
 gboolean
@@ -147,8 +143,9 @@ zcloud_store_list(
     ZCloudProgressListener *progress,
     GError **error)
 {
-    mkstub(list,
-        template, list, progress, error);
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
+    g_assert(c->list != NULL); \
+    return (c->list)(self, template, list, progress, error);
 }
 
 ZCloudAddress *
@@ -157,8 +154,9 @@ zcloud_store_parse_address(
     gchar *address_str,
     GError **error)
 {
-    mkstub(parse_address,
-        address_str, error);
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
+    g_assert(c->parse_address != NULL); \
+    return (c->parse_address)(self, address_str, error);
 }
 
 ZCloudAddressTemplate *
@@ -167,6 +165,7 @@ zcloud_store_parse_address_template(
     gchar *address_template_str,
     GError **error)
 {
-    mkstub(parse_address_template,
-        address_template_str, error);
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
+    g_assert(c->parse_address_template != NULL); \
+    return (c->parse_address_template)(self, address_template_str, error);
 }

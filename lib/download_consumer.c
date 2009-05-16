@@ -73,15 +73,6 @@ zcloud_download_consumer_get_type(void)
  * method stubs
  */
 
-#define mkstub(methname, ...) \
-    ZCloudDownloadConsumerClass *c = ZCLOUD_DOWNLOAD_CONSUMER_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self, __VA_ARGS__);
-#define mkstub0(methname) \
-    ZCloudDownloadConsumerClass *c = ZCLOUD_DOWNLOAD_CONSUMER_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self);
-
 gsize
 zcloud_download_consumer_write(
     ZCloudDownloadConsumer *self,
@@ -89,15 +80,18 @@ zcloud_download_consumer_write(
     gsize bytes,
     GError **error)
 {
-    mkstub(write,
-        buffer, bytes, error);
+    ZCloudDownloadConsumerClass *c = ZCLOUD_DOWNLOAD_CONSUMER_GET_CLASS(self);
+    g_assert(c->write != NULL);
+    return (c->write)(self, buffer, bytes, error);
 }
 
-void
+gboolean
 zcloud_download_consumer_reset(
     ZCloudDownloadConsumer *self,
     GError **error)
 {
-    mkstub(reset, error);
+    ZCloudDownloadConsumerClass *c = ZCLOUD_DOWNLOAD_CONSUMER_GET_CLASS(self); \
+    g_assert(c->reset != NULL); \
+    return (c->reset)(self, error);
 }
 

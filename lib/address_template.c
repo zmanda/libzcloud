@@ -73,20 +73,14 @@ zcloud_address_template_get_type(void)
  * method stubs
  */
 
-#define mkstub(methname, ...) \
-    ZCloudAddressTemplateClass *c = ZCLOUD_ADDRESS_TEMPLATE_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self, __VA_ARGS__);
-#define mkstub0(methname) \
-    ZCloudAddressTemplateClass *c = ZCLOUD_ADDRESS_TEMPLATE_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self);
-
 /*
 ZCloudAddress *
 zcloud_address_template_interpolate(
     ZCloudAddressTemplate *self, ...)
 {
+    ZCloudAddressTemplateClass *c = ZCLOUD_ADDRESS_TEMPLATE_GET_CLASS(self);
+    g_assert(c->interpolate != NULL);
+    return (c->interpolate)(self, ...);
 }
 */
 
@@ -95,12 +89,16 @@ zcloud_address_template_interpolate_sa(
     ZCloudAddressTemplate *self,
     GPtrArray *substitution_parts)
 {
-    mkstub(interpolate_sa, substitution_parts);
+    ZCloudAddressTemplateClass *c = ZCLOUD_ADDRESS_TEMPLATE_GET_CLASS(self);
+    g_assert(c->interpolate_sa != NULL);
+    return (c->interpolate_sa)(self, substitution_parts);
 }
 
 gchar *
 zcloud_address_template_to_string(
     ZCloudAddressTemplate *self)
 {
-    mkstub0(to_string);
+    ZCloudAddressTemplateClass *c = ZCLOUD_ADDRESS_TEMPLATE_GET_CLASS(self);
+    g_assert(c->to_string != NULL);
+    return (c->to_string)(self);
 }

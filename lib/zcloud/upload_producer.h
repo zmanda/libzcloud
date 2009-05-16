@@ -65,7 +65,7 @@ typedef struct ZCloudUploadProducerClass_s {
     gsize (*read)(ZCloudUploadProducer *self, gpointer buffer, gsize bytes, GError **error);
     gsize (*get_size)(ZCloudUploadProducer *self, GError **error);
     GByteArray* (*calculate_md5)(ZCloudUploadProducer *self, GError **error);
-    void (*reset)(ZCloudUploadProducer *self, GError **error);
+    gboolean (*reset)(ZCloudUploadProducer *self, GError **error);
 } ZCloudUploadProducerClass;
 
 gsize zcloud_upload_producer_read(
@@ -80,7 +80,7 @@ GByteArray* zcloud_upload_producer_calculate_md5(
     ZCloudUploadProducer *self,
     GError **error);
 
-void zcloud_upload_producer_reset(ZCloudUploadProducer *self, GError **error);
+gboolean zcloud_upload_producer_reset(ZCloudUploadProducer *self, GError **error);
 
 G_END_DECLS
 

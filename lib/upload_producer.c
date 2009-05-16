@@ -69,15 +69,6 @@ zcloud_upload_producer_get_type(void)
  * method stubs
  */
 
-#define mkstub(methname, ...) \
-    ZCloudUploadProducerClass *c = ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self, __VA_ARGS__);
-#define mkstub0(methname) \
-    ZCloudUploadProducerClass *c = ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(self); \
-    g_assert(c->methname != NULL); \
-    return (c->methname)(self);
-
 gsize
 zcloud_upload_producer_read(
     ZCloudUploadProducer *self,
@@ -85,8 +76,9 @@ zcloud_upload_producer_read(
     gsize bytes,
     GError **error)
 {
-    mkstub(read,
-        buffer, bytes, error);
+    ZCloudUploadProducerClass *c = ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(self);
+    g_assert(c->read != NULL);
+    return (c->read)(self, buffer, bytes, error);
 }
 
 gsize
@@ -94,8 +86,9 @@ zcloud_upload_producer_get_size(
     ZCloudUploadProducer *self,
     GError **error)
 {
-    mkstub(get_size,
-        error);
+    ZCloudUploadProducerClass *c = ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(self);
+    g_assert(c->get_size != NULL);
+    return (c->get_size)(self, error);
 }
 
 GByteArray *
@@ -103,15 +96,17 @@ zcloud_upload_producer_calculate_md5(
     ZCloudUploadProducer *self,
     GError **error)
 {
-    mkstub(calculate_md5,
-        error);
+    ZCloudUploadProducerClass *c = ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(self);
+    g_assert(c->calculate_md5 != NULL);
+    return (c->calculate_md5)(self, error);
 }
 
-void
+gboolean
 zcloud_upload_producer_reset(
     ZCloudUploadProducer *self,
     GError **error)
 {
-    mkstub(reset,
-        error);
+    ZCloudUploadProducerClass *c = ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(self);
+    g_assert(c->reset != NULL);
+    return (c->reset)(self, error);
 }
