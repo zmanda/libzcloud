@@ -47,17 +47,17 @@
 #
 # DESCRIPTION
 #
-#   Set up extra compiler flags, mostly for GCC.  Sets up ZC_WARNING_CFLAGS,
-#   which can be added to AM_CFLAGS in Makefiles.  Sets up ZC_LDFLAGS, also for
+#   Set up extra compiler flags, mostly for GCC.  Sets up ZC_WARNING_CPPFLAGS,
+#   which can be added to AM_CPPFLAGS in Makefiles.  Sets up ZC_LDFLAGS, also for
 #   inclusion in Makefiles
 #
 AC_DEFUN([ZCLOUD_INIT_COMPILER_FLAGS], [
     AC_REQUIRE([AC_PROG_GCC_TRADITIONAL])
 
     # Warn for just about everything
-    AX_CFLAGS_GCC_OPTION(-Wall, ZC_WARNING_CFLAGS)
+    AX_CFLAGS_GCC_OPTION(-Wall, ZC_WARNING_CPPFLAGS)
     
-    AC_SUBST([ZC_WARNING_CFLAGS])
+    AC_SUBST([ZC_WARNING_CPPFLAGS])
     AC_SUBST([ZC_LDFLAGS])
 ])
 
@@ -67,9 +67,9 @@ AC_DEFUN([ZCLOUD_INIT_COMPILER_FLAGS], [
 #
 # DESCRIPTION
 #
-#   Adds OPTION to ZC_WARNING_CFLAGS if the compiler is gcc and if it accepts
+#   Adds OPTION to ZC_WARNING_CPPFLAGS if the compiler is gcc and if it accepts
 #   the option.
 AC_DEFUN([ZCLOUD_ADD_GCC_WARNING_OPTION], [
     AC_REQUIRE([ZCLOUD_INIT_COMPILER_FLAGS])
-    AX_CFLAGS_GCC_OPTION($1, ZC_WARNING_CFLAGS)
+    AX_CFLAGS_GCC_OPTION($1, ZC_WARNING_CPPFLAGS)
 ])
