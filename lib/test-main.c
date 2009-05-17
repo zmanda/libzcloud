@@ -41,12 +41,44 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/* The sole purpose of this file is to provide a main() which can call
- * zcloud_do_tests; zcloud_do_tests is in libzcloud-test.la, and has access
- * to internal symbols */
+/* The sole purpose of this file is to provide a main() which can invoke
+ * the various tests. */
 
-int zcloud_do_tests(int *argc, char ***argv);
-int main(int argc, char **argv)
+#include "test.h"
+#include <glib/gprintf.h>
+
+struct test_t {
+    const gchar *test_name;
+    void (*test_fn)(void);
+};
+
+#define TEST_MODULE(n) { G_STRINGIFY(n), test_##n },
+struct test_t all_tests[] = {
+    ALL_TESTS
+    { NULL, NULL }
+};
+#undef TEST_MODULE
+
+int
+main(int argc, char **argv)
 {
-    return zcloud_do_tests(&argc, &argv);
+    struct test_t *t;
+
+    if (argc > 1) {
+        g_fprintf(stderr, "usage: %s\n", argv[0]);
+        return 1;
+    }
+
+    for (t = all_tests; t->test_name; t++) {
+        g_fprintf(stderr, "TESTING %s\n", t->test_name);
+        t->test_fn();
+    }
+
+    if (tests_failed + tests_passed) {
+        g_fprintf(stderr, "RESULTS: %d passed, %d failed (%d%% success)\n",
+            tests_passed, tests_failed,
+            tests_passed * 100 / (tests_passed + tests_failed));
+    }
+
+    return tests_failed? 1 : 0;
 }

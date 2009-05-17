@@ -41,14 +41,9 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "internal.h"
-#include <glib/gprintf.h>
+#include "test.h"
 
 #define XML_FILE "mod.xml"
-
-/*
- * XML tests
- */
 
 static void
 write_xml_and_load(const gchar *xml, GError **error)
@@ -70,175 +65,152 @@ write_xml_and_load(const gchar *xml, GError **error)
     g_assert(close(fd) == 0);
 
     res = zc_load_module_xml(".", XML_FILE, error);
+
+    /* double-check that the boolean result agrees with ERROR */
     g_assert((res && !*error) || (!res && *error));
 }
 
 static void
-xml_ok(const gchar *xml)
+load_xml(const gchar *xml, GError **error)
 {
-    GError *error = NULL;
     zc_plugins_clear();
-    write_xml_and_load(xml, &error);
-    if (error) {
-        g_fprintf(stderr, "Unexpected error: %s\n", error->message);
-    }
-    g_assert(error == NULL);
+    write_xml_and_load(xml, error);
 }
-
-static void
-xml_not_ok(const gchar *xml, gint code)
-{
-    GError *error = NULL;
-    zc_plugins_clear();
-    write_xml_and_load(xml, &error);
-    if (error && (error->domain != G_MARKUP_ERROR || error->code != code)) {
-        g_fprintf(stderr, "Unexpected code/domain: %s\n", error->message);
-    }
-    g_assert(error != NULL);
-    g_assert(error->domain == G_MARKUP_ERROR);
-    g_assert(error->code == code);
-    g_clear_error(&error);
-}
-
-static void
-test_xml_simple(void)
-{
-    xml_ok("<zcloud-module basename=\"disk\">"
-    "<store-plugin prefix=\"disk\"></store-plugin>"
-    "</zcloud-module>");
-
-    g_assert(zcloud_get_store_plugin_by_prefix("disk"));
-}
-
-static void
-test_xml_badattr(void)
-{
-    xml_not_ok("<zcloud-module foo=\"bar\" basename=\"myext\">"
-    "<store-plugin prefix=\"myext\"></store-plugin>"
-    "</zcloud-module>", G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE);
-
-    xml_not_ok("<zcloud-module basename=\"myext\">"
-    "<store-plugin foo=\"bar\" prefix=\"myext\"></store-plugin>"
-    "</zcloud-module>", G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE);
-
-    xml_not_ok("<zcloud-module>"
-    "<store-plugin prefix=\"myext\"></store-plugin>"
-    "</zcloud-module>", G_MARKUP_ERROR_INVALID_CONTENT);
-
-    xml_not_ok("<zcloud-module basename=\"foo\">"
-    "<store-plugin></store-plugin>"
-    "</zcloud-module>", G_MARKUP_ERROR_INVALID_CONTENT);
-}
-
-static void
-test_xml_badtext(void)
-{
-    xml_not_ok("<zcloud-module basename=\"myext\">"
-    "random text"
-    "</zcloud-module>", G_MARKUP_ERROR_INVALID_CONTENT);
-}
-
-static void
-test_xml_badtags(void)
-{
-    xml_not_ok("<zcloud-module basename=\"myext\">"
-    "<blink>hi mom</blink>"
-    "</zcloud-module>", G_MARKUP_ERROR_UNKNOWN_ELEMENT);
-
-    xml_not_ok("<store-plugin></store-plugin>",
-    G_MARKUP_ERROR_INVALID_CONTENT);
-
-    xml_not_ok("<zcloud-module basename=\"myext\">"
-    "<store-plugin prefix=\"myext\">"
-    "<store-plugin prefix=\"myext\">", G_MARKUP_ERROR_INVALID_CONTENT);
-
-    xml_not_ok("<zcloud-module basename=\"myext\">"
-    "<zcloud-module>", G_MARKUP_ERROR_INVALID_CONTENT);
-}
-
-static void
-test_xml_multiplugins(void)
-{
-    xml_ok("<zcloud-module basename=\"myext\">"
-    "<store-plugin prefix=\"myext1\"></store-plugin>"
-    "<store-plugin prefix=\"myext2\"></store-plugin>"
-    "</zcloud-module>");
-
-    g_assert(zcloud_get_store_plugin_by_prefix("myext1"));
-    g_assert(zcloud_get_store_plugin_by_prefix("myext2"));
-
-    xml_not_ok("<zcloud-module basename=\"myext\">"
-    "<store-plugin prefix=\"dupe\"></store-plugin>"
-    "<store-plugin prefix=\"dupe\"></store-plugin>"
-    "</zcloud-module>", G_MARKUP_ERROR_INVALID_CONTENT);
-}
-
-static void
-test_xml_multimodules(void)
-{
-    xml_ok("<zcloud-module basename=\"myext1\">"
-    "<store-plugin prefix=\"one\"></store-plugin>"
-    "</zcloud-module><zcloud-module basename=\"myext2\">"
-    "<store-plugin prefix=\"two\"></store-plugin>"
-    "</zcloud-module>");
-
-    g_assert(zcloud_get_store_plugin_by_prefix("one"));
-    g_assert(0 == strcmp(
-        zcloud_get_store_plugin_by_prefix("one")->module->basename,
-        "myext1"));
-    g_assert(zcloud_get_store_plugin_by_prefix("two"));
-    g_assert(0 == strcmp(
-        zcloud_get_store_plugin_by_prefix("two")->module->basename,
-        "myext2"));
-
-    xml_not_ok("<zcloud-module basename=\"foo\">"
-    "<store-plugin prefix=\"one\"></store-plugin>"
-    "</zcloud-module><zcloud-module basename=\"foo\">"
-    "<store-plugin prefix=\"another\"></store-plugin>"
-    "</zcloud-module>", G_MARKUP_ERROR_INVALID_CONTENT);
-}
-
-static void
-test_plugin_info(void)
-{
-    GSList *iter;
-    gboolean seen_one = FALSE, seen_two = FALSE;
-
-    xml_ok("<zcloud-module basename=\"myext\">"
-    "<store-plugin prefix=\"one\"></store-plugin>"
-    "<store-plugin prefix=\"two\"></store-plugin>"
-    "</zcloud-module>");
-
-    /* evaluate all of the fields in the structs to make sure they're set
-     * correctly */
-    for (iter = zcloud_get_all_store_plugins(); iter; iter = iter->next) {
-        ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
-
-        if (0 == strcmp(plugin->prefix, "one"))
-            seen_one = TRUE;
-        if (0 == strcmp(plugin->prefix, "two"))
-            seen_two = TRUE;
-
-        g_assert(0 == strcmp(plugin->module->basename, "myext"));
-        g_assert(0 == strcmp(plugin->module->xml_path, "./mod.xml"));
-        g_assert(plugin->module->module_path != NULL);
-    }
-
-    g_assert(seen_one && seen_two);
-}
-
-/*
- * Initialization
- */
 
 void
-zc_test_plugins()
+test_plugins(void)
 {
-    g_test_add_func("/plugins/xml/simple", test_xml_simple);
-    g_test_add_func("/plugins/xml/badattr", test_xml_badattr);
-    g_test_add_func("/plugins/xml/badtext", test_xml_badtext);
-    g_test_add_func("/plugins/xml/badtags", test_xml_badtags);
-    g_test_add_func("/plugins/xml/multiplugins", test_xml_multiplugins);
-    g_test_add_func("/plugins/xml/multimodules", test_xml_multimodules);
-    g_test_add_func("/plugins/plugin_info", test_plugin_info);
+    GError *error = NULL;
+    ZCloudStorePlugin *pl;
+
+    load_xml("<zcloud-module basename=\"disk\">"
+        "<store-plugin prefix=\"disk\"></store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_clear(&error, "XML: single plugin in a simple module");
+    ok(NULL != zcloud_get_store_plugin_by_prefix("disk"), "plugin found");
+
+    load_xml("<zcloud-module foo=\"bar\" basename=\"myext\">"
+        "<store-plugin prefix=\"myext\"></store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_set(&error, "*'zcloud-module' attribute 'foo' not recognized",
+                G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE, "bogus zcloud-module attribute");
+
+    load_xml("<zcloud-module basename=\"myext\">"
+        "<store-plugin foo=\"bar\" prefix=\"myext\"></store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_set(&error, "*'store-plugin' attribute 'foo' not recognized",
+                G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE, "bogus store-plugin attribute");
+
+    load_xml("<zcloud-module>"
+        "<store-plugin prefix=\"myext\"></store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_set(&error, "*'zcloud-module' attribute 'basename' is required",
+                G_MARKUP_ERROR_INVALID_CONTENT, "missing basename attribute");
+
+    load_xml("<zcloud-module basename=\"foo\">"
+        "<store-plugin></store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_set(&error, "*'store-plugin' attribute 'prefix' is required",
+                G_MARKUP_ERROR_INVALID_CONTENT, "missing prefix attribute");
+
+    load_xml("<zcloud-module basename=\"myext\">"
+        "random text"
+        "</zcloud-module>", &error);
+    gerror_is_set(&error, "*unexpected text",
+            G_MARKUP_ERROR_INVALID_CONTENT, "unexpected text");
+
+    load_xml("<zcloud-module basename=\"myext\">"
+        "<blink>hi mom</blink>"
+        "</zcloud-module>", &error);
+    gerror_is_set(&error, "*element 'blink' not recognized",
+            G_MARKUP_ERROR_UNKNOWN_ELEMENT, "bogus element");
+
+    load_xml("<store-plugin></store-plugin>", &error);
+    gerror_is_set(&error, "*element 'store-plugin' must appear in a 'zcloud-module' element",
+            G_MARKUP_ERROR_INVALID_CONTENT, "store-plugin with no module");
+
+    load_xml("<zcloud-module basename=\"myext\">"
+        "<zcloud-module>", &error);
+    gerror_is_set(&error, "*element 'zcloud-module' cannot be nested",
+            G_MARKUP_ERROR_INVALID_CONTENT, "nested zcloud-module");
+
+    load_xml("<zcloud-module basename=\"myext\">"
+        "<store-plugin prefix=\"myext\">"
+        "<store-plugin prefix=\"myext\">", &error);
+    gerror_is_set(&error, "*element 'store-plugin' cannot be nested",
+            G_MARKUP_ERROR_INVALID_CONTENT, "nested store-plugin");
+
+    load_xml("<zcloud-module basename=\"myext\">"
+        "<store-plugin prefix=\"myext1\"></store-plugin>"
+        "<store-plugin prefix=\"myext2\"></store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_clear(&error, "no error loading a module with two store plugins");
+    ok(NULL != zcloud_get_store_plugin_by_prefix("myext1"), "one of two plugins exists");
+    ok(NULL != zcloud_get_store_plugin_by_prefix("myext2"), ".. as does the other");
+
+    load_xml("<zcloud-module basename=\"myext\">"
+        "<store-plugin prefix=\"dupe\"></store-plugin>"
+        "<store-plugin prefix=\"dupe\"></store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_set(&error, "*store plugin prefix 'dupe' is already defined",
+            G_MARKUP_ERROR_INVALID_CONTENT, "duplicate prefixes generate an error");
+
+    load_xml("<zcloud-module basename=\"myext1\">"
+        "<store-plugin prefix=\"one\"></store-plugin>"
+        "</zcloud-module><zcloud-module basename=\"myext2\">"
+        "<store-plugin prefix=\"two\"></store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_clear(&error, "no error loading two modules");
+
+    pl = zcloud_get_store_plugin_by_prefix("one");
+    ok(pl != NULL, "prefix one exists");
+    ok(0 == strcmp(pl->module->basename, "myext1"),
+        "..and has the right module name");
+
+    pl = zcloud_get_store_plugin_by_prefix("two");
+    ok(pl != NULL, "prefix two exists");
+    ok(0 == strcmp(pl->module->basename, "myext2"),
+        "..and has the right module name");
+
+    load_xml("<zcloud-module basename=\"foo\">"
+        "<store-plugin prefix=\"one\"></store-plugin>"
+        "</zcloud-module><zcloud-module basename=\"foo\">"
+        "<store-plugin prefix=\"another\"></store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_set(&error, "*zcloud-module with basename 'foo' is already defined",
+            G_MARKUP_ERROR_INVALID_CONTENT,
+            "two extensions with the same basename generate an error");
+
+    load_xml("<zcloud-module basename=\"myext\">"
+    "<store-plugin prefix=\"one\"></store-plugin>"
+    "<store-plugin prefix=\"two\"></store-plugin>"
+    "</zcloud-module>", &error);
+    gerror_is_clear(&error, "no error loading two plugins");
+
+    {
+        GSList *iter, *all;
+        gboolean seen_one = FALSE, seen_two = FALSE;
+
+        /* evaluate all of the fields in the structs to make sure they're set
+         * correctly */
+        all = zcloud_get_all_store_plugins();
+        for (iter = all; iter; iter = iter->next) {
+            pl = (ZCloudStorePlugin *)iter->data;
+
+            if (0 == strcmp(pl->prefix, "one"))
+                seen_one = TRUE;
+            if (0 == strcmp(pl->prefix, "two"))
+                seen_two = TRUE;
+
+            ok(0 == strcmp(pl->module->basename, "myext"),
+                "module basename is correct");
+            ok(0 == strcmp(pl->module->xml_path, "./mod.xml"),
+                "module xml_path is correct");
+            ok(pl->module->module_path != NULL,
+                "module module_path is non-NULL");
+        }
+
+        ok(g_slist_length(all) == 2 && seen_one && seen_two,
+            "saw the correct two plugins");
+    }
 }

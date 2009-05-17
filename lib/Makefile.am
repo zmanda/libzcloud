@@ -73,9 +73,11 @@ libzcloud_source = \
     upload_producer.c \
     zcloud.c
 
+
 test_source = \
-    test-driver.c \
-    plugins-test.c
+	test-checks.c \
+	memory_upload_producer-test.c \
+	plugins-test.c
 
 ##
 # compiler settings
@@ -99,17 +101,17 @@ libzcloud_la_LDFLAGS = $(OPENSSL_LDFLAGS)
 libzcloud_la_SOURCES = internal.h $(internal_headers) $(libzcloud_source)
 
 ##
-# test
+# test library
 
-TESTS = test
-check_PROGRAMS = test memory_upload_producer_test
-test_SOURCES = test-main.c
-test_LDADD = libzcloud-test.la
+# due to the need to access internal functions, tests are built within a
+# specially-created library and invoked from a "test" binary.
 
-memory_upload_producer_test_SOURCES = memory_upload_producer-test.c
-memory_upload_producer_test_LDADD = libzcloud.la libzcloud-test.la
+check_LTLIBRARIES = libzcloud-test.la
+libzcloud_test_la_LIBADD = $(libzcloud_la_LIBADD)
+libzcloud_test_la_LDFLAGS = $(libzcloud_la_LDFLAGS)
+libzcloud_test_la_SOURCES = $(libzcloud_la_SOURCES) $(test_source)
 
-# tests get their own library, including the test functions
-noinst_LTLIBRARIES = libzcloud-test.la
-libzcloud_test_la_LIBADD = $(GLIB_LIBS)
-libzcloud_test_la_SOURCES = test-driver.c $(test_source) $(internal_headers) $(libzcloud_source)
+TESTS = libzcloud-test
+check_PROGRAMS = libzcloud-test
+libzcloud_test_SOURCES = test-main.c test.h
+libzcloud_test_LDADD = libzcloud-test.la

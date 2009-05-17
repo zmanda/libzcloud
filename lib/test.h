@@ -41,20 +41,67 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+#ifndef ZC_TEST_H
+#define ZC_TEST_H
+
 #include "internal.h"
 
-/* list all test files here, with their setup functions */
-void zc_test_plugins();                 /* plugins-test.c */
+G_BEGIN_DECLS
 
-/* This function is effectively main() for the libzcloud tests; it is called
- * from libzcloud-main.c */
-int
-zcloud_do_tests(int *argc, char ***argv)
-{
-    g_test_init(argc, argv, NULL);
+/*
+ * Checks (test-checks.c)
+ */
 
-    /* and call the setup functions here */
-    zc_test_plugins();
+/* print a diagnostic message */
+void diag(const gchar *fmt, ...) G_GNUC_PRINTF(1, 2);
 
-    return g_test_run();
-}
+/* print a message indicating that the named test passed or failed */
+gboolean pass(const gchar *msg);
+gboolean fail(const gchar *msg);
+
+/* The remaining test functions return TRUE if the test passes, and take
+ * a MSG parameter describing the test, for output to the user */
+
+/* pass if TEST is true */
+gboolean ok(gboolean test, const gchar *msg);
+
+/* pass if TEST is false */
+gboolean not_ok(gboolean test, const gchar *msg);
+
+/* pass if ERROR is NULL.  The GError is cleared if necessary. */
+gboolean gerror_is_clear(GError **error, const gchar *msg);
+
+/* pass if ERROR is non-NULL, optionally matching its message against
+ * EXPECTED_MESSAGE_GLOB, and (if EXPECTED_CODE is not -1) matching the
+ * code against EXPECTED_CODE. The GError is cleared if necessary. */
+gboolean gerror_is_set(GError **error, const gchar *expected_message_glob,
+                    gint expected_code, const gchar *msg);
+
+/* compare two objects of the same, given type */
+gboolean is_gsize(gsize got, gsize expected, const gchar *msg);
+gboolean is_string(const gchar *got, const gchar *expected, const gchar *msg);
+gboolean is_byte_array(const GByteArray *got, const GByteArray *expected, const gchar *msg);
+
+/*
+ * Global state tracking
+ */
+
+extern gint tests_failed, tests_passed, tests_run;
+
+/*
+ * All test modules
+ */
+
+/* list of all test modules */
+#define ALL_TESTS \
+    TEST_MODULE(memory_upload_producer) \
+    TEST_MODULE(plugins)
+
+/* generate test module prototypes */
+#define TEST_MODULE(n) void test_##n(void);
+ALL_TESTS
+#undef TEST_MODULE
+
+G_END_DECLS
+
+#endif

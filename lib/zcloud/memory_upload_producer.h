@@ -65,7 +65,7 @@ enum {
 typedef struct ZCloudMemoryUploadProducer_s {
     ZCloudUploadProducer parent;
 
-    guint8 *buffer;
+    const guint8 *buffer;
     guint buffer_length;
     guint buffer_position;
 } ZCloudMemoryUploadProducer;
@@ -76,7 +76,7 @@ typedef struct ZCloudMemoryUploadProducerClass_s {
 
 /* constructor */
 ZCloudMemoryUploadProducer *
-zcloud_memory_upload_producer(guint8 *buffer, guint buffer_length);
+zcloud_memory_upload_producer(const guint8 *buffer, guint buffer_length);
 
 G_END_DECLS
 
