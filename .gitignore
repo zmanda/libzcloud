@@ -7,3 +7,4 @@ Makefile.in
 config/config.h.in~
 plugins/configure.m4
 docs/_build
+docs/rst-files

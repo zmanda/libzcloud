@@ -47,3 +47,4 @@ clean-local:
 
 html: conf.py
 	$(SPHINX_BUILD) -c $(builddir) -b html -d build/doctree $(srcdir) build/html
+	tar -C build -cf html.tgz html

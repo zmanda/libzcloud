@@ -1,19 +1,35 @@
-.. libzcloud documentation master file, created by sphinx-quickstart on Sun May 17 22:34:23 2009.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+libzcloud
+=========
 
-Welcome to libzcloud's documentation!
-=====================================
+Libzcloud is an abstraction for cloud storage services.  It provides an easy,
+consistent interface to a variety of cloud services in the form of a system
+library (``libzcloud``) and a command-line utility (:command:`zcloud`).
 
-Contents:
+Note that this documentation is still essentially a series of notes we've added
+as we've built parts of the library.  It needs serious thought put toward
+proper organization and connection.
+
+Table of Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   introduction
+   plugins
+   headers
+
+To Do
+=====
+
+* Descriptions of each class from the user's perspective
+* "How to write a plugin"
+* "Using libzcloud" example
+* Reference zcloud(1) for zcloud instructions
+* "Using zcloud" example
+* Developers' doc: testing, coding style, etc.
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
-
