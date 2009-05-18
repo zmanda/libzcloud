@@ -102,11 +102,16 @@ ZCLOUD_WITH_ZCPLUGINDIR
 # load plugins
 m4_include([plugins/configure.m4])
 
+# set up documentation
+ZCLOUD_CHECK_DOCUMENTATION
+
 AC_CONFIG_FILES([
     Makefile
     man/Makefile
     lib/Makefile
     bin/Makefile
+    docs/Makefile
+    docs/conf.py
 ])
 
 AC_OUTPUT

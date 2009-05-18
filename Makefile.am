@@ -42,4 +42,5 @@
 #  ***** END LICENSE BLOCK ***** */
 
 ACLOCAL_AMFLAGS = -Iconfig -I config/macro-archive -I config/libzcloud
-SUBDIRS = lib $(PLUGIN_SUBDIRS) bin man
+
+SUBDIRS = lib $(PLUGIN_SUBDIRS) bin man docs
