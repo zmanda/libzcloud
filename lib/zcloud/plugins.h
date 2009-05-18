@@ -50,6 +50,33 @@
 
 G_BEGIN_DECLS
 
+/*
+ * Plugin registration
+ */
+
+/* plugin-creation function
+ *
+ * @param storenode: the node (store specification string without prefix)
+ * @returns: a new object or NULL on error (with ERROR set correctly)
+ */
+typedef ZCloudStore *(* ZCloudStoreConstructor)(const gchar *storenode, GError **error);
+
+/* Plugins call this function from g_module_check_init.  It is invalid to
+ * call this at any other time.
+ *
+ * @param module_name: name of the module registering this plugin
+ * @param prefix: prefix for this plugin
+ * @param type: GType to instantiate for this plugin
+ * @returns: NULL on success, or an error string on failure (return this string
+ *   from g_module_check_init)
+ */
+gchar *zcloud_register_store_plugin(const gchar *module_name,
+                    const gchar *prefix, ZCloudStoreConstructor constructor);
+
+/*
+ * Types
+ */
+
 typedef struct ZCloudModule_s {
     /* short name of the module (e.g., "disk" or "cloudsplosion") */
     gchar *basename;
@@ -71,24 +98,9 @@ typedef struct ZCloudStorePlugin_s {
     /* the module defining this store plugin */
     ZCloudModule *module;
 
-    /* GType for the store class, or 0 if the plugin isn't loaded */
-    GType type;
+    /* constructor for the store class, or NULL if the plugin isn't loaded */
+    ZCloudStoreConstructor constructor;
 } ZCloudStorePlugin;
-
-/*
- * Plugin registration
- */
-
-/* Plugins call this function from g_module_check_init.  It is invalid to
- * call this at any other time.
- *
- * @param module_name: name of the module registering this plugin
- * @param prefix: prefix for this plugin
- * @param type: GType to instantiate for this plugin
- * @returns: NULL on success, or an error string on failure (return this string
- *   from g_module_check_init)
- */
-gchar *zcloud_register_store_plugin(const gchar *module_name, const gchar *prefix, GType type);
 
 /*
  * Low-level interface

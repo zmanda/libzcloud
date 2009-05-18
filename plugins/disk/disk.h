@@ -41,11 +41,18 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "disk.h"
-#include <gmodule.h>
+#ifndef DISK_H
+#define DISK_H
 
-const gchar *
-g_module_check_init(GModule *module)
-{
-    return zcloud_register_store_plugin("disk", "disk", disk_constructor);
-}
+#include "zcloud.h"
+
+G_BEGIN_DECLS
+
+/* store.c */
+
+ZCloudStore *disk_constructor(const gchar *storenode, GError **error);
+
+G_END_DECLS
+
+#endif
+

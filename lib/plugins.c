@@ -441,9 +441,11 @@ gchar *
 zcloud_register_store_plugin(
     const gchar *module_name,
     const gchar *prefix,
-    GType type)
+    ZCloudStoreConstructor constructor)
 {
     ZCloudStorePlugin *plugin;
+
+    g_assert(constructor != NULL);
 
     plugin = zcloud_get_store_plugin_by_prefix(prefix);
     if (!plugin) {
@@ -452,7 +454,7 @@ zcloud_register_store_plugin(
                 "prefix '%s' is defined", prefix);
     }
 
-    if (plugin->type != 0) {
+    if (plugin->constructor != NULL) {
         return g_strdup_printf("zcloud_register_store_plugin: "
                 "prefix '%s' is already registered", prefix);
     }
@@ -463,7 +465,7 @@ zcloud_register_store_plugin(
                 prefix, plugin->module->basename);
     }
 
-    plugin->type = type;
+    plugin->constructor = constructor;
     return NULL;
 }
 
@@ -504,7 +506,7 @@ zcloud_load_store_plugin(
     g_static_mutex_lock(&mutex);
 
     /* check whether the type is loaded after acquiring the mutex */
-    if (store_plugin->type != 0) {
+    if (store_plugin->constructor != NULL) {
         g_static_mutex_unlock(&mutex);
         return TRUE;
     }
@@ -535,7 +537,7 @@ zcloud_load_store_plugin(
     /* check that it lived up to its advertisement */
     for (iter = all_store_plugins; iter; iter = iter->next) {
         ZCloudStorePlugin *pl = (ZCloudStorePlugin *)iter->data;
-        if (pl->module == zcmod && pl->type == 0) {
+        if (pl->module == zcmod && pl->constructor == NULL) {
             g_set_error(error,
                         ZCLOUD_ERROR,
                         ZCERR_MODULE,
@@ -584,7 +586,7 @@ zc_plugins_clear(void)
     for (iter = all_store_plugins; iter; iter = iter->next) {
         ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
 
-        g_assert(plugin->type == 0);
+        g_assert(plugin->constructor == NULL);
 
         if (plugin->prefix)
             g_free(plugin->prefix);
