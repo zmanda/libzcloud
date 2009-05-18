@@ -75,6 +75,9 @@ test_source = \
     test-driver.c \
     plugins-test.c
 
+EXTRA_DIST = \
+    libzcloud.pc.in
+
 ##
 # compiler settings
 
@@ -91,11 +94,14 @@ zcinclude_HEADERS = $(public_headers)
 include_HEADERS = zcloud.h
 
 ##
-# install the library
+# install the library and pkgconfig source file
 
 lib_LTLIBRARIES = libzcloud.la
 libzcloud_la_LIBADD = $(GLIB_LIBS)
 libzcloud_la_SOURCES = internal.h $(internal_headers) $(libzcloud_source)
+
+pkgconfigdir=$(libdir)/pkgconfig
+pkgconfig_DATA = libzcloud.pc
 
 ##
 # test
