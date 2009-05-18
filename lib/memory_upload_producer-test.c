@@ -51,7 +51,7 @@ is_md5(
 {
     gboolean rv;
     GByteArray *arr = g_byte_array_sized_new(16);
-    g_byte_array_append(arr, bytestring, 16);
+    g_byte_array_append(arr, (const guint8 *)bytestring, 16);
 
     rv = is_byte_array(got, arr, msg);
 
