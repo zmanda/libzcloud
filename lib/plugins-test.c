@@ -243,4 +243,6 @@ zc_test_plugins(void)
     g_test_add_func("/plugins/xml/multiplugins", test_xml_multiplugins);
     g_test_add_func("/plugins/xml/multimodules", test_xml_multimodules);
     g_test_add_func("/plugins/plugin_info", test_plugin_info);
+
+    unlink(XML_FILE);
 }

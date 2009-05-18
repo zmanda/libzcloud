@@ -41,4 +41,4 @@
 # 
 #  ***** END LICENSE BLOCK ***** */
 
-man_MANS = zcloud.1
+dist_man1_MANS = zcloud.1
