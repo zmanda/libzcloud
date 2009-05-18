@@ -54,6 +54,8 @@ GType zcloud_upload_producer_get_type(void);
 #define ZCLOUD_IS_UPLOAD_PRODUCER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_UPLOAD_PRODUCER))
 #define ZCLOUD_UPLOAD_PRODUCER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_UPLOAD_PRODUCER, ZCloudUploadProducerClass))
 
+#define ZCLOUD_MD5_HASH_BYTE_LEN 16
+
 typedef struct ZCloudUploadProducer_s {
     GObject parent;
 

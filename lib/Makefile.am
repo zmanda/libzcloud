@@ -1,5 +1,5 @@
 #  -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#  vi: set tabstop=4 shiftwidth=4 expandtab: */
+#  vi: set tabstop=4 shiftwidth=4 noexpandtab: */
 #  ***** BEGIN LICENSE BLOCK *****
 #  Version: LGPL 2.1/GPL 2.0
 #  This file is part of libzcloud.
@@ -49,9 +49,10 @@ public_headers = \
 	zcloud/address.h \
 	zcloud/address_template.h \
 	zcloud/download_consumer.h \
-    zcloud/error.h \
-    zcloud/plugins.h \
+	zcloud/error.h \
 	zcloud/list_consumer.h \
+	zcloud/memory_upload_producer.h \
+	zcloud/plugins.h \
 	zcloud/progress_listener.h \
 	zcloud/store.h \
 	zcloud/upload_producer.h
@@ -65,15 +66,18 @@ libzcloud_source = \
     download_consumer.c \
     error.c \
     list_consumer.c \
+    memory_upload_producer.c \
     plugins.c \
     progress_listener.c \
     store.c \
     upload_producer.c \
     zcloud.c
 
+
 test_source = \
-    test-driver.c \
-    plugins-test.c
+	test-checks.c \
+	memory_upload_producer-test.c \
+	plugins-test.c
 
 EXTRA_DIST = \
     libzcloud.pc.in
@@ -81,7 +85,7 @@ EXTRA_DIST = \
 ##
 # compiler settings
 
-INCLUDES = -I. -I$(top_srcdir)/config
+INCLUDES = -I. -I$(top_srcdir)/config $(OPENSSL_INCLUDES)
 AM_CPPFLAGS = $(GLIB_CFLAGS) $(ZC_WARNING_CPPFLAGS)
 AM_LDFLAGS = $(ZC_LDFLAGS)
 AM_LIBTOOLFLAGS = --silent
@@ -97,21 +101,26 @@ include_HEADERS = zcloud.h
 # install the library and pkgconfig source file
 
 lib_LTLIBRARIES = libzcloud.la
-libzcloud_la_LIBADD = $(GLIB_LIBS)
+
+libzcloud_la_LIBADD = $(GLIB_LIBS) $(OPENSSL_LIBS)
+libzcloud_la_LDFLAGS = $(OPENSSL_LDFLAGS)
 libzcloud_la_SOURCES = internal.h $(internal_headers) $(libzcloud_source)
 
 pkgconfigdir=$(libdir)/pkgconfig
 pkgconfig_DATA = libzcloud.pc
 
 ##
-# test
+# test library
 
-TESTS = test
-check_PROGRAMS = test
-test_SOURCES = test-main.c
-test_LDADD = libzcloud-test.la
+# due to the need to access internal functions, tests are built within a
+# specially-created library and invoked from a "test" binary.
 
-# tests get their own library, including the test functions
-noinst_LTLIBRARIES = libzcloud-test.la
-libzcloud_test_la_LIBADD = $(GLIB_LIBS)
-libzcloud_test_la_SOURCES = test-driver.c $(test_source) $(internal_headers) $(libzcloud_source)
+check_LTLIBRARIES = libzcloud-test.la
+libzcloud_test_la_LIBADD = $(libzcloud_la_LIBADD)
+libzcloud_test_la_LDFLAGS = $(libzcloud_la_LDFLAGS)
+libzcloud_test_la_SOURCES = $(libzcloud_la_SOURCES) $(test_source)
+
+TESTS = libzcloud-test
+check_PROGRAMS = libzcloud-test
+libzcloud_test_SOURCES = test-main.c test.h
+libzcloud_test_LDADD = libzcloud-test.la

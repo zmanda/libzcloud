@@ -40,80 +40,73 @@
 #  <http://www.gnu.org/licenses/>.
 # 
 #  ***** END LICENSE BLOCK ***** */
+#
+# SYNOPSIS
+#
+#   ZCLOUD_CHECK_OPENSSL
+#
+# OVERVIEW
+#
+#   Look for OpenSSL in a number of default spots, or in a user-selected
+#   spot.  Set
+#     OPENSSL_INCLUDES to the include directives required
+#     OPENSSL_LIBS to the -l directives required
+#     OPENSSL_LDFLAGS to the -L or -R flags required
+#
+AC_DEFUN([ZCLOUD_CHECK_OPENSSL], [
+    AC_MSG_CHECKING(for OpenSSL)
+    AC_REQUIRE([AC_CANONICAL_BUILD])
 
-AC_INIT
-AC_CONFIG_AUX_DIR(config)
-AC_CONFIG_MACRO_DIR(config)
-AC_CONFIG_SRCDIR([lib/store.c])
-AC_CONFIG_HEADER([config/config.h])
-AM_INIT_AUTOMAKE(libzcloud, "1.0alpha")
-AC_PREREQ(2.59)
+    AC_ARG_WITH(openssl,
+        AS_HELP_STRING([--with-openssl=DIR],
+            [root of the OpenSSL directory]),
+        [
+            case "$withval" in
+            "" | y | ye | yes | n | no)
+            AC_MSG_ERROR([Invalid --with-openssl value])
+              ;;
+            *) ssldirs="$withval"
+              ;;
+            esac
+        ], [
+            ssldirs="/usr/local/ssl /usr/lib/ssl /usr/ssl /usr/pkg /usr/local /usr"
+        ]
+        )
+    
+    # note that we #include <openssl/foo.h>, so the OpenSSL headers have to be in
+    # an 'openssl' subdirectory
 
-# Libtool
-AM_PROG_LIBTOOL
-AC_SUBST(LIBTOOL_DEPS)
+    OPENSSL_INCLUDES=
+    found=false
+    for ssldir in $ssldirs; do
+        if test -f "$ssldir/include/openssl/ssl.h"; then
+            found=true
+            test "$ssldir" = "/usr" || OPENSSL_INCLUDES="-I$ssldir/include"
+            break
+        fi
+    done
 
-# Checks for programs.
-AC_PROG_CC
+    if ! $found; then
+        AC_MSG_RESULT([no])
+        AC_MSG_FAILURE([Cannot find ssl.h])
+    fi
+    AC_MSG_RESULT([yes])
 
-# Compiler and linker flags
+    # try linking with that directory, saving LIBS and LDFLAGS because
+    # we do not want to link *everything* with openssl
+    save_LIBS="$LIBS"
+    save_LDFLAGS="$LDFLAGS"
+    test "$ssldir" = "/usr" || LDFLAGS="$LDFLAGS -L $ssldir/lib"
+    AC_SEARCH_LIBS(SSL_new, ssl, [], [
+        AC_MSG_FAILURE([Cannot find ssl libraries])
+    ])
+    LDFLAGS="$save_LDFLAGS"
+    LIBS="$save_LIBS"
 
-# get gcc to check a lot of things for us
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wparentheses])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wdeclaration-after-statement])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wmissing-prototypes])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wstrict-prototypes])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wmissing-declarations])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wformat])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wformat-security])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wsign-compare])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wfloat-equal])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wold-style-definition])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wno-strict-aliasing])
-ZCLOUD_ADD_GCC_WARNING_OPTION([-Wno-unknown-pragmas])
+    test "$ssldir" = "/usr" || OPENSSL_LDFLAGS="-L $ssldir/lib"
+    OPENSSL_LIBS="-lssl -lcrypto"
 
-# Checks for libraries.
-ZCLOUD_CHECK_GLIB
-ZCLOUD_CHECK_OPENSSL
-
-# Checks for header files.
-AC_HEADER_DIRENT
-AC_HEADER_STDC
-AC_CHECK_HEADERS([ \
-    errno.h \
-    fcntl.h \
-    stdlib.h \
-    string.h \
-    strings.h \
-    sys/types.h \
-    sys/stat.h \
-    unistd.h \
+    AC_SUBST([OPENSSL_INCLUDES])
+    AC_SUBST([OPENSSL_LIBS])
+    AC_SUBST([OPENSSL_LDFLAGS])
 ])
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_TYPE_SIZE_T
-
-# Checks for library functions.
-AC_CHECK_FUNCS([bzero regcomp])
-
-# Set up directories
-ZCLOUD_WITH_ZCPLUGINDIR
-
-# load plugins
-m4_include([plugins/configure.m4])
-
-# set up documentation
-ZCLOUD_CHECK_DOCUMENTATION
-
-AC_CONFIG_FILES([
-    Makefile
-    man/Makefile
-    lib/Makefile
-    lib/libzcloud.pc
-    bin/Makefile
-    docs/Makefile
-    docs/conf.py
-])
-
-AC_OUTPUT

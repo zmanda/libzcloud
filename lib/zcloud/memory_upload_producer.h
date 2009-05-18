@@ -41,44 +41,43 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/* The sole purpose of this file is to provide a main() which can invoke
- * the various tests. */
+#ifndef ZCLOUD_MEMORY_UPLOAD_PRODUCER_H
+#define ZCLOUD_MEMORY_UPLOAD_PRODUCER_H
 
-#include "test.h"
-#include <glib/gprintf.h>
+#include "upload_producer.h"
 
-struct test_t {
-    const gchar *test_name;
-    void (*test_fn)(void);
+G_BEGIN_DECLS
+
+GType zcloud_memory_upload_producer_get_type(void);
+#define ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER (zcloud_memory_upload_producer_get_type())
+#define ZCLOUD_MEMORY_UPLOAD_PRODUCER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER, ZCloudMemoryUploadProducer))
+#define ZCLOUD_MEMORY_UPLOAD_PRODUCER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER, ZCloudMemoryUploadProducerClass))
+#define ZCLOUD_IS_MEMORY_UPLOAD_PRODUCER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER))
+#define ZCLOUD_IS_MEMORY_UPLOAD_PRODUCER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER))
+#define ZCLOUD_MEMORY_UPLOAD_PRODUCER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_MEMORY_UPLOAD_PRODUCER, ZCloudMemoryUploadProducerClass))
+
+enum {
+    ZCLOUD_PROP_MEMORY_UPLOAD_PRODUCER_BUFFER = 1,
+    ZCLOUD_PROP_MEMORY_UPLOAD_PRODUCER_BUFFER_LENGTH,
+    ZCLOUD_PROP_MEMORY_UPLOAD_PRODUCER_BUFFER_POSITION,
 };
 
-#define TEST_MODULE(n) { G_STRINGIFY(n), test_##n },
-struct test_t all_tests[] = {
-    ALL_TESTS
-    { NULL, NULL }
-};
-#undef TEST_MODULE
+typedef struct ZCloudMemoryUploadProducer_s {
+    ZCloudUploadProducer parent;
 
-int
-main(int argc, char **argv)
-{
-    struct test_t *t;
+    const guint8 *buffer;
+    guint buffer_length;
+    guint buffer_position;
+} ZCloudMemoryUploadProducer;
 
-    if (argc > 1) {
-        g_fprintf(stderr, "usage: %s\n", argv[0]);
-        return 1;
-    }
+typedef struct ZCloudMemoryUploadProducerClass_s {
+    ZCloudUploadProducerClass parent_class;
+} ZCloudMemoryUploadProducerClass;
 
-    for (t = all_tests; t->test_name; t++) {
-        g_fprintf(stderr, "TESTING %s\n", t->test_name);
-        t->test_fn();
-    }
+/* constructor */
+ZCloudMemoryUploadProducer *
+zcloud_memory_upload_producer(const guint8 *buffer, guint buffer_length);
 
-    if (tests_failed + tests_passed) {
-        g_fprintf(stderr, "RESULTS: %d passed, %d failed (%d%% success)\n",
-            tests_passed, tests_failed,
-            tests_passed * 100 / (tests_passed + tests_failed));
-    }
+G_END_DECLS
 
-    return tests_failed? 1 : 0;
-}
+#endif

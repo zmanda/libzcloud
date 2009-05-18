@@ -41,44 +41,64 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/* The sole purpose of this file is to provide a main() which can invoke
- * the various tests. */
-
 #include "test.h"
-#include <glib/gprintf.h>
 
-struct test_t {
-    const gchar *test_name;
-    void (*test_fn)(void);
-};
-
-#define TEST_MODULE(n) { G_STRINGIFY(n), test_##n },
-struct test_t all_tests[] = {
-    ALL_TESTS
-    { NULL, NULL }
-};
-#undef TEST_MODULE
-
-int
-main(int argc, char **argv)
+static gboolean
+is_md5(
+    GByteArray *got,
+    const gchar *bytestring,
+    const gchar *msg)
 {
-    struct test_t *t;
+    gboolean rv;
+    GByteArray *arr = g_byte_array_sized_new(16);
+    g_byte_array_append(arr, bytestring, 16);
 
-    if (argc > 1) {
-        g_fprintf(stderr, "usage: %s\n", argv[0]);
-        return 1;
-    }
+    rv = is_byte_array(got, arr, msg);
 
-    for (t = all_tests; t->test_name; t++) {
-        g_fprintf(stderr, "TESTING %s\n", t->test_name);
-        t->test_fn();
-    }
+    g_byte_array_free(arr, 1);
+    return rv;
+}
 
-    if (tests_failed + tests_passed) {
-        g_fprintf(stderr, "RESULTS: %d passed, %d failed (%d%% success)\n",
-            tests_passed, tests_failed,
-            tests_passed * 100 / (tests_passed + tests_failed));
-    }
+void
+test_memory_upload_producer(void)
+{
+    ZCloudMemoryUploadProducer *o;
+    ZCloudUploadProducer *o_p;
+    GError *err = NULL;
+    const gchar *buf = "The quick brown fox jumps over the lazy dog",
+        *buf_md5 = "\x9e\x10\x7d\x9d\x37\x2b\xb6\x82\x6b\xd8\x1d\x35\x42\xa4\x19\xd6",
+        *empty_md5 = "\xd4\x1d\x8c\xd9\x8f\x00\xb2\x04\xe9\x80\x09\x98\xec\xf8\x42\x7e";
+    gsize buf_len, size;
+    GByteArray *md5;
 
-    return tests_failed? 1 : 0;
+    g_type_init();  /* TODO */
+    buf_len = strlen(buf);
+
+    o = zcloud_memory_upload_producer(buf, 0);
+    o_p = ZCLOUD_UPLOAD_PRODUCER(o);
+
+    size = zcloud_upload_producer_get_size(o_p, &err);
+    gerror_is_clear(&err, "no error while getting size of zero-length buffer");
+    is_gsize(size, 0, "check reported size for zero-length buffer");
+
+    md5 = zcloud_upload_producer_calculate_md5(o_p, &err);
+    gerror_is_clear(&err, "no error while calculating MD5 hash of zero-length buffer");
+    is_md5(md5, empty_md5, "check MD5 hash for zero-length buffer");
+
+    g_byte_array_free(md5, TRUE);
+    g_object_unref(o);
+
+    o = zcloud_memory_upload_producer(buf, buf_len);
+    o_p = ZCLOUD_UPLOAD_PRODUCER(o);
+
+    size = zcloud_upload_producer_get_size(o_p, &err);
+    gerror_is_clear(&err, "no error while getting size of test string");
+    is_gsize(size, buf_len, "check reported size for test string");
+
+    md5 = zcloud_upload_producer_calculate_md5(o_p, &err);
+    gerror_is_clear(&err, "no error while calculating MD5 hash of test string");
+    is_md5(md5, buf_md5, "check MD5 hash for test string");
+
+    g_byte_array_free(md5, TRUE);
+    g_object_unref(o);
 }

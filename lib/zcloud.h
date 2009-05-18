@@ -55,6 +55,7 @@
 #include "zcloud/list_consumer.h"
 #include "zcloud/progress_listener.h"
 #include "zcloud/upload_producer.h"
+#include "zcloud/memory_upload_producer.h"
 
 /* miscellaneous */
 #include "zcloud/error.h"
