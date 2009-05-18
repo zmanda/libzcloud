@@ -41,11 +41,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include <glib.h>
-#include <glib-object.h>
-#include <string.h>
+#include "internal.h"
 #include <openssl/md5.h>
-#include "zcloud.h"
 
 /* class mechanics */
 static void
@@ -53,22 +50,22 @@ class_init(ZCloudMemoryUploadProducerClass *klass);
 
 /* prototypes for method implementations */
 static gsize
-read(
+read_impl(
     ZCloudUploadProducer *self,
     gpointer buffer,
     gsize bytes,
     GError **error);
 
 static gsize
-get_size(ZCloudUploadProducer *self, GError **error);
+get_size_impl(ZCloudUploadProducer *self, GError **error);
 
 static GByteArray*
-calculate_md5(
+calculate_md5_impl(
     ZCloudUploadProducer *self,
     GError **error);
 
 static gboolean
-reset(ZCloudUploadProducer *self, GError **error);
+reset_impl(ZCloudUploadProducer *self, GError **error);
 
 GType
 zcloud_memory_upload_producer_get_type(void)
@@ -102,10 +99,10 @@ class_init(ZCloudMemoryUploadProducerClass *klass)
 {
     ZCloudUploadProducerClass *up_class = ZCLOUD_UPLOAD_PRODUCER_CLASS(klass);
 
-    up_class->read = read;
-    up_class->get_size = get_size;
-    up_class->calculate_md5 = calculate_md5;
-    up_class->reset = reset;
+    up_class->read = read_impl;
+    up_class->get_size = get_size_impl;
+    up_class->calculate_md5 = calculate_md5_impl;
+    up_class->reset = reset_impl;
 }
 
 
@@ -125,7 +122,7 @@ zcloud_memory_upload_producer(gconstpointer buffer, guint buffer_length)
 }
 
 static gsize
-read(
+read_impl(
     ZCloudUploadProducer *o,
     gpointer buffer,
     gsize bytes,
@@ -144,14 +141,14 @@ read(
 }
 
 static gsize
-get_size(ZCloudUploadProducer *o, GError **error)
+get_size_impl(ZCloudUploadProducer *o, GError **error)
 {
     ZCloudMemoryUploadProducer *self = ZCLOUD_MEMORY_UPLOAD_PRODUCER(o);
     return self->buffer_length;
 }
 
 static GByteArray*
-calculate_md5(
+calculate_md5_impl(
     ZCloudUploadProducer *o,
     GError **error)
 {
@@ -170,7 +167,7 @@ calculate_md5(
 }
 
 static gboolean
-reset(ZCloudUploadProducer *o, GError **error)
+reset_impl(ZCloudUploadProducer *o, GError **error)
 {
     ZCloudMemoryUploadProducer *self = ZCLOUD_MEMORY_UPLOAD_PRODUCER(o);
 
