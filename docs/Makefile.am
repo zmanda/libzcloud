@@ -41,6 +41,8 @@
 # 
 #  ***** END LICENSE BLOCK ***** */
 
+EXTRA_DIST = conf.py.in
+
 include rst-files
 clean-local:
 	rm -rf build
