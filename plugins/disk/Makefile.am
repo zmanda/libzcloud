@@ -1,4 +1,4 @@
-#  -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+#  -*- Mode: makefile; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #  vi: set tabstop=4 shiftwidth=4 expandtab: */
 #  ***** BEGIN LICENSE BLOCK *****
 #  Version: LGPL 2.1/GPL 2.0
