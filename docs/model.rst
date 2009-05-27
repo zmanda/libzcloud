@@ -81,34 +81,16 @@ They should be subclassed, and that subclass instantiated.
    .. method:: list(template, consumer, progress, error)
 
       List all addresses matching ``template``, calling
+      List all :class:`addresses <Address>` matching ``template``, calling
+      :meth:`ListConsumer.got_result` for each one. The ``template`` should 
+      just use ``%s`` as a placeholder and ``%%`` to represent ``%``.
 
-      :param template: the :class:`AddressTemplate` to list matches for
+      :param template: the template to list matches for
       :param consumer: a :class:`DownloadConsumer`
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
       :rtype: boolean
-
-   .. method:: parse_address_template(string, error)
-
-      Parse a string representing a template for addresses. This should just use
-      ``%s`` as a placeholder and ``%%`` to represent ``%``.
-
-      :param string: the string to parse
-      :param error: optional storage for an error
-      :returns: an address template or null
-      :rtype: :class:`AddressTemplate` or null
-
-.. class:: AddressTemplate
-
-   .. attribute:: template_parts
-
-      An array representing the template, with each element being separated by
-      ``%s`` and already having ``%%`` replaced with ``%``
-
-   .. method:: interpolate(...)
-
-      Takes a list of strings and substitutes them into the template.
 
 .. class:: ProgressListener
 

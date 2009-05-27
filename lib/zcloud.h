@@ -49,7 +49,6 @@
 
 /* classes */
 #include "zcloud/store.h"
-#include "zcloud/address_template.h"
 #include "zcloud/download_consumer.h"
 #include "zcloud/list_consumer.h"
 #include "zcloud/progress_listener.h"

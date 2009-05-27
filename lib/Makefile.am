@@ -46,7 +46,6 @@
 #
 
 public_headers = \
-	zcloud/address_template.h \
 	zcloud/download_consumer.h \
 	zcloud/error.h \
 	zcloud/list_consumer.h \
@@ -60,7 +59,6 @@ internal_headers = \
     internal/plugins.h
 
 libzcloud_source = \
-    address_template.c \
     download_consumer.c \
     error.c \
     list_consumer.c \

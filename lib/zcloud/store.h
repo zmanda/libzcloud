@@ -44,7 +44,6 @@
 #ifndef ZCLOUD_STORE_H
 #define ZCLOUD_STORE_H
 
-#include "address_template.h"
 #include "download_consumer.h"
 #include "list_consumer.h"
 #include "progress_listener.h"
@@ -98,13 +97,9 @@ typedef struct ZCloudStoreClass_s {
         GError **error);
     gboolean (*list)(
         ZCloudStore *self,
-        ZCloudAddressTemplate *template,
+        gchar *template,
         ZCloudListConsumer *list,
         ZCloudProgressListener *progress,
-        GError **error);
-    ZCloudAddressTemplate *(*parse_address_template)(
-        ZCloudStore *self,
-        gchar *address_template_str,
         GError **error);
 } ZCloudStoreClass;
 
@@ -142,14 +137,9 @@ gboolean zcloud_store_exists(
 
 gboolean zcloud_store_list(
     ZCloudStore *self,
-    ZCloudAddressTemplate *template,
+    gchar *template,
     ZCloudListConsumer *list,
     ZCloudProgressListener *progress,
-    GError **error);
-
-ZCloudAddressTemplate *zcloud_store_parse_address_template(
-    ZCloudStore *self,
-    gchar *address_template_str,
     GError **error);
 
 G_END_DECLS

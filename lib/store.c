@@ -138,7 +138,7 @@ zcloud_store_exists(
 gboolean
 zcloud_store_list(
     ZCloudStore *self,
-    ZCloudAddressTemplate *template,
+    gchar *template,
     ZCloudListConsumer *list,
     ZCloudProgressListener *progress,
     GError **error)
@@ -146,15 +146,4 @@ zcloud_store_list(
     ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
     g_assert(c->list != NULL); \
     return (c->list)(self, template, list, progress, error);
-}
-
-ZCloudAddressTemplate *
-zcloud_store_parse_address_template(
-    ZCloudStore *self,
-    gchar *address_template_str,
-    GError **error)
-{
-    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
-    g_assert(c->parse_address_template != NULL); \
-    return (c->parse_address_template)(self, address_template_str, error);
 }
