@@ -20,7 +20,8 @@ They should be subclassed, and that subclass instantiated.
 
       Creates whatever is represented by the address.
 
-      :param address: the :class:`Address` to create
+      :param address: the address to create
+      :type address: String
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
@@ -33,7 +34,8 @@ They should be subclassed, and that subclass instantiated.
       to be uploaded. The :class:`Store` handles actually uploading the data
       to the storage service.
 
-      :param address: the :class:`Address` to store the data at
+      :param address: the address to store the data at
+      :type address: String
       :param producer: an :class:`UploadProducer`
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
@@ -46,7 +48,8 @@ They should be subclassed, and that subclass instantiated.
       "doing something useful" with the data received from the storage service.
       For example, it could save it to a file.
 
-      :param address: the :class:`Address` to fetch data from
+      :param address: the address to fetch data from
+      :type address: String
       :param consumer: a :class:`DownloadConsumer`
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
@@ -57,7 +60,8 @@ They should be subclassed, and that subclass instantiated.
 
       Checks if the given ``address`` exists
 
-      :param address: the :class:`Address` to check
+      :param address: the address to check
+      :type address: String
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
@@ -67,7 +71,8 @@ They should be subclassed, and that subclass instantiated.
 
       Delete whatever is represented by ``address``
 
-      :param address: the :class:`Address` to delete
+      :param address: the address to delete
+      :type address: String
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
@@ -75,8 +80,7 @@ They should be subclassed, and that subclass instantiated.
 
    .. method:: list(template, consumer, progress, error)
 
-      List all :class:`addresses <Address>` matching ``template``, calling
-      :meth:`ListConsumer.got_result` for each one.
+      List all addresses matching ``template``, calling
 
       :param template: the :class:`AddressTemplate` to list matches for
       :param consumer: a :class:`DownloadConsumer`
@@ -84,16 +88,6 @@ They should be subclassed, and that subclass instantiated.
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
       :rtype: boolean
-
-   .. method:: parse_address(string, error)
-
-      Parse a string representing an address.
-      Different stores may support different formats.
-
-      :param string: the string to parse
-      :param error: optional storage for an error
-      :returns: an address or null
-      :rtype: :class:`Address` or null
 
    .. method:: parse_address_template(string, error)
 
@@ -104,14 +98,6 @@ They should be subclassed, and that subclass instantiated.
       :param error: optional storage for an error
       :returns: an address template or null
       :rtype: :class:`AddressTemplate` or null
-
-.. class:: Address
-
-   .. method:: to_string()
-
-      :returns: a string representing the address. Passing this to the
-                :meth:`Store.parse_address` should make it return an
-                analagous :class:`Address` object
 
 .. class:: AddressTemplate
 
@@ -175,4 +161,5 @@ They should be subclassed, and that subclass instantiated.
 
    .. method:: got_result(address)
 
-      :param address: an :class:`Address`
+      :param address: an address
+      :type address: String

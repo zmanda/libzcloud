@@ -44,8 +44,6 @@
 #ifndef ZCLOUD_ADDRESS_TEMPLATE_H
 #define ZCLOUD_ADDRESS_TEMPLATE_H
 
-#include "address.h"
-
 G_BEGIN_DECLS
 
 GType zcloud_address_template_get_type(void);
@@ -66,14 +64,14 @@ typedef struct ZCloudAddressTemplateClass_s {
     GObjectClass parent_class;
 
     /* TODO: accept a va_list here */
-    /* ZCloudAddress* (*interpolate)(ZCloudAddressTemplate *self, ...); */
-    ZCloudAddress* (*interpolate_sa)(ZCloudAddressTemplate *self, GPtrArray *substitution_parts);
+    /* gchar* (*interpolate)(ZCloudAddressTemplate *self, ...); */
+    gchar* (*interpolate_sa)(ZCloudAddressTemplate *self, GPtrArray *substitution_parts);
     gchar* (*to_string)(ZCloudAddressTemplate *self);
 } ZCloudAddressTemplateClass;
 
-/* ZCloudAddress* zcloud_address_template_interpolate(ZCloudAddressTemplate *self, ...); */
+/* gchar* zcloud_address_template_interpolate(ZCloudAddressTemplate *self, ...); */
 
-ZCloudAddress* zcloud_address_template_interpolate_sa(ZCloudAddressTemplate *self, GPtrArray *substitution_parts);
+gchar* zcloud_address_template_interpolate_sa(ZCloudAddressTemplate *self, GPtrArray *substitution_parts);
 
 gchar* zcloud_address_template_to_string(ZCloudAddressTemplate *self);
 

@@ -76,7 +76,7 @@ zcloud_store_get_type(void)
 gboolean
 zcloud_store_create(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudProgressListener *progress,
     GError **error)
 {
@@ -88,7 +88,7 @@ zcloud_store_create(
 gboolean
 zcloud_store_upload(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudUploadProducer *upload,
     ZCloudProgressListener *progress,
     GError **error)
@@ -101,7 +101,7 @@ zcloud_store_upload(
 gboolean
 zcloud_store_download(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudDownloadConsumer *download,
     ZCloudProgressListener *progress,
     GError **error)
@@ -114,7 +114,7 @@ zcloud_store_download(
 gboolean
 zcloud_store_delete(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudProgressListener *progress,
     GError **error)
 {
@@ -126,7 +126,7 @@ zcloud_store_delete(
 gboolean
 zcloud_store_exists(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudProgressListener *progress,
     GError **error)
 {
@@ -146,17 +146,6 @@ zcloud_store_list(
     ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
     g_assert(c->list != NULL); \
     return (c->list)(self, template, list, progress, error);
-}
-
-ZCloudAddress *
-zcloud_store_parse_address(
-    ZCloudStore *self,
-    gchar *address_str,
-    GError **error)
-{
-    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
-    g_assert(c->parse_address != NULL); \
-    return (c->parse_address)(self, address_str, error);
 }
 
 ZCloudAddressTemplate *

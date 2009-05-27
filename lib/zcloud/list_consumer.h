@@ -44,8 +44,6 @@
 #ifndef ZCLOUD_LIST_CONSUMER_H
 #define ZCLOUD_LIST_CONSUMER_H
 
-#include "address.h"
-
 G_BEGIN_DECLS
 
 GType zcloud_list_consumer_get_type(void);
@@ -64,10 +62,10 @@ typedef struct ZCloudListConsumer_s {
 typedef struct ZCloudListConsumerClass_s {
     GObjectClass parent_class;
 
-    void (*got_result)(ZCloudListConsumer *self, ZCloudAddress *address);
+    void (*got_result)(ZCloudListConsumer *self, gchar *address);
 } ZCloudListConsumerClass;
 
-void zcloud_list_consumer_got_result(ZCloudListConsumer *self, ZCloudAddress *address);
+void zcloud_list_consumer_got_result(ZCloudListConsumer *self, gchar *address);
 
 G_END_DECLS
 

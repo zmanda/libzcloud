@@ -16,7 +16,6 @@ store must support are:
 * delete
 * exists
 * list
-* parse_address
 * parse_address_template
 
 Most of the operations above take an "address" to operate on. Addresses are
@@ -30,9 +29,9 @@ be able to list everything matching that pattern. Only permitting strings
 in the pattern is only meant to simplify the parsing of the pattern by the store;
 programs using libzcloud might only substitute, say, a number.
 
-Besides the store, implementations of libzcloud should also provide an
-implementation of addresses. Special handling of address templates is not required,
-but might prove useful (e.g. keeping track of there the different parts
+Besides the store, implementations of libzcloud stores may provide
+their own implementation of address templates. This
+might prove useful (e.g. keeping track of there the different parts
 of the address begin and end).
 
 Independent of particular stores are the download consumer, upload producer,

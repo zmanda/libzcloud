@@ -76,7 +76,7 @@ zcloud_list_consumer_get_type(void)
 void
 zcloud_list_consumer_got_result(
     ZCloudListConsumer *self,
-    ZCloudAddress *address)
+    gchar *address)
 {
     ZCloudListConsumerClass *c = ZCLOUD_LIST_CONSUMER_GET_CLASS(self);
     g_assert(c->got_result != NULL);

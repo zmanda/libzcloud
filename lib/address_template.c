@@ -74,7 +74,7 @@ zcloud_address_template_get_type(void)
  */
 
 /*
-ZCloudAddress *
+gchar *
 zcloud_address_template_interpolate(
     ZCloudAddressTemplate *self, ...)
 {
@@ -84,7 +84,7 @@ zcloud_address_template_interpolate(
 }
 */
 
-ZCloudAddress *
+gchar *
 zcloud_address_template_interpolate_sa(
     ZCloudAddressTemplate *self,
     GPtrArray *substitution_parts)

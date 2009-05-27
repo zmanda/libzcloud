@@ -44,7 +44,6 @@
 #ifndef ZCLOUD_STORE_H
 #define ZCLOUD_STORE_H
 
-#include "address.h"
 #include "address_template.h"
 #include "download_consumer.h"
 #include "list_consumer.h"
@@ -72,29 +71,29 @@ typedef struct ZCloudStoreClass_s {
 
     gboolean (*create)(
         ZCloudStore *self,
-        ZCloudAddress *address,
+        gchar *address,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*upload)(
         ZCloudStore *self,
-        ZCloudAddress *address,
+        gchar *address,
         ZCloudUploadProducer *upload,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*download)(
         ZCloudStore *self,
-        ZCloudAddress *address,
+        gchar *address,
         ZCloudDownloadConsumer *download,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*delete)(
         ZCloudStore *self,
-        ZCloudAddress *address,
+        gchar *address,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*exists)(
         ZCloudStore *self,
-        ZCloudAddress *address,
+        gchar *address,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*list)(
@@ -102,10 +101,6 @@ typedef struct ZCloudStoreClass_s {
         ZCloudAddressTemplate *template,
         ZCloudListConsumer *list,
         ZCloudProgressListener *progress,
-        GError **error);
-    ZCloudAddress *(*parse_address)(
-        ZCloudStore *self,
-        gchar *address_str,
         GError **error);
     ZCloudAddressTemplate *(*parse_address_template)(
         ZCloudStore *self,
@@ -115,33 +110,33 @@ typedef struct ZCloudStoreClass_s {
 
 gboolean zcloud_store_create(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_upload(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudUploadProducer *upload,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_download(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudDownloadConsumer *download,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_delete(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_exists(
     ZCloudStore *self,
-    ZCloudAddress *address,
+    gchar *address,
     ZCloudProgressListener *progress,
     GError **error);
 
@@ -150,11 +145,6 @@ gboolean zcloud_store_list(
     ZCloudAddressTemplate *template,
     ZCloudListConsumer *list,
     ZCloudProgressListener *progress,
-    GError **error);
-
-ZCloudAddress *zcloud_store_parse_address(
-    ZCloudStore *self,
-    gchar *address_str,
     GError **error);
 
 ZCloudAddressTemplate *zcloud_store_parse_address_template(
