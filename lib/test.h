@@ -78,9 +78,40 @@ gboolean gerror_is_set(GError **error, const gchar *expected_message_glob,
                     gint expected_code, const gchar *msg);
 
 /* compare two objects of the same, given type */
-gboolean is_gsize(gsize got, gsize expected, const gchar *msg);
 gboolean is_string(const gchar *got, const gchar *expected, const gchar *msg);
 gboolean is_byte_array(const GByteArray *got, const GByteArray *expected, const gchar *msg);
+
+/* generate functions for integer types, comparable with == */
+#define ZC_INT_TYPE_LIST \
+    ZC_INT_TYPE(char, "hhi") \
+    ZC_INT_TYPE(short, "hi") \
+    ZC_INT_TYPE(int, "i") \
+    ZC_INT_TYPE(long, "li") \
+    \
+    ZC_INT_TYPE(gboolean, "i") \
+    ZC_INT_TYPE(gchar, "hhi") \
+    ZC_INT_TYPE(guchar, "hhu") \
+    ZC_INT_TYPE(gint, "i") \
+    ZC_INT_TYPE(guint, "u") \
+    ZC_INT_TYPE(gshort, "hi") \
+    ZC_INT_TYPE(gushort, "hu") \
+    ZC_INT_TYPE(glong, "li") \
+    ZC_INT_TYPE(gulong, "lu") \
+    ZC_INT_TYPE(gint8, "hhi") \
+    ZC_INT_TYPE(guint8, "hhu") \
+    ZC_INT_TYPE(gint16, G_GINT16_FORMAT) \
+    ZC_INT_TYPE(guint16, G_GUINT16_FORMAT) \
+    ZC_INT_TYPE(gint32, G_GINT32_FORMAT) \
+    ZC_INT_TYPE(guint32, G_GUINT32_FORMAT) \
+    ZC_INT_TYPE(gint64, G_GINT64_FORMAT) \
+    ZC_INT_TYPE(guint64, G_GUINT64_FORMAT) \
+    ZC_INT_TYPE(gsize, G_GSIZE_FORMAT) \
+    ZC_INT_TYPE(gssize, G_GSSIZE_FORMAT) \
+    ZC_INT_TYPE(goffset, G_GINT64_FORMAT)
+
+#define ZC_INT_TYPE(T, FS) gboolean is_ ##T(T got, T expected, const gchar *msg);
+  ZC_INT_TYPE_LIST
+#undef ZC_INT_TYPE
 
 /*
  * Global state tracking

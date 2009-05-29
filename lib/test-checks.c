@@ -164,19 +164,22 @@ gerror_is_set(
     return ok(success, msg);
 }
 
-gboolean
-is_gsize(
-    gsize got,
-    gsize expected,
-    const gchar *msg)
-{
-    if (got == expected) {
-        return pass(msg);
-    } else {
-        diag(" got: %zu; expected: %zu", got, expected);
-        return fail(msg);
+#define ZC_INT_TYPE(T, FS) \
+    gboolean \
+    is_ ##T ( \
+        T got, \
+        T expected, \
+        const gchar *msg) \
+    { \
+        if (got == expected) { \
+            return pass(msg); \
+        } else { \
+            diag(" got: %" FS "; expected: %" FS , got, expected); \
+            return fail(msg); \
+        } \
     }
-}
+  ZC_INT_TYPE_LIST
+#undef ZC_INT_TYPE
 
 gboolean
 is_string(
