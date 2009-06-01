@@ -1,5 +1,5 @@
 #  -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*- */
-#  vi: set tabstop=4 shiftwidth=4 nononoexpandtab: */
+#  vi: set tabstop=4 shiftwidth=4 noexpandtab: */
 #  ***** BEGIN LICENSE BLOCK *****
 #  Version: LGPL 2.1/GPL 2.0
 #  This file is part of libzcloud.
@@ -50,3 +50,8 @@ clean-local:
 html: conf.py
 	$(SPHINX_BUILD) -c $(builddir) -b html -d build/doctree $(srcdir) build/html
 	tar -C build -cf html.tgz html
+
+gh-pages: html
+	./gh-pages.sh
+
+.PHONY: gh-pages

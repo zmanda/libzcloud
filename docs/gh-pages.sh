@@ -1,5 +1,6 @@
-#  -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*- */
-#  vi: set tabstop=4 shiftwidth=4 noexpandtab: */
+#!/bin/sh
+#  -*- Mode: makefile; tab-width: 4; indent-tabs-mode: nil -*- */
+#  vi: set tabstop=4 shiftwidth=4 expandtab: */
 #  ***** BEGIN LICENSE BLOCK *****
 #  Version: LGPL 2.1/GPL 2.0
 #  This file is part of libzcloud.
@@ -41,11 +42,23 @@
 # 
 #  ***** END LICENSE BLOCK ***** */
 
-ACLOCAL_AMFLAGS = -Iconfig -I config/macro-archive -I config/libzcloud
 
-SUBDIRS = lib $(PLUGIN_SUBDIRS) bin man docs
+function die {
+    echo $@
+    exit 1
+}
 
-gh-pages:
-	cd docs; $(MAKE) $@
-
-.PHONY: gh-pages
+test -n "$GH_PAGES_REPO" || die "must set GH_PAGES_REPO"
+test -n "$GH_PAGES_REMOTE" || die "must set GH_PAGES_REMOTE"
+test ! -d build/git || die "leftover files? cleanup build/git"
+git clone -n "$GH_PAGES_REPO" build/git || die "clone failed"
+cd build/git || die "cd failed"
+git checkout -b gh-pages origin/gh-pages || die "checkout failed"
+cp -r ../html/* . || die "copy failed"
+sed -i -e 's/_sources/sources/' -e 's/_static/static/' *.html *.js || die "munging failed"
+mv _sources sources || die "rename failed (sources)"
+mv _static static || die "rename failed (static)"
+git add . || die "git add failed"
+git commit -m "update docs" || die "commit failed"
+git push "$GH_PAGES_REMOTE" gh-pages || die "push failed"
+rm -rf build/git || "failed to cleanup git dir"
