@@ -1,4 +1,0 @@
-<zcloud-module basename="disk">
-  <store-plugin prefix="disk">
-  </store-plugin>
-</zcloud-module>
