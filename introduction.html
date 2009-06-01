@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &mdash; libzcloud v1.0alpha documentation</title>
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '1.0alpha',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="libzcloud v1.0alpha documentation" href="index.html" />
+    <link rel="next" title="Model" href="model.html" />
+    <link rel="prev" title="libzcloud" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="model.html" title="Model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="libzcloud"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="id1">
+<span id="introduction"></span><h1>Introduction<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>This is an initial draft of the libzcloud interfaces, which aim to provide an
+abstraction for the various cloud storage services.</p>
+<p>The core of libzcloud&#8217;s abstraction is the &#8220;store&#8221;. The methods that the
+store must support are:</p>
+<ul class="simple">
+<li>create</li>
+<li>upload</li>
+<li>download</li>
+<li>delete</li>
+<li>exists</li>
+<li>list</li>
+</ul>
+<p>Most of the operations above take an &#8220;address&#8221; to operate on. Addresses are
+specific to an individual store (e.g bucket name and key for Amazon S3) and
+are represented by a simple string, which parse_address should interpret.</p>
+<p>Address templates (used when listing addresses) are simply a sprintf-style
+pattern (which only accepts strings, &#8220;%s&#8221;, and the escape sequence, &#8220;%%&#8221;).
+They allow programs using libzcloud to specicfy simple patterns and still have
+the store (probably) be able to list everything matching that pattern. Only
+permitting strings in the pattern is only meant to simplify the parsing of the
+pattern by the store; programs using libzcloud might only substitute, say,
+a number.</p>
+<p>Independent of particular stores are the download consumer, upload producer,
+progress listener, and list consumer. They are the concern of programs using libzcloud.</p>
+<p>libzcloud will eventually include some implementations of its abstractions.
+An implementation of an Amazon S3 store is expected along with consumers
+(and producers) that write to (and read from) memory buffers and files.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html" title="previous chapter">libzcloud</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="model.html" title="next chapter">Model</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="sources/introduction.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="model.html" title="Model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="libzcloud"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
+      Last updated on Jun 01, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.
+    </div>
+  </body>
+</html>

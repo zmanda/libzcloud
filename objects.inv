@@ -1,0 +1,21 @@
+# Sphinx inventory version 1
+# Project: libzcloud
+# Version: 1.0alpha
+Store.upload method model.html
+ListConsumer class model.html
+Store.create method model.html
+UploadProducer.calculate_md5 method model.html
+UploadProducer.get_size method model.html
+Store.list method model.html
+Store.exists method model.html
+DownloadConsumer.write method model.html
+UploadProducer class model.html
+DownloadConsumer class model.html
+Store.download method model.html
+UploadProducer.reset method model.html
+ProgressListener class model.html
+Store.delete method model.html
+ListConsumer.got_result method model.html
+UploadProducer.read method model.html
+Store class model.html
+DownloadConsumer.reset method model.html
