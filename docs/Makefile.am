@@ -1,5 +1,5 @@
-#  -*- Mode: makefile; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#  vi: set tabstop=4 shiftwidth=4 noexpandtab: */
+#  -*- Mode: makefile; tab-width: 4; indent-tabs-mode: nil -*- */
+#  vi: set tabstop=4 shiftwidth=4 nonoexpandtab: */
 #  ***** BEGIN LICENSE BLOCK *****
 #  Version: LGPL 2.1/GPL 2.0
 #  This file is part of libzcloud.
