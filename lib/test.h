@@ -79,7 +79,9 @@ gboolean gerror_is_set(GError **error, const gchar *expected_message_glob,
 
 /* compare two objects of the same, given type */
 gboolean is_string(const gchar *got, const gchar *expected, const gchar *msg);
+gboolean isnt_string(const gchar *got, const gchar *expected, const gchar *msg);
 gboolean is_byte_array(const GByteArray *got, const GByteArray *expected, const gchar *msg);
+gboolean isnt_byte_array(const GByteArray *got, const GByteArray *expected, const gchar *msg);
 
 /* generate functions for integer types, comparable with == */
 #define ZC_INT_TYPE_LIST \
@@ -109,7 +111,9 @@ gboolean is_byte_array(const GByteArray *got, const GByteArray *expected, const 
     ZC_INT_TYPE(gssize, G_GSSIZE_FORMAT) \
     ZC_INT_TYPE(goffset, G_GINT64_FORMAT)
 
-#define ZC_INT_TYPE(T, FS) gboolean is_ ##T(T got, T expected, const gchar *msg);
+#define ZC_INT_TYPE(T, FS) \
+    gboolean is_ ##T(T got, T expected, const gchar *msg);  \
+    gboolean isnt_ ##T(T got, T expected, const gchar *msg);
   ZC_INT_TYPE_LIST
 #undef ZC_INT_TYPE
 

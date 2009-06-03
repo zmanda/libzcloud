@@ -177,6 +177,20 @@ gerror_is_set(
             diag(" got: %" FS "; expected: %" FS , got, expected); \
             return fail(msg); \
         } \
+    } \
+    \
+    gboolean \
+    isnt_ ##T ( \
+        T got, \
+        T expected, \
+        const gchar *msg) \
+    { \
+        if (got != expected) { \
+            return pass(msg); \
+        } else { \
+            diag(" got: %" FS "; expected: %" FS , got, expected); \
+            return fail(msg); \
+        } \
     }
   ZC_INT_TYPE_LIST
 #undef ZC_INT_TYPE
@@ -188,6 +202,20 @@ is_string(
     const gchar *msg)
 {
     if (0 == strcmp(got, expected)) {
+        return pass(msg);
+    } else {
+        diag(" got: %s expected: %s\n", got, expected);
+        return fail(msg);
+    }
+}
+
+gboolean
+isnt_string(
+    const gchar *got,
+    const gchar *expected,
+    const gchar *msg)
+{
+    if (0 != strcmp(got, expected)) {
         return pass(msg);
     } else {
         diag(" got: %s expected: %s\n", got, expected);
@@ -227,6 +255,26 @@ is_byte_array(
     expected_s = hex_encode(expected);
 
     ret = is_string(got_s, expected_s, msg);
+
+    g_free(got_s);
+    g_free(expected_s);
+
+    return ret;
+}
+
+gboolean
+isnt_byte_array(
+    const GByteArray *got,
+    const GByteArray *expected,
+    const char *msg)
+{
+    gchar *got_s, *expected_s;
+    gboolean ret;
+
+    got_s = hex_encode(got);
+    expected_s = hex_encode(expected);
+
+    ret = isnt_string(got_s, expected_s, msg);
 
     g_free(got_s);
     g_free(expected_s);
