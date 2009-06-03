@@ -41,39 +41,52 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifndef ZCLOUD_H
-#define ZCLOUD_H
+#ifndef ZCLOUD_MEMORY_DOWNLOAD_CONSUMER_H
+#define ZCLOUD_MEMORY_DOWNLOAD_CONSUMER_H
 
-#include <glib.h>
-#include <glib-object.h>
-
-/* classes */
-#include "zcloud/store.h"
-#include "zcloud/download_consumer.h"
-#include "zcloud/list_consumer.h"
-#include "zcloud/memory_download_consumer.h"
-#include "zcloud/memory_upload_producer.h"
-#include "zcloud/progress_listener.h"
-#include "zcloud/upload_producer.h"
-
-/* miscellaneous */
-#include "zcloud/error.h"
-#include "zcloud/plugins.h"
+#include "upload_producer.h"
 
 G_BEGIN_DECLS
 
-/* Call this before calling any other zcloud functions.  If this fails,
- * do not call it again.
- *
- * @returns: FALSE on error, with ERROR set properly
- */
-gboolean zcloud_init(GError **error);
+GType zcloud_memory_download_consumer_get_type(void);
+#define ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER (zcloud_memory_upload_producer_get_type())
+#define ZCLOUD_MEMORY_DOWNLOAD_CONSUMER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER, ZCloudMemoryDownloadConsumer))
+#define ZCLOUD_MEMORY_DOWNLOAD_CONSUMER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER, ZCloudMemoryDownloadConsumerClass))
+#define ZCLOUD_IS_MEMORY_DOWNLOAD_CONSUMER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER))
+#define ZCLOUD_IS_MEMORY_DOWNLOAD_CONSUMER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER))
+#define ZCLOUD_MEMORY_DOWNLOAD_CONSUMER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER, ZCloudMemoryDownloadConsumerClass))
 
-/* Create a new ZCloudStore object with the given prefix.
- *
- * @returns: NULL on error, with ERROR set properly
- */
-ZCloudStore *zcloud_new(const gchar *prefix, GError **error);
+enum {
+    ZCLOUD_PROP_MEMORY_DOWNLOAD_CONSUMER_BUFFER = 1,
+    ZCLOUD_PROP_MEMORY_DOWNLOAD_CONSUMER_BUFFER_LENGTH,
+    ZCLOUD_PROP_MEMORY_DOWNLOAD_CONSUMER_BUFFER_POSITION,
+};
+
+typedef struct ZCloudMemoryDownloadConsumer_s {
+    ZCloudDownloadConsumer parent;
+
+    guint8 *buffer;
+    guint buffer_length;
+    guint max_buffer_length;
+    guint buffer_position;
+} ZCloudMemoryDownloadConsumer;
+
+typedef struct ZCloudMemoryDownloadConsumerClass_s {
+    ZCloudDownloadConsumerClass parent_class;
+
+    guint8 * (*get_contents)(ZCloudMemoryDownloadConsumer *self, gsize *length, gboolean copy);
+} ZCloudMemoryDownloadConsumerClass;
+
+/* constructor */
+/* Note: specifying 0 as max_buffer_length results in an unbounded buffer */
+ZCloudMemoryDownloadConsumer *
+zcloud_memory_download_consumer(guint max_buffer_length);
+
+guint8 *
+zcloud_memory_download_consumer_get_contents(
+    ZCloudMemoryDownloadConsumer *self,
+    gsize *length,
+    gboolean copy);
 
 G_END_DECLS
 

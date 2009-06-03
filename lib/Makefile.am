@@ -49,6 +49,7 @@ public_headers = \
 	zcloud/download_consumer.h \
 	zcloud/error.h \
 	zcloud/list_consumer.h \
+	zcloud/memory_download_consumer.h \
 	zcloud/memory_upload_producer.h \
 	zcloud/plugins.h \
 	zcloud/progress_listener.h \
@@ -62,6 +63,7 @@ libzcloud_source = \
     download_consumer.c \
     error.c \
     list_consumer.c \
+    memory_download_consumer.c \
     memory_upload_producer.c \
     plugins.c \
     progress_listener.c \
