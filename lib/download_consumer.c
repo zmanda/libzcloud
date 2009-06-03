@@ -76,7 +76,7 @@ zcloud_download_consumer_get_type(void)
 gsize
 zcloud_download_consumer_write(
     ZCloudDownloadConsumer *self,
-    gpointer buffer,
+    gconstpointer buffer,
     gsize bytes,
     GError **error)
 {
@@ -90,8 +90,8 @@ zcloud_download_consumer_reset(
     ZCloudDownloadConsumer *self,
     GError **error)
 {
-    ZCloudDownloadConsumerClass *c = ZCLOUD_DOWNLOAD_CONSUMER_GET_CLASS(self); \
-    g_assert(c->reset != NULL); \
+    ZCloudDownloadConsumerClass *c = ZCLOUD_DOWNLOAD_CONSUMER_GET_CLASS(self);
+    g_assert(c->reset != NULL);
     return (c->reset)(self, error);
 }
 

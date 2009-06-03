@@ -75,6 +75,7 @@ libzcloud_source = \
 test_source = \
 	test-checks.c \
 	memory_upload_producer-test.c \
+	memory_download_consumer-test.c \
 	plugins-test.c
 
 EXTRA_DIST = \

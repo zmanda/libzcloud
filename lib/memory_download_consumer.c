@@ -52,7 +52,7 @@ class_init(ZCloudMemoryDownloadConsumerClass *klass);
 static gsize
 write_impl(
     ZCloudDownloadConsumer *self,
-    gpointer buffer,
+    gconstpointer buffer,
     gsize bytes,
     GError **error);
 
@@ -135,7 +135,7 @@ zcloud_memory_download_consumer_get_contents(
 static gsize
 write_impl(
     ZCloudDownloadConsumer *o,
-    gpointer buffer,
+    gconstpointer buffer,
     gsize bytes,
     GError **error)
 {
