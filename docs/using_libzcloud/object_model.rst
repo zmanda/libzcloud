@@ -82,7 +82,7 @@ They should be subclassed, and that subclass instantiated.
 
       List all addresses matching ``template``, calling
       List all :class:`addresses <Address>` matching ``template``, calling
-      :meth:`ListConsumer.got_result` for each one. The ``template`` should 
+      :meth:`ListConsumer.got_result` for each one. The ``template`` should
       just use ``%s`` as a placeholder and ``%%`` to represent ``%``.
 
       :param template: the template to list matches for

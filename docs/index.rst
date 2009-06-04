@@ -15,9 +15,11 @@ Table of Contents:
    :maxdepth: 2
 
    introduction
-   model
+   using_zcloud
+   using_libzcloud
+   writing_plugins
+   hacking_libzcloud
    plugins
-   headers
 
 To Do
 =====
