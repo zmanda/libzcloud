@@ -86,7 +86,7 @@ test_memory_download_consumer(void)
 
     buf = zcloud_memory_download_consumer_get_contents(o, &get_size, FALSE);
     is_gsize(get_size, data_str_len+1, "after writing all data, buffer size matches");
-    is_string(buf, data_str, "buffer and input data match");
+    is_string((gchar*) buf, data_str, "buffer and input data match");
 
     wrote = zcloud_download_consumer_write(o_p, data_str, data_str_len, &err);
     gerror_is_clear(&err, "no error writing more bytes to buffer");
@@ -94,9 +94,9 @@ test_memory_download_consumer(void)
 
     buf = zcloud_memory_download_consumer_get_contents(o, &get_size, FALSE);
     is_gsize(get_size, data_str_len+1, "after writing more data to full buffer, buffer size is the same");
-    is_string(buf, data_str, "buffer and input data still match");
+    is_string((gchar*) buf, data_str, "buffer and input data still match");
 
-    ok = zcloud_upload_producer_reset(o_p, &err);
+    ok = zcloud_download_consumer_reset(o_p, &err);
     is_gboolean(ok, TRUE, "reset test buffer returned true");
     gerror_is_clear(&err, "no error reseting buffer");
 

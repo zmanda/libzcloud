@@ -92,7 +92,7 @@ test_memory_upload_producer(void)
     read = zcloud_upload_producer_read(o_p, buf, data_str_len, &err);
     gerror_is_clear(&err, "no error reading from zero-length buffer");
     is_gsize(read, 0, "read 0 bytes from zero-length buffer");
-    is_string(buf, "", "empty read from zero-length buffer");
+    is_string((gchar*) buf, "", "empty read from zero-length buffer");
     g_free(buf);
 
     g_object_unref(o);
@@ -113,14 +113,14 @@ test_memory_upload_producer(void)
     read = zcloud_upload_producer_read(o_p, buf, data_str_len, &err);
     gerror_is_clear(&err, "no error reading from buffer");
     is_gsize(read, data_str_len, "read all bytes from buffer");
-    is_string(buf, data_str, "read test string from buffer");
+    is_string((gchar*) buf, data_str, "read test string from buffer");
     g_free(buf);
 
     buf = g_malloc0(data_str_len+1);
     read = zcloud_upload_producer_read(o_p, buf, data_str_len, &err);
     gerror_is_clear(&err, "no error reading from buffer");
     is_gsize(read, 0, "read 0 bytes from exhausted test buffer");
-    is_string(buf, "", "empty read exhausted buffer");
+    is_string((gchar*) buf, "", "empty read exhausted buffer");
     g_free(buf);
 
     ok = zcloud_upload_producer_reset(o_p, &err);
@@ -142,7 +142,7 @@ test_memory_upload_producer(void)
     read = zcloud_upload_producer_read(o_p, buf+2, data_str_len, &err);
     gerror_is_clear(&err, "no error reading from buffer");
     is_gsize(read, data_str_len-2, "read remaining bytes from buffer");
-    is_string(buf, data_str, "complete read matches data");
+    is_string((gchar*) buf, data_str, "complete read matches data");
 
     g_free(buf);
 
