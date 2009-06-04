@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Plugins &mdash; libzcloud v1.0alpha documentation</title>
+    <title>Writing libzcloud Plugins &mdash; libzcloud v1.0alpha documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -18,7 +18,8 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="libzcloud v1.0alpha documentation" href="index.html" />
-    <link rel="prev" title="Headers" href="hacking_libzcloud/headers.html" /> 
+    <link rel="next" title="Plugin XML Definitions" href="writing_plugins/xml_definition.html" />
+    <link rel="prev" title="Model" href="using_libzcloud/object_model.html" /> 
   </head>
   <body>
     <div class="related">
@@ -28,7 +29,10 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="hacking_libzcloud/headers.html" title="Headers"
+          <a href="writing_plugins/xml_definition.html" title="Plugin XML Definitions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="using_libzcloud/object_model.html" title="Model"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
       </ul>
@@ -39,14 +43,11 @@
           <div class="body">
             
   
-  <div class="section" id="id1">
-<span id="plugins"></span><h1>Plugins<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Plugins are contained in shared objects (modules) which are found in plugin
-directories.  The default plugin directory is <tt class="docutils literal"><span class="pre">$libdir/zcloud-plugins</span></tt>, but
-this can be overridden at compile time (<tt class="docutils literal"><span class="pre">--with-zcplugindir</span></tt>) and at runtime
-(<tt class="docutils literal"><span class="pre">$ZCPLUGINPATH</span></tt>).</p>
-<p>Each plugin defines one prefix that can appear in store names, e.g., <tt class="docutils literal"><span class="pre">s3</span></tt>.
-There can be more than one plugin per module.</p>
+  <div class="section" id="writing-libzcloud-plugins">
+<h1>Writing libzcloud Plugins<a class="headerlink" href="#writing-libzcloud-plugins" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li class="toctree-l1"><a class="reference" href="writing_plugins/xml_definition.html">Plugin XML Definitions</a></li>
+</ul>
 </div>
 
 
@@ -56,10 +57,12 @@ There can be more than one plugin per module.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <h4>Previous topic</h4>
-            <p class="topless"><a href="hacking_libzcloud/headers.html" title="previous chapter">Headers</a></p>
+            <p class="topless"><a href="using_libzcloud/object_model.html" title="previous chapter">Model</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="writing_plugins/xml_definition.html" title="next chapter">Plugin XML Definitions</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="sources/plugins.txt">Show Source</a></li>
+              <li><a href="sources/writing_plugins.txt">Show Source</a></li>
             </ul>
           <h3>Quick search</h3>
             <form class="search" action="search.html" method="get">
@@ -78,7 +81,10 @@ There can be more than one plugin per module.</p>
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="hacking_libzcloud/headers.html" title="Headers"
+          <a href="writing_plugins/xml_definition.html" title="Plugin XML Definitions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="using_libzcloud/object_model.html" title="Model"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
       </ul>
