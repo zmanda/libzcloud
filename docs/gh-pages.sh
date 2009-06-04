@@ -49,16 +49,21 @@ function die {
 }
 
 test -n "$GH_PAGES_REPO" || die "must set GH_PAGES_REPO"
-test ! -d build/git || die "leftover files? cleanup build/git"
-git clone -n "$GH_PAGES_REPO" build/git || die "clone failed"
-cd build/git || die "cd failed"
-git checkout -b gh-pages origin/gh-pages || die "checkout failed"
+if test ! -d build/git; then
+    git clone -n "$GH_PAGES_REPO" build/git || die "clone failed"
+    cd build/git || die "cd failed"
+    git checkout -b gh-pages origin/gh-pages || die "checkout failed (does the gh-pages branch exist for this repo?)"
+else
+    cd build/git || die "cd failed"
+fi
 git rm -r . || die "git rm failed"
+git clean -fdx || die "git clean failed"
 cp -r ../html/* . || die "copy failed"
 find * -type f -exec sed -i -e 's!_static/!static/!g' -e 's!_sources/!sources/!g' \{} \; || die "munging failed"
+test -d sources && die "sources/ already exists"
 mv _sources sources || die "rename failed (sources)"
+test -d static && die "sources/ already exists"
 mv _static static || die "rename failed (static)"
 git add . || die "git add failed"
 git commit -m "update docs" || die "commit failed"
 git push origin gh-pages || die "push failed"
-rm -rf build/git || "failed to cleanup git dir"

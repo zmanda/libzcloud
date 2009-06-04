@@ -52,6 +52,6 @@ html: conf.py
 	tar -C build -cf html.tgz html
 
 gh-pages: html
-	./gh-pages.sh
+	$(srcdir)/gh-pages.sh
 
 .PHONY: gh-pages
