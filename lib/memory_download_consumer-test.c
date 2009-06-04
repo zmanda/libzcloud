@@ -105,7 +105,7 @@ test_memory_download_consumer(void)
 
     wrote = zcloud_download_consumer_write(o_p, data_str+2, 1, &err);
     gerror_is_clear(&err, "no error writing 1 bytes to buffer");
-    is_gsize(wrote, 0, "wrote 1 bytes to buffer");
+    is_gsize(wrote, 1, "wrote 1 bytes to buffer");
 
     buf = zcloud_memory_download_consumer_get_contents(o, &get_size, FALSE);
     is_gsize(get_size, 1, "after writing 1 bytes, buffer has size 1");

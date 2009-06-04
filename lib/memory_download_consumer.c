@@ -140,27 +140,26 @@ write_impl(
     GError **error)
 {
     ZCloudMemoryDownloadConsumer *self = ZCLOUD_MEMORY_DOWNLOAD_CONSUMER(o);
-    guint length_needed = self->buffer_position + bytes;
-
-    if (self->max_buffer_length && length_needed > self->max_buffer_length)
-        return 0;
+    guint length_wanted = self->buffer_position + bytes;
 
     /* reallocate if necessary. We use exponential sizing to make this
      * happen less often. */
-    if (length_needed > self->buffer_length) {
-        guint new_length = MAX(length_needed, self->buffer_length * 2);
+    if (length_wanted > self->buffer_length) {
+        guint new_length = MAX(length_wanted, self->buffer_length * 2);
         if (self->max_buffer_length) {
             new_length = MIN(new_length, self->max_buffer_length);
         }
         self->buffer = g_realloc(self->buffer, new_length);
         self->buffer_length = new_length;
     }
+    if (self->max_buffer_length && length_wanted > self->max_buffer_length)
+        bytes -= length_wanted - self->max_buffer_length;
 
     /* actually copy the data to the buffer */
     memcpy(self->buffer + self->buffer_position, buffer, bytes);
     self->buffer_position += bytes;
 
-    return length_needed;
+    return bytes;
 }
 
 static gboolean reset_impl(
@@ -183,11 +182,11 @@ get_contents_impl(
     guint8 *ret;
 
     if (length)
-        *length = self->buffer_length;
+        *length = self->buffer_position;
 
     if (copy) {
-        ret = g_malloc(self->buffer_length);
-        memcpy(ret, self->buffer, self->buffer_length);
+        ret = g_malloc(self->buffer_position);
+        memcpy(ret, self->buffer, self->buffer_position);
     } else {
         ret = self->buffer;
     }
