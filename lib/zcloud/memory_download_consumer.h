@@ -44,12 +44,12 @@
 #ifndef ZCLOUD_MEMORY_DOWNLOAD_CONSUMER_H
 #define ZCLOUD_MEMORY_DOWNLOAD_CONSUMER_H
 
-#include "upload_producer.h"
+#include "download_consumer.h"
 
 G_BEGIN_DECLS
 
 GType zcloud_memory_download_consumer_get_type(void);
-#define ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER (zcloud_memory_upload_producer_get_type())
+#define ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER (zcloud_memory_download_consumer_get_type())
 #define ZCLOUD_MEMORY_DOWNLOAD_CONSUMER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER, ZCloudMemoryDownloadConsumer))
 #define ZCLOUD_MEMORY_DOWNLOAD_CONSUMER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER, ZCloudMemoryDownloadConsumerClass))
 #define ZCLOUD_IS_MEMORY_DOWNLOAD_CONSUMER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZCLOUD_TYPE_MEMORY_DOWNLOAD_CONSUMER))
