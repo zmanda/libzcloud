@@ -69,7 +69,7 @@ test_memory_download_consumer(void)
 
     wrote = zcloud_download_consumer_write(o_p, data_str, 1, &err);
     gerror_is_clear(&err, "no error writing 1 bytes to buffer");
-    is_gsize(wrote, 0, "wrote 1 bytes to buffer");
+    is_gsize(wrote, 1, "wrote 1 bytes to buffer");
 
     buf = zcloud_memory_download_consumer_get_contents(o, &get_size, TRUE);
     is_gsize(get_size, 1, "after writing 1 bytes, buffer has size 1");
@@ -80,7 +80,7 @@ test_memory_download_consumer(void)
     is_gsize(get_size, 1, "buffer still has size 1");
     is_gchar((gchar) buf[0], 'T', "after changing a copy, the buffer contents remain unchanged");
 
-    wrote = zcloud_download_consumer_write(o_p, data_str, data_str_len, &err);
+    wrote = zcloud_download_consumer_write(o_p, data_str+1, data_str_len, &err);
     gerror_is_clear(&err, "no error writing remaining bytes to buffer");
     is_gsize(wrote, data_str_len, "filled remaining buffer space");
 
