@@ -49,7 +49,7 @@ public_headers = \
 	zcloud/download_consumer.h \
 	zcloud/error.h \
 	zcloud/list_consumer.h \
-	zcloud/memory_download_consumer.h \
+	zcloud/growing_memory_download_consumer.h \
 	zcloud/memory_upload_producer.h \
 	zcloud/plugins.h \
 	zcloud/progress_listener.h \
@@ -63,7 +63,7 @@ libzcloud_source = \
     download_consumer.c \
     error.c \
     list_consumer.c \
-    memory_download_consumer.c \
+    growing_memory_download_consumer.c \
     memory_upload_producer.c \
     plugins.c \
     progress_listener.c \
@@ -75,7 +75,7 @@ libzcloud_source = \
 test_source = \
 	test-checks.c \
 	memory_upload_producer-test.c \
-	memory_download_consumer-test.c \
+	growing_memory_download_consumer-test.c \
 	plugins-test.c
 
 EXTRA_DIST = \
