@@ -74,7 +74,7 @@ typedef struct ZCloudMemoryDownloadConsumer_s {
 typedef struct ZCloudMemoryDownloadConsumerClass_s {
     ZCloudDownloadConsumerClass parent_class;
 
-    guint8 * (*get_contents)(ZCloudMemoryDownloadConsumer *self, gsize *length, gboolean copy);
+    guint8 * (*get_contents)(ZCloudMemoryDownloadConsumer *self, gsize *length);
 } ZCloudMemoryDownloadConsumerClass;
 
 /* constructor */
@@ -85,8 +85,7 @@ zcloud_memory_download_consumer(guint max_buffer_length);
 guint8 *
 zcloud_memory_download_consumer_get_contents(
     ZCloudMemoryDownloadConsumer *self,
-    gsize *length,
-    gboolean copy);
+    gsize *length);
 
 G_END_DECLS
 

@@ -65,8 +65,10 @@ reset_impl(
 static guint8 *
 get_contents_impl(
     ZCloudMemoryDownloadConsumer *self,
-    gsize *length,
-    gboolean copy);
+    gsize *length);
+
+static void
+finalize_impl(GObject *o);
 
 GType
 zcloud_memory_download_consumer_get_type(void)
@@ -98,8 +100,10 @@ zcloud_memory_download_consumer_get_type(void)
 static void
 class_init(ZCloudMemoryDownloadConsumerClass *klass)
 {
+    GObjectClass *go_class = G_OBJECT_CLASS(klass);
     ZCloudDownloadConsumerClass *up_class = ZCLOUD_DOWNLOAD_CONSUMER_CLASS(klass);
 
+    go_class->finalize = finalize_impl;
     up_class->write = write_impl;
     up_class->reset = reset_impl;
     klass->get_contents = get_contents_impl;
@@ -124,12 +128,11 @@ zcloud_memory_download_consumer(
 guint8 *
 zcloud_memory_download_consumer_get_contents(
     ZCloudMemoryDownloadConsumer *self,
-    gsize *length,
-    gboolean copy)
+    gsize *length)
 {
     ZCloudMemoryDownloadConsumerClass *c = ZCLOUD_MEMORY_DOWNLOAD_CONSUMER_GET_CLASS(self);
     g_assert(c->get_contents != NULL);
-    return (c->get_contents)(self, length, copy);
+    return (c->get_contents)(self, length);
 }
 
 static gsize
@@ -176,20 +179,23 @@ static gboolean reset_impl(
 static guint8 *
 get_contents_impl(
     ZCloudMemoryDownloadConsumer *self,
-    gsize *length,
-    gboolean copy)
+    gsize *length)
 {
     guint8 *ret;
 
     if (length)
         *length = self->buffer_position;
 
-    if (copy) {
-        ret = g_malloc(self->buffer_position);
-        memcpy(ret, self->buffer, self->buffer_position);
-    } else {
-        ret = self->buffer;
-    }
+    ret = g_malloc(self->buffer_position);
+    memcpy(ret, self->buffer, self->buffer_position);
 
     return ret;
+}
+
+static void
+finalize_impl(GObject *o)
+{
+    ZCloudMemoryDownloadConsumer *self = ZCLOUD_MEMORY_DOWNLOAD_CONSUMER(o);
+
+    g_free(self->buffer);
 }

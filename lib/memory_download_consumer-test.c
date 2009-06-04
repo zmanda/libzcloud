@@ -64,52 +64,58 @@ test_memory_download_consumer(void)
     gerror_is_clear(&err, "no error writing 0 bytes to buffer");
     is_gsize(wrote, 0, "wrote 0 bytes to buffer");
 
-    buf = zcloud_memory_download_consumer_get_contents(o, &get_size, FALSE);
+    buf = zcloud_memory_download_consumer_get_contents(o, &get_size);
     is_gsize(get_size, 0, "after writing zero bytes, buffer has size 0");
+    g_free(buf);
 
     wrote = zcloud_download_consumer_write(o_p, data_str, 1, &err);
     gerror_is_clear(&err, "no error writing 1 bytes to buffer");
     is_gsize(wrote, 1, "wrote 1 bytes to buffer");
 
-    buf = zcloud_memory_download_consumer_get_contents(o, &get_size, TRUE);
+    buf = zcloud_memory_download_consumer_get_contents(o, &get_size);
     is_gsize(get_size, 1, "after writing 1 bytes, buffer has size 1");
     is_gchar((gchar) buf[0], 'T', "got back the one character we wrote");
     buf[0] = 'i';
     g_free(buf);
-    buf = zcloud_memory_download_consumer_get_contents(o, &get_size, FALSE);
+    buf = zcloud_memory_download_consumer_get_contents(o, &get_size);
     is_gsize(get_size, 1, "buffer still has size 1");
     is_gchar((gchar) buf[0], 'T', "after changing a copy, the buffer contents remain unchanged");
+    g_free(buf);
 
     wrote = zcloud_download_consumer_write(o_p, data_str+1, data_str_len, &err);
     gerror_is_clear(&err, "no error writing remaining bytes to buffer");
     is_gsize(wrote, data_str_len, "filled remaining buffer space");
 
-    buf = zcloud_memory_download_consumer_get_contents(o, &get_size, FALSE);
+    buf = zcloud_memory_download_consumer_get_contents(o, &get_size);
     is_gsize(get_size, data_str_len+1, "after writing all data, buffer size matches");
     is_string((gchar*) buf, data_str, "buffer and input data match");
+    g_free(buf);
 
     wrote = zcloud_download_consumer_write(o_p, data_str, data_str_len, &err);
     gerror_is_clear(&err, "no error writing more bytes to buffer");
     is_gsize(wrote, 0, "wrote no bytes to full buffer");
 
-    buf = zcloud_memory_download_consumer_get_contents(o, &get_size, FALSE);
+    buf = zcloud_memory_download_consumer_get_contents(o, &get_size);
     is_gsize(get_size, data_str_len+1, "after writing more data to full buffer, buffer size is the same");
     is_string((gchar*) buf, data_str, "buffer and input data still match");
+    g_free(buf);
 
     ok = zcloud_download_consumer_reset(o_p, &err);
     is_gboolean(ok, TRUE, "reset test buffer returned true");
     gerror_is_clear(&err, "no error reseting buffer");
 
-    buf = zcloud_memory_download_consumer_get_contents(o, &get_size, FALSE);
+    buf = zcloud_memory_download_consumer_get_contents(o, &get_size);
     is_gsize(get_size, 0, "after reset, size is 0");
+    g_free(buf);
 
     wrote = zcloud_download_consumer_write(o_p, data_str+2, 1, &err);
     gerror_is_clear(&err, "no error writing 1 bytes to buffer");
     is_gsize(wrote, 1, "wrote 1 bytes to buffer");
 
-    buf = zcloud_memory_download_consumer_get_contents(o, &get_size, FALSE);
+    buf = zcloud_memory_download_consumer_get_contents(o, &get_size);
     is_gsize(get_size, 1, "after writing 1 bytes, buffer has size 1");
     is_gchar((gchar) buf[0], 'e', "got back the one character we wrote");
+    g_free(buf);
 
     g_object_unref(o);
 }
