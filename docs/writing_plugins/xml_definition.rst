@@ -7,7 +7,10 @@ shared object without the "lib" prefix.  For example, ``libs3.so`` is paired
 with ``s3.xml``.  The XML file has the following structure::
 
     <zcloud-module basename="mycloud">
+      <property name="access_key" type="string"
+            description="access key for mycloud service"/>
       <store-plugin prefix="mycl">
+        <property name="block-size" type="int"/>
       </store-plugin>
     </zcloud-module>
 
@@ -25,6 +28,7 @@ instructions.
     module.  It can contain the following elements:
 
        * ``store-plugin``
+       * ``property``
 
     The base name is used to find the shared object, and should name the object
     without any suffixes or prefixes.  The shared object is assumed to reside
@@ -38,4 +42,38 @@ instructions.
 
     The ``store-plugin`` element identifies a particular plugin within a module,
     and contains elements defining the characteristics of this plugin.  It can
-    not contain any other elements.
+    contain the following element:
+
+       * ``property``
+
+    The properties available on the plugin are all those specified in the
+    parent ``zcloud-module`` element as well as those specified in the
+    ``store-plugin`` element itself.  It is an error to specify the same
+    property at the module level and the plugin level.
+
+.. index:: property
+
+.. describe:: property
+
+    :arg name: the name of the property
+    :arg type: the type of the property
+    :arg description: a short human-readable description of the property
+
+    The ``property`` element describes a property of a plugin.  If it is
+    specified at the module level, then it applies to all plugins.  It is
+    always an empty element.
+
+    The property type is used for validation and to convert the type to useful
+    data within the module.  It is case-insensitive and must be one of:
+
+        * ``string``
+        * ``int``
+        * ``boolean``
+
+    The property name should be lower case, and should use underscores (``_``),
+    not dashes, to connect words.  The property description may be displayed in
+    the online help of applications linked to libzcloud, so it should be short
+    (less than, say, 50 characters), declarative, and not begin with "the".
+
+    Note that there is no way to mark a property as "mandatory" - that should
+    come in the documentation for the cloud being defined.

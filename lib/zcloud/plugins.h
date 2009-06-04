@@ -91,6 +91,12 @@ typedef struct ZCloudModule_s {
     gboolean loaded;
 } ZCloudModule;
 
+typedef struct ZCloudStorePluginPropertySpec_s {
+    gchar *name;
+    GType type;
+    gchar *description;
+} ZCloudStorePluginPropertySpec;
+
 typedef struct ZCloudStorePlugin_s {
     /* prefix identifying the plugin */
     gchar *prefix;
@@ -100,6 +106,9 @@ typedef struct ZCloudStorePlugin_s {
 
     /* constructor for the store class, or NULL if the plugin isn't loaded */
     ZCloudStoreConstructor constructor;
+
+    /* list of ZCloudStorePluginPropertySpec objects */
+    GSList *property_specs;
 } ZCloudStorePlugin;
 
 /*

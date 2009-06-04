@@ -50,6 +50,66 @@ static GSList *all_store_plugins;
 static GSList *all_modules;
 
 /*
+ * property utility functions
+ */
+
+static ZCloudStorePluginPropertySpec *
+propspec_new(
+    const gchar *name,
+    GType type,
+    const gchar *description)
+{
+    ZCloudStorePluginPropertySpec *rv = g_new0(ZCloudStorePluginPropertySpec, 1);
+    rv->name = g_strdup(name);
+    rv->type = type;
+    rv->description = g_strdup(description);
+    return rv;
+}
+
+static ZCloudStorePluginPropertySpec *
+propspec_copy(
+    ZCloudStorePluginPropertySpec *src)
+{
+    return propspec_new(src->name, src->type, src->description);
+}
+
+static void
+propspec_free(
+    ZCloudStorePluginPropertySpec *spec)
+{
+    if (spec) {
+        if (spec->name)
+            g_free(spec->name);
+        if (spec->description)
+            g_free(spec->description);
+        g_free(spec);
+    }
+}
+
+static gboolean
+propspec_list_add(
+    GSList **listp,
+    const gchar *name,
+    GType type,
+    const gchar *description)
+{
+    GSList *iter;
+
+    /* first, search for a duplicate */
+    for (iter = *listp; iter; iter = iter->next) {
+        ZCloudStorePluginPropertySpec *spec = (ZCloudStorePluginPropertySpec *)iter->data;
+        if (0 == g_strcasecmp(spec->name, name)) {
+            return FALSE;
+        }
+    }
+
+    /* then add to the list */
+    *listp = g_slist_append(*listp, propspec_new(name, type, description));
+
+    return TRUE;
+}
+
+/*
  * Plugin initialization support
  */
 
@@ -61,7 +121,11 @@ struct markup_parser_state {
     /* filename of the XML file */
     gchar *filename;
 
+    /* name of a element which must end immediately */
+    gchar *open_empty_element;
+
     ZCloudModule *current_module;
+    GSList *current_module_props;
     ZCloudStorePlugin *current_plugin;
 };
 
@@ -100,6 +164,24 @@ markup_error(
     g_free(msg);
 }
 
+static gboolean
+markup_str_to_gtype(
+    const gchar *type,
+    GType *gtype)
+{
+    if (0 == g_strcasecmp(type, "string")) {
+        *gtype = G_TYPE_STRING;
+    } else if (0 == g_strcasecmp(type, "int")) {
+        *gtype = G_TYPE_INT;
+    } else if (0 == g_strcasecmp(type, "boolean")) {
+        *gtype = G_TYPE_BOOLEAN;
+    } else {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 static void
 markup_start_element(GMarkupParseContext *context,
                    const gchar *element_name,
@@ -109,6 +191,13 @@ markup_start_element(GMarkupParseContext *context,
                    GError **error)
 {
     struct markup_parser_state *state = (struct markup_parser_state *)user_data;
+
+    if (state->open_empty_element) {
+        markup_error(state, context, error,
+                    G_MARKUP_ERROR_INVALID_CONTENT,
+                    "'%s' element must be empty", state->open_empty_element);
+        return;
+    }
 
     if (g_strcasecmp(element_name, "zcloud-module") == 0) {
         GSList *iter;
@@ -210,6 +299,94 @@ markup_start_element(GMarkupParseContext *context,
         plugin->prefix = prefix;
 
         all_store_plugins = g_slist_append(all_store_plugins, plugin);
+    } else if (g_strcasecmp(element_name, "property") == 0) {
+        const gchar **i1, **i2;
+        const gchar *name, *type, *description;
+        GType gtype;
+        GSList *dupelists[2] = {
+            state->current_module_props,
+            state->current_plugin? state->current_plugin->property_specs : NULL,
+        };
+
+        if (!state->current_module) {
+            markup_error(state, context, error,
+                        G_MARKUP_ERROR_INVALID_CONTENT,
+                        "element 'property' must appear in another element");
+            return;
+        }
+
+        /* process attributes */
+        name = type = description = NULL;
+        for (i1 = attribute_names, i2 = attribute_values;
+                                    *i1 && *i2; i1++, i2++) {
+            if (0 == strcasecmp("name", *i1)) {
+                name = *i2;
+            } else if (0 == strcasecmp("type", *i1)) {
+                type = *i2;
+            } else if (0 == strcasecmp("description", *i1)) {
+                description = *i2;
+            } else {
+                markup_error(state, context, error,
+                            G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
+                            "'property' attribute '%s' not recognized", *i1);
+                return;
+            }
+        }
+        if (!name) {
+            markup_error(state, context, error,
+                        G_MARKUP_ERROR_INVALID_CONTENT,
+                        "'property' attribute 'name' is required");
+            return;
+        }
+        if (!type) {
+            markup_error(state, context, error,
+                        G_MARKUP_ERROR_INVALID_CONTENT,
+                        "'property' attribute 'type' is required");
+            return;
+        }
+        if (!description) {
+            markup_error(state, context, error,
+                        G_MARKUP_ERROR_INVALID_CONTENT,
+                        "'property' attribute 'description' is required");
+            return;
+        }
+
+        if (!markup_str_to_gtype(type, &gtype)) {
+            markup_error(state, context, error,
+                        G_MARKUP_ERROR_INVALID_CONTENT,
+                        "invalid property type '%s'", type);
+            return;
+        }
+
+        /* search for duplicates */
+        for (i = 0; i < G_N_ELEMENTS(dupelists); i++) {
+            GSList *list;
+            for (list = dupelists[i]; list; list = list->next) {
+                ZCloudStorePluginPropertySpec *spec =
+                    (ZCloudStorePluginPropertySpec *)list->data;
+                if (0 == g_strcasecmp(spec->name, name)) {
+                    markup_error(state, context, error,
+                                G_MARKUP_ERROR_INVALID_CONTENT,
+                                "duplicate property name '%s'", name);
+                    return;
+                }
+            }
+        }
+
+        /* now add this to the current plugin's list, if it exists, or to
+         * the current_module_props otherwise */
+        if (state->current_plugin) {
+            current_plugin->property_specs =
+                    g_slist_append(current_plugin->property_specs,
+                                   propspec_new(name, gtype, description));
+        } else {
+            current_module_props =
+                    g_slist_append(current_module_props,
+                                   propspec_new(name, gtype, description));
+        }
+
+        /* this element must be closed immediately */
+        state->open_empty_element = g_strdup(element_name);
     } else {
         markup_error(state, context, error,
                     G_MARKUP_ERROR_UNKNOWN_ELEMENT,
@@ -225,6 +402,12 @@ markup_end_element(GMarkupParseContext *context,
                  GError **error)
 {
     struct markup_parser_state *state = (struct markup_parser_state *)user_data;
+
+    if (state->open_empty_element) {
+        g_assert(0 == g_strcasecmp(element_name, state->open_empty_element));
+        g_free(state->open_empty_element);
+        state->open_empty_element = NULL;
+    }
 
     if (g_strcasecmp(element_name, "zcloud-module") == 0) {
         if (!state->current_module) {
@@ -248,6 +431,8 @@ markup_end_element(GMarkupParseContext *context,
             return;
         }
         state->current_plugin = NULL;
+    } else if (g_strcasecmp(element_name, "property") == 0) {
+        return; /* property is an empty element, so the end tag is boring */
     } else {
         markup_error(state, context, error,
                     G_MARKUP_ERROR_UNKNOWN_ELEMENT,
@@ -266,7 +451,8 @@ markup_text(GMarkupParseContext *context,
     struct markup_parser_state *state = (struct markup_parser_state *)user_data;
     gsize i;
 
-    /* if there's any non whitespace, then this is unexpected */
+    /* if there's any non whitespace, then this is unexpected.  If this changes
+     * to allow text in some places, then it should check open_empty_element */
     for (i = 0; i < text_len; i++) {
         if (!g_ascii_isspace(text[i])) {
             markup_error(state, context, error,
@@ -296,7 +482,7 @@ zc_load_module_xml(
     GMarkupParseContext *ctxt = NULL;
     int fd = -1;
     gboolean success = FALSE;
-    struct markup_parser_state state = { NULL, NULL, NULL, NULL };
+    struct markup_parser_state state = { NULL, NULL, NULL, NULL, NULL, NULL };
     static GMarkupParser parser = {
         markup_start_element,
         markup_end_element,
@@ -353,6 +539,8 @@ error:
         close(fd);
     if (state.filename)
         g_free(state.filename);
+    if (state.open_empty_element)
+        g_free(state.open_empty_element);
 
     return success;
 }
@@ -521,8 +709,8 @@ zcloud_load_store_plugin(
         goto error;
     }
 
-    /* this process should load all of the plugins for this module, and
-     * fail with g_critical if not. */
+    /* this process should load all of the plugins for this module, and return
+     * NULL if there is an error */
     gmod = g_module_open(zcmod->module_path, 0);
 
     if (!gmod) {
@@ -532,6 +720,8 @@ zcloud_load_store_plugin(
                     "%s", g_module_error());
         goto error;
     }
+
+    /* keep this module around for the duration */
     g_module_make_resident(gmod);
 
     /* check that it lived up to its advertisement */
@@ -585,11 +775,18 @@ zc_plugins_clear(void)
 
     for (iter = all_store_plugins; iter; iter = iter->next) {
         ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
+        GSList *iter;
 
         g_assert(plugin->constructor == NULL);
 
         if (plugin->prefix)
             g_free(plugin->prefix);
+
+        for (iter = plugin->property_specs; iter; iter = iter->next) {
+            ZCloudStorePluginPropertySpec *spec = (ZCloudStorePluginPropertySpec *)iter->data;
+            propspec_free(spec);
+        }
+        g_slist_free(plugin->property_specs);
 
         g_free(plugin);
     }
