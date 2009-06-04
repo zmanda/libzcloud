@@ -131,6 +131,7 @@ extern gint tests_failed, tests_passed, tests_run;
 #define ALL_TESTS \
     TEST_MODULE(memory_upload_producer) \
     TEST_MODULE(growing_memory_download_consumer) \
+    TEST_MODULE(fixed_memory_download_consumer) \
     TEST_MODULE(plugins)
 
 /* generate test module prototypes */

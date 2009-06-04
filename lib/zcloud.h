@@ -50,8 +50,9 @@
 /* classes */
 #include "zcloud/store.h"
 #include "zcloud/download_consumer.h"
-#include "zcloud/list_consumer.h"
+#include "zcloud/fixed_memory_download_consumer.h"
 #include "zcloud/growing_memory_download_consumer.h"
+#include "zcloud/list_consumer.h"
 #include "zcloud/memory_upload_producer.h"
 #include "zcloud/progress_listener.h"
 #include "zcloud/upload_producer.h"
