@@ -89,11 +89,19 @@ typedef struct ZCloudModule_s {
 
     /* TRUE if this module is loaded */
     gboolean loaded;
+
+    /* list of ZCloudStorePluginPropertySpec objects */
+    GSList *property_specs;
 } ZCloudModule;
 
 typedef struct ZCloudStorePluginPropertySpec_s {
+    /* name of the property - lowercase, underscores */
     gchar *name;
+
+    /* property type, translated to a GType */
     GType type;
+
+    /* short description of the property */
     gchar *description;
 } ZCloudStorePluginPropertySpec;
 

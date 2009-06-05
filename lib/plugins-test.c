@@ -275,15 +275,32 @@ test_plugins(void)
     pl = zcloud_get_store_plugin_by_prefix("withprop");
     ok(pl != NULL, "prefix withprop exists");
     prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "inner"),
-        "..and begins with the plugin-level property");
-    ok(prop->type == G_TYPE_INT,
-        "..and has the right property type");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->next->data;
     ok(0 == strcmp(prop->name, "outer"),
         "..and ends with the module-level property");
     ok(prop->type == G_TYPE_INT,
         "..and has the right property type");
+    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->next->data;
+    ok(0 == strcmp(prop->name, "inner"),
+        "..and begins with the plugin-level property");
+    ok(prop->type == G_TYPE_INT,
+        "..and has the right property type");
+
+    load_xml("<zcloud-module basename=\"mod\">"
+        "<store-plugin prefix=\"withprop\">"
+        " <property name=\"inner\" type=\"int\" description=\"in\" />"
+        "</store-plugin>"
+        "<property name=\"outer\" type=\"int\" description=\"out\" />"
+        "</zcloud-module>", &error);
+    gerror_is_clear(&error, "no error with a property at both levels, inner property first");
+
+    pl = zcloud_get_store_plugin_by_prefix("withprop");
+    ok(pl != NULL, "prefix withprop exists");
+    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
+    ok(0 == strcmp(prop->name, "inner"),
+        "..and begins with the plugin-level property");
+    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->next->data;
+    ok(0 == strcmp(prop->name, "outer"),
+        "..and ends with the module-level property");
 
     load_xml("<zcloud-module basename=\"mod\">"
         "<property name=\"outer\" type=\"int\" description=\"out\" />"
@@ -291,7 +308,7 @@ test_plugins(void)
         " <property name=\"inner1\" type=\"int\" description=\"in1\" />"
         "</store-plugin>"
         "<store-plugin prefix=\"withprop2\">"
-        " <property name=\"inner2\" type=\"gboolean\" description=\"in2\" />"
+        " <property name=\"inner2\" type=\"boolean\" description=\"in2\" />"
         "</store-plugin>"
         "</zcloud-module>", &error);
     gerror_is_clear(&error, "no error with a property at both levels with two plugins");
@@ -299,11 +316,11 @@ test_plugins(void)
     pl = zcloud_get_store_plugin_by_prefix("withprop1");
     ok(pl != NULL, "prefix withprop1 exists");
     prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "inner1"),
-        "..and begins with the correct plugin-level property");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->next->data;
     ok(0 == strcmp(prop->name, "outer"),
         "..and ends with the module-level property");
+    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->next->data;
+    ok(0 == strcmp(prop->name, "inner1"),
+        "..and begins with the correct plugin-level property");
 
     pl = zcloud_get_store_plugin_by_prefix("withprop2");
     ok(pl != NULL, "prefix withprop2 exists");
