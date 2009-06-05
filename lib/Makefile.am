@@ -34,7 +34,8 @@ public_headers = \
 	zcloud/upload_producer.h
 
 internal_headers = \
-    internal/plugins.h
+    internal/plugins.h \
+	internal/properties.h
 
 libzcloud_source = \
     download_consumer.c \
@@ -45,6 +46,7 @@ libzcloud_source = \
     memory_upload_producer.c \
     plugins.c \
     progress_listener.c \
+	properties.c \
     store.c \
     upload_producer.c \
     zcloud.c

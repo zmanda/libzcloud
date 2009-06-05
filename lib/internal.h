@@ -74,10 +74,11 @@
 #endif
 #endif
 
+/* include the public headers so the internal headers can use the types */
+#include "zcloud.h"
+
 /* include internal headers */
 #include "internal/plugins.h"
-
-/* finish by including the public header */
-#include "zcloud.h"
+#include "internal/properties.h"
 
 #endif

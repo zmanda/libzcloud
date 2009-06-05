@@ -29,32 +29,6 @@ static GSList *all_modules;
  * property utility functions
  */
 
-static ZCloudStorePluginPropertySpec *
-propspec_new(
-    const gchar *name,
-    GType type,
-    const gchar *description)
-{
-    ZCloudStorePluginPropertySpec *rv = g_new0(ZCloudStorePluginPropertySpec, 1);
-    rv->name = g_strdup(name);
-    rv->type = type;
-    rv->description = g_strdup(description);
-    return rv;
-}
-
-static void
-propspec_free(
-    ZCloudStorePluginPropertySpec *spec)
-{
-    if (spec) {
-        if (spec->name)
-            g_free(spec->name);
-        if (spec->description)
-            g_free(spec->description);
-        g_free(spec);
-    }
-}
-
 static gboolean
 propspec_list_add(
     GSList **listp,
@@ -73,7 +47,7 @@ propspec_list_add(
     }
 
     /* then add to the list */
-    *listp = g_slist_append(*listp, propspec_new(name, type, description));
+    *listp = g_slist_append(*listp, zc_propspec_new(name, type, description));
 
     return TRUE;
 }
@@ -132,24 +106,6 @@ markup_error(
                 "%s:%d: %s", state->filename, line, msg);
 
     g_free(msg);
-}
-
-static gboolean
-markup_str_to_gtype(
-    const gchar *type,
-    GType *gtype)
-{
-    if (0 == g_strcasecmp(type, "string")) {
-        *gtype = G_TYPE_STRING;
-    } else if (0 == g_strcasecmp(type, "int")) {
-        *gtype = G_TYPE_INT;
-    } else if (0 == g_strcasecmp(type, "boolean")) {
-        *gtype = G_TYPE_BOOLEAN;
-    } else {
-        return FALSE;
-    }
-
-    return TRUE;
 }
 
 static void
@@ -332,7 +288,7 @@ markup_start_element(GMarkupParseContext *context,
             return;
         }
 
-        if (!markup_str_to_gtype(type, &gtype)) {
+        if (!zc_propspec_string_to_gtype(type, &gtype)) {
             markup_error(state, context, error,
                         G_MARKUP_ERROR_INVALID_CONTENT,
                         "invalid property type '%s'", type);
@@ -417,7 +373,7 @@ markup_end_element(GMarkupParseContext *context,
 
         for (iter = state->current_module_propspecs; iter; iter = iter->next) {
             ZCloudStorePluginPropertySpec *spec = (ZCloudStorePluginPropertySpec *)iter->data;
-            propspec_free(spec);
+            zc_propspec_free(spec);
         }
         state->current_module_propspecs = NULL;
 
@@ -783,7 +739,7 @@ zc_plugins_clear(void)
 
         for (iter = plugin->property_specs; iter; iter = iter->next) {
             ZCloudStorePluginPropertySpec *spec = (ZCloudStorePluginPropertySpec *)iter->data;
-            propspec_free(spec);
+            zc_propspec_free(spec);
         }
         g_slist_free(plugin->property_specs);
 
