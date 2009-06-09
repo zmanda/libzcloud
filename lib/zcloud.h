@@ -48,9 +48,10 @@ gboolean zcloud_init(GError **error);
 
 /* Create a new ZCloudStore object with the given prefix.
  *
+ * @param storespec: store specifier
  * @returns: NULL on error, with ERROR set properly
  */
-ZCloudStore *zcloud_new(const gchar *prefix, GError **error);
+ZCloudStore *zcloud_store_new(const gchar *storespec, GError **error);
 
 G_END_DECLS
 

@@ -20,7 +20,7 @@
 #include "internal.h"
 
 ZCloudStore *
-zcloud_new(const gchar *storespec, GError **error)
+zcloud_store_new(const gchar *storespec, GError **error)
 {
     gchar *prefix, *colon;
     ZCloudStorePlugin *plugin;
@@ -53,7 +53,7 @@ unknown_spec:
                     ZCLOUD_ERROR,
                     ZCERR_MODULE,
                     "unknown store specification '%s'",
-                    prefix);
+                    storespec);
         return NULL;
 }
 

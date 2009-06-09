@@ -30,6 +30,7 @@ To Do
 * Reference zcloud(1) for zcloud instructions
 * "Using zcloud" example
 * Developers' doc: testing, coding style, etc.
+* using_libzcloud/linking_and_compiling.rst (headers, pkg-config, etc.)
 
 Indices and tables
 ==================

@@ -11,7 +11,7 @@ should be expected.
 None of the classes in the model should be instantiated themselves.
 They should be subclassed, and that subclass instantiated.
 
-.. class:: Store
+.. class:: ZCloudStore
 
    Stores represent a service that provides persistence of arbitrary blobs.
    An example is Amazon S3.
