@@ -94,6 +94,14 @@ gboolean isnt_byte_array(const GByteArray *got, const GByteArray *expected, cons
 #undef ZC_INT_TYPE
 
 /*
+ * Utilities (test-util.c)
+ */
+
+/* Load the given xml file as a plugin file, using "." as the
+ * plugin directory */
+gboolean load_plugin_xml(const gchar *xml, GError **error);
+
+/*
  * Global state tracking
  */
 

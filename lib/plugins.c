@@ -58,6 +58,9 @@ propspec_list_add(
 
 /* user_data for the markup parser */
 struct markup_parser_state {
+    /* parser context */
+    GMarkupParseContext *ctxt;
+
     /* directory in which the parse is taking place */
     const gchar *dir_name;
 
@@ -419,25 +422,12 @@ markup_text(GMarkupParseContext *context,
 
 }
 
-/* Load and parse a single XML file, creating the corresponding ZCloudStorePlugin and
- * ZCloudModule objects along the way.
- *
- * Side effect: populates all_store_plugins and all_modules
- *
- * @param dir_name: directory containing the file
- * @param file: filename
- * @returns: FALSE on error, with ERROR set properly
- */
-gboolean
-zc_load_module_xml(
+static void
+markup_parser_init(
+    struct markup_parser_state *state,
     const gchar *dir_name,
-    const gchar *file,
-    GError **error)
+    gchar *filename)
 {
-    GMarkupParseContext *ctxt = NULL;
-    int fd = -1;
-    gboolean success = FALSE;
-    struct markup_parser_state state = { NULL, NULL, NULL, NULL, NULL, NULL, NULL };
     static GMarkupParser parser = {
         markup_start_element,
         markup_end_element,
@@ -446,8 +436,64 @@ zc_load_module_xml(
         NULL
     };
 
-    state.dir_name = dir_name;
-    state.filename = g_build_path("/", dir_name, file, NULL);
+    state->ctxt = g_markup_parse_context_new(&parser, 0, (gpointer)state, NULL);
+    state->dir_name = dir_name;
+    state->filename = filename;
+    state->open_empty_element = NULL;
+    state->current_module = NULL;
+    state->current_module_propspecs = NULL;
+    state->current_module_plugins = NULL;
+    state->current_plugin = NULL;
+}
+
+static void
+markup_parser_cleanup(
+    struct markup_parser_state *state)
+{
+    if (state->ctxt)
+        g_markup_parse_context_free(state->ctxt);
+    if (state->open_empty_element)
+        g_free(state->open_empty_element);
+}
+
+gboolean
+zc_load_module_xml(
+    const gchar *xml,
+    GError **error)
+{
+    gboolean success = FALSE;
+    struct markup_parser_state state;
+
+    markup_parser_init(&state, ".", "(string)");
+
+    if (!g_markup_parse_context_parse(state.ctxt, xml, strlen(xml), error)) {
+        goto error;
+    }
+
+    if (!g_markup_parse_context_end_parse(state.ctxt, error)) {
+        goto error;
+    }
+
+    success = TRUE;
+
+error:
+    /* free everything */
+    markup_parser_cleanup(&state);
+
+    return success;
+}
+
+static gboolean
+load_module_xml_file(
+    const gchar *dir_name,
+    const gchar *file,
+    GError **error)
+{
+    int fd = -1;
+    gboolean success = FALSE;
+    struct markup_parser_state state;
+
+    markup_parser_init(&state, dir_name, g_build_path("/", dir_name, file, NULL));
 
     fd = open(state.filename, O_RDONLY, 0);
     if (fd < 0) {
@@ -459,7 +505,6 @@ zc_load_module_xml(
         goto error;
     }
 
-    ctxt = g_markup_parse_context_new(&parser, 0, (gpointer)&state, NULL);
     while (1) {
         gchar buf[4096];
         gsize len;
@@ -475,12 +520,12 @@ zc_load_module_xml(
             goto error;
         }
 
-        if (!g_markup_parse_context_parse(ctxt, buf, len, error)) {
+        if (!g_markup_parse_context_parse(state.ctxt, buf, len, error)) {
             goto error;
         }
     }
 
-    if (!g_markup_parse_context_end_parse(ctxt, error)) {
+    if (!g_markup_parse_context_end_parse(state.ctxt, error)) {
         goto error;
     }
 
@@ -488,14 +533,11 @@ zc_load_module_xml(
 
 error:
     /* free everything */
-    if (ctxt)
-        g_markup_parse_context_free(ctxt);
+    markup_parser_cleanup(&state);
     if (fd >= 0)
         close(fd);
     if (state.filename)
         g_free(state.filename);
-    if (state.open_empty_element)
-        g_free(state.open_empty_element);
 
     return success;
 }
@@ -542,7 +584,7 @@ scan_plugin_dir(
         size_t len = strlen(elt);
         /* if the file ends in .xml, load it */
         if (len > 4 && 0 == g_ascii_strcasecmp(".xml", elt + len - 4)) {
-            if (!zc_load_module_xml(dir_name, elt, error)) {
+            if (!load_module_xml_file(dir_name, elt, error)) {
                 g_dir_close(dir);
                 return FALSE;
             }
@@ -731,8 +773,6 @@ zc_plugins_clear(void)
     for (iter = all_store_plugins; iter; iter = iter->next) {
         ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
         GSList *iter;
-
-        g_assert(plugin->constructor == NULL);
 
         if (plugin->prefix)
             g_free(plugin->prefix);

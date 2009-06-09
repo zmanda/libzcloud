@@ -19,42 +19,20 @@
 
 #include "test.h"
 
-#define XML_FILE "mod.xml"
-
 static void
-write_xml_and_load(const gchar *xml, GError **error)
+load_xml(const gchar *xml, GError **error)
 {
-    int fd;
-    const gchar *p = xml;
-    gsize remaining = strlen(xml);
     gboolean res;
 
-    fd = open(XML_FILE, O_WRONLY|O_CREAT|O_TRUNC, 0666);
-    g_assert(fd >= 0);
+    zc_plugins_clear();
+    res = zc_load_module_xml(xml, error);
 
-    while (remaining) {
-        gsize written = write(fd, p, remaining);
-        g_assert(written > 0);
-        p += written;
-        remaining -= written;
-    }
-    g_assert(close(fd) == 0);
-
-    res = zc_load_module_xml(".", XML_FILE, error);
-
-    /* double-check that the boolean result agrees with ERROR */
+    /* check that error and res agree */
     g_assert((res && !*error) || (!res && *error));
 }
 
 static void
-load_xml(const gchar *xml, GError **error)
-{
-    zc_plugins_clear();
-    write_xml_and_load(xml, error);
-}
-
-void
-test_plugins(void)
+test_xml_parser(void)
 {
     GError *error = NULL;
     ZCloudStorePlugin *pl;
@@ -359,9 +337,9 @@ test_plugins(void)
             if (0 == strcmp(pl->prefix, "two"))
                 seen_two = TRUE;
 
-            ok(0 == strcmp(pl->module->basename, "myext"),
+            is_string(pl->module->basename, "myext",
                 "module basename is correct");
-            ok(0 == strcmp(pl->module->xml_path, "./mod.xml"),
+            is_string(pl->module->xml_path, "(string)",
                 "module xml_path is correct");
             ok(pl->module->module_path != NULL,
                 "module module_path is non-NULL");
@@ -370,6 +348,18 @@ test_plugins(void)
         ok(g_slist_length(all) == 2 && seen_one && seen_two,
             "saw the correct two plugins");
     }
+}
 
-    unlink(XML_FILE);
+static void
+test_set_property(void)
+{
+    //ZCloudStore *store;
+    //setup_disk_plugin();
+}
+
+void
+test_plugins(void)
+{
+    test_xml_parser();
+    test_set_property();
 }

@@ -55,6 +55,7 @@ libzcloud_source = \
 
 test_source = \
 	test-checks.c \
+	test-util.c \
 	fixed_memory_download_consumer-test.c \
 	growing_memory_download_consumer-test.c \
 	memory_upload_producer-test.c \

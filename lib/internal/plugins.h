@@ -34,17 +34,24 @@ gboolean zc_plugins_init(GError **error);
  */
 
 /* Clear all of the plugin metadata; note that this can *not* be called after
- * modules have been loaded!
+ * modules have been loaded, although it is safe to add plugin constructors.
  */
 G_GNUC_INTERNAL
 void zc_plugins_clear(void);
 
-/* Load the XML file given by 'dir_name/file' */
+/* Parse the given XML, creating the corresponding ZCloudStorePlugin and
+ * ZCloudModule objects along the way.  The base directory for the module
+ * is ".".
+ *
+ * Side effect: populates all_store_plugins and all_modules
+ *
+ * @param xml: xml data to load
+ * @returns: FALSE on error, with ERROR set properly
+ */
 G_GNUC_INTERNAL
 gboolean
 zc_load_module_xml(
-    const gchar *dir_name,
-    const gchar *file,
+    const gchar *xml,
     GError **error);
 
 G_END_DECLS
