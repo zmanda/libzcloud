@@ -100,20 +100,21 @@ disk_store_get_type(void)
 
 ZCloudStore *
 disk_constructor(
-    const gchar *storenode,
+    const gchar *prefix G_GNUC_UNUSED,
+    const gchar *storespec_suffix,
     GError **error)
 {
     DiskStore *store;
 
-    if(!g_file_test(storenode, G_FILE_TEST_IS_DIR)) {
+    if(!g_file_test(storespec_suffix, G_FILE_TEST_IS_DIR)) {
         g_set_error(error, ZCLOUD_ERROR, ZCERR_PLUGIN,
-            "'%s' is not a directory", storenode);
+            "'%s' is not a directory", storespec_suffix);
         return NULL;
     }
 
     store = g_object_new(DISK_TYPE_STORE, NULL);
     g_assert(store != NULL);
-    store->basedir = g_strdup(storenode);
+    store->basedir = g_strdup(storespec_suffix);
 
     return ZCLOUD_STORE(store);
 }

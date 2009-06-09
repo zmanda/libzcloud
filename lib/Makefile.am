@@ -30,6 +30,7 @@ public_headers = \
 	zcloud/memory_upload_producer.h \
 	zcloud/plugins.h \
 	zcloud/progress_listener.h \
+	zcloud/properties.h \
 	zcloud/store.h \
 	zcloud/upload_producer.h
 

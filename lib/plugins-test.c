@@ -58,7 +58,7 @@ test_plugins(void)
 {
     GError *error = NULL;
     ZCloudStorePlugin *pl;
-    ZCloudStorePluginPropertySpec *prop;
+    ZCloudPropertySpec *prop;
 
     load_xml("<zcloud-module basename=\"disk\">"
         "<store-plugin prefix=\"disk\"></store-plugin>"
@@ -215,7 +215,7 @@ test_plugins(void)
 
     pl = zcloud_get_store_plugin_by_prefix("withprop");
     ok(pl != NULL, "prefix withprop exists");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->data;
     ok(0 == strcmp(prop->name, "prop"),
         "..and has the right property name");
     ok(prop->type == G_TYPE_STRING,
@@ -232,7 +232,7 @@ test_plugins(void)
 
     pl = zcloud_get_store_plugin_by_prefix("withprop");
     ok(pl != NULL, "prefix withprop exists");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->data;
     ok(0 == strcmp(prop->name, "prop"),
         "..and has the right property name");
     ok(prop->type == G_TYPE_BOOLEAN,
@@ -250,12 +250,12 @@ test_plugins(void)
 
     pl = zcloud_get_store_plugin_by_prefix("withprop");
     ok(pl != NULL, "prefix withprop exists");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->data;
     ok(0 == strcmp(prop->name, "outer"),
         "..and ends with the module-level property");
     ok(prop->type == G_TYPE_INT,
         "..and has the right property type");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->next->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->next->data;
     ok(0 == strcmp(prop->name, "inner"),
         "..and begins with the plugin-level property");
     ok(prop->type == G_TYPE_INT,
@@ -271,10 +271,10 @@ test_plugins(void)
 
     pl = zcloud_get_store_plugin_by_prefix("withprop");
     ok(pl != NULL, "prefix withprop exists");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->data;
     ok(0 == strcmp(prop->name, "inner"),
         "..and begins with the plugin-level property");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->next->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->next->data;
     ok(0 == strcmp(prop->name, "outer"),
         "..and ends with the module-level property");
 
@@ -291,19 +291,19 @@ test_plugins(void)
 
     pl = zcloud_get_store_plugin_by_prefix("withprop1");
     ok(pl != NULL, "prefix withprop1 exists");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->data;
     ok(0 == strcmp(prop->name, "outer"),
         "..and ends with the module-level property");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->next->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->next->data;
     ok(0 == strcmp(prop->name, "inner1"),
         "..and begins with the correct plugin-level property");
 
     pl = zcloud_get_store_plugin_by_prefix("withprop2");
     ok(pl != NULL, "prefix withprop2 exists");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->data;
     ok(0 == strcmp(prop->name, "outer"),
         "..and begins with the module-level property");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->next->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->next->data;
     ok(0 == strcmp(prop->name, "inner2"),
         "..and ends with the correct plugin-level property");
 
@@ -319,13 +319,13 @@ test_plugins(void)
 
     pl = zcloud_get_store_plugin_by_prefix("withprop1");
     ok(pl != NULL, "prefix withprop1 exists");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->data;
     ok(0 == strcmp(prop->name, "prop1"),
         "..and has the correct module-level property");
 
     pl = zcloud_get_store_plugin_by_prefix("withprop2");
     ok(pl != NULL, "prefix withprop2 exists");
-    prop = (ZCloudStorePluginPropertySpec *)pl->property_specs->data;
+    prop = (ZCloudPropertySpec *)pl->property_specs->data;
     ok(0 == strcmp(prop->name, "prop2"),
         "..and has the correct module-level property");
 

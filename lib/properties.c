@@ -18,13 +18,13 @@
 
 #include "internal.h"
 
-ZCloudStorePluginPropertySpec *
+ZCloudPropertySpec *
 zc_propspec_new(
     const gchar *name,
     GType type,
     const gchar *description)
 {
-    ZCloudStorePluginPropertySpec *rv = g_new0(ZCloudStorePluginPropertySpec, 1);
+    ZCloudPropertySpec *rv = g_new0(ZCloudPropertySpec, 1);
     rv->name = g_strdup(name);
     rv->type = type;
     rv->description = g_strdup(description);
@@ -33,7 +33,7 @@ zc_propspec_new(
 
 void
 zc_propspec_free(
-    ZCloudStorePluginPropertySpec *spec)
+    ZCloudPropertySpec *spec)
 {
     if (spec) {
         if (spec->name)

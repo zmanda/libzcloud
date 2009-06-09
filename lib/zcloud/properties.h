@@ -16,37 +16,27 @@
  * GNU Lesser General Public License for more details.
  *  ***** END LICENSE BLOCK ***** */
 
-
-#ifndef ZCLOUD_H
-#define ZCLOUD_H
-
-#include <glib.h>
-#include <glib-object.h>
-
-/* classes */
-#include "zcloud/store.h"
-#include "zcloud/download_consumer.h"
-#include "zcloud/fixed_memory_download_consumer.h"
-#include "zcloud/growing_memory_download_consumer.h"
-#include "zcloud/list_consumer.h"
-#include "zcloud/memory_upload_producer.h"
-#include "zcloud/progress_listener.h"
-#include "zcloud/upload_producer.h"
-
-/* miscellaneous */
-#include "zcloud/error.h"
-#include "zcloud/plugins.h"
-#include "zcloud/properties.h"
+#ifndef ZCLOUD_PROPERTIES_H
+#define ZCLOUD_PROPERTIES_H
 
 G_BEGIN_DECLS
 
-/* Call this before calling any other zcloud functions.  If this fails,
- * do not call it again.
- *
- * @returns: FALSE on error, with ERROR set properly
+/*
+ * Property specifications
  */
-gboolean zcloud_init(GError **error);
+
+typedef struct ZCloudPropertySpec_s {
+    /* name of the property - lowercase, underscores */
+    gchar *name;
+
+    /* property type, represented as a GType */
+    GType type;
+
+    /* short description of the property */
+    gchar *description;
+} ZCloudPropertySpec;
 
 G_END_DECLS
 
 #endif
+

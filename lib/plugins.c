@@ -40,7 +40,7 @@ propspec_list_add(
 
     /* first, search for a duplicate */
     for (iter = *listp; iter; iter = iter->next) {
-        ZCloudStorePluginPropertySpec *spec = (ZCloudStorePluginPropertySpec *)iter->data;
+        ZCloudPropertySpec *spec = (ZCloudPropertySpec *)iter->data;
         if (0 == g_strcasecmp(spec->name, name)) {
             return FALSE;
         }
@@ -231,7 +231,7 @@ markup_start_element(GMarkupParseContext *context,
         /* add any properties already defined at the module level.  This should not
          * cause duplicates */
         for (iter = state->current_module_propspecs; iter; iter = iter->next) {
-            ZCloudStorePluginPropertySpec *spec = (ZCloudStorePluginPropertySpec *)iter->data;
+            ZCloudPropertySpec *spec = (ZCloudPropertySpec *)iter->data;
             g_assert(propspec_list_add(&plugin->property_specs,
                             spec->name, spec->type, spec->description));
         }
@@ -372,7 +372,7 @@ markup_end_element(GMarkupParseContext *context,
         state->current_module_plugins = NULL;
 
         for (iter = state->current_module_propspecs; iter; iter = iter->next) {
-            ZCloudStorePluginPropertySpec *spec = (ZCloudStorePluginPropertySpec *)iter->data;
+            ZCloudPropertySpec *spec = (ZCloudPropertySpec *)iter->data;
             zc_propspec_free(spec);
         }
         state->current_module_propspecs = NULL;
@@ -738,7 +738,7 @@ zc_plugins_clear(void)
             g_free(plugin->prefix);
 
         for (iter = plugin->property_specs; iter; iter = iter->next) {
-            ZCloudStorePluginPropertySpec *spec = (ZCloudStorePluginPropertySpec *)iter->data;
+            ZCloudPropertySpec *spec = (ZCloudPropertySpec *)iter->data;
             zc_propspec_free(spec);
         }
         g_slist_free(plugin->property_specs);

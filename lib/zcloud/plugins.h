@@ -16,13 +16,10 @@
  * GNU Lesser General Public License for more details.
  *  ***** END LICENSE BLOCK ***** */
 
-
-/* This file need only be included by plugin modules' source files, not by
- * libzcloud users.  It defines the data formats and functions used to
- * set up communication between libzcloud and its plugins. */
-
 #ifndef ZCLOUD_PLUGINS_H
 #define ZCLOUD_PLUGINS_H
+
+#include "store.h"
 
 G_BEGIN_DECLS
 
@@ -30,14 +27,7 @@ G_BEGIN_DECLS
  * Plugin registration
  */
 
-/* plugin-creation function
- *
- * @param storenode: the node (store specification string without prefix)
- * @returns: a new object or NULL on error (with ERROR set correctly)
- */
-typedef ZCloudStore *(* ZCloudStoreConstructor)(const gchar *storenode, GError **error);
-
-/* Plugins call this function from g_module_check_init.  It is invalid to
+/* Modules call this function from g_module_check_init.  It is invalid to
  * call this at any other time.
  *
  * @param module_name: name of the module registering this plugin
@@ -65,21 +55,7 @@ typedef struct ZCloudModule_s {
 
     /* TRUE if this module is loaded */
     gboolean loaded;
-
-    /* list of ZCloudStorePluginPropertySpec objects */
-    GSList *property_specs;
 } ZCloudModule;
-
-typedef struct ZCloudStorePluginPropertySpec_s {
-    /* name of the property - lowercase, underscores */
-    gchar *name;
-
-    /* property type, translated to a GType */
-    GType type;
-
-    /* short description of the property */
-    gchar *description;
-} ZCloudStorePluginPropertySpec;
 
 typedef struct ZCloudStorePlugin_s {
     /* prefix identifying the plugin */
@@ -91,7 +67,7 @@ typedef struct ZCloudStorePlugin_s {
     /* constructor for the store class, or NULL if the plugin isn't loaded */
     ZCloudStoreConstructor constructor;
 
-    /* list of ZCloudStorePluginPropertySpec objects */
+    /* list of ZCloudPropertySpec objects */
     GSList *property_specs;
 } ZCloudStorePlugin;
 

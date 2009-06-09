@@ -19,44 +19,6 @@
 
 #include "internal.h"
 
-ZCloudStore *
-zcloud_store_new(const gchar *storespec, GError **error)
-{
-    gchar *prefix, *colon;
-    ZCloudStorePlugin *plugin;
-    ZCloudStore *store;
-
-    if ((colon = strchr(storespec, ':')) == NULL)
-        goto unknown_spec;
-    prefix = g_strndup(storespec, colon-storespec);
-
-    plugin = zcloud_get_store_plugin_by_prefix(prefix);
-    g_free(prefix);
-    if (!plugin)
-        goto unknown_spec;
-
-    if (!zcloud_load_store_plugin(plugin, error))
-        return NULL;
-
-    g_assert(plugin->constructor != NULL);
-    store = plugin->constructor(colon+1, error);
-
-    if (!store) {
-        g_assert(*error != NULL);
-        return NULL;
-    }
-    g_assert(!*error);
-    return store;
-
-unknown_spec:
-        g_set_error(error,
-                    ZCLOUD_ERROR,
-                    ZCERR_MODULE,
-                    "unknown store specification '%s'",
-                    storespec);
-        return NULL;
-}
-
 gboolean
 zcloud_init(GError **error)
 {

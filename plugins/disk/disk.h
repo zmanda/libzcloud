@@ -26,7 +26,10 @@ G_BEGIN_DECLS
 
 /* store.c */
 
-ZCloudStore *disk_constructor(const gchar *storenode, GError **error);
+ZCloudStore *disk_constructor(
+        const gchar *prefix,
+        const gchar *specsuffix,
+        GError **error);
 
 G_END_DECLS
 

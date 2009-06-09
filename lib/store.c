@@ -19,6 +19,111 @@
 
 #include "internal.h"
 
+/*
+ * Constructor
+ */
+
+ZCloudStore *
+zcloud_store_new(const gchar *storespec, GError **error)
+{
+    gchar *prefix, *colon;
+    ZCloudStorePlugin *plugin;
+    ZCloudStore *store;
+
+    if ((colon = strchr(storespec, ':')) == NULL)
+        goto unknown_spec;
+    prefix = g_strndup(storespec, colon-storespec);
+
+    plugin = zcloud_get_store_plugin_by_prefix(prefix);
+    g_free(prefix);
+    if (!plugin)
+        goto unknown_spec;
+
+    if (!zcloud_load_store_plugin(plugin, error))
+        return NULL;
+
+    g_assert(plugin->constructor != NULL);
+    store = plugin->constructor(prefix, colon+1, error);
+    store->plugin = plugin;
+
+    if (!store) {
+        g_assert(*error != NULL);
+        return NULL;
+    }
+    g_assert(!*error);
+    return store;
+
+unknown_spec:
+    g_set_error(error,
+                ZCLOUD_ERROR,
+                ZCERR_MODULE,
+                "unknown store specification '%s'",
+                storespec);
+    return NULL;
+}
+
+/*
+ * Method implementations
+ */
+
+static gboolean
+set_property_impl(
+    ZCloudStore *self,
+    const gchar *name, 
+    GValue *value,
+    GError **error)
+{
+    GValue *copy;
+
+    if (g_hash_table_lookup(self->properties, name)) {
+        g_set_error(error, ZCLOUD_ERROR, ZCERR_PROPERTY, "property '%s' is already set", name);
+        return FALSE;
+    }
+
+    copy = g_new0(GValue, 1);
+    g_value_copy(value, copy);
+    g_hash_table_insert(self->properties, g_strdup(name), copy);
+
+    return TRUE;
+}
+
+/*
+ * Class mechanics
+ */
+
+static void
+free_gvalue(
+    GValue *val)
+{
+    g_value_unset(val);
+    g_free(val);
+}
+
+static void
+init_impl(
+    ZCloudStore *self)
+{
+    self->properties = g_hash_table_new_full(
+        g_str_hash, g_str_equal,
+        (GDestroyNotify)g_free, (GDestroyNotify)free_gvalue);
+}
+
+static void
+finalize_impl(
+    ZCloudStore* self)
+{
+    g_hash_table_destroy(self->properties);
+}
+
+static void
+class_init(
+    ZCloudStoreClass *zc_class)
+{
+    GObjectClass *go_class = (GObjectClass *)zc_class;
+    zc_class->set_property = set_property_impl;
+    go_class->finalize = (GObjectFinalizeFunc)finalize_impl;
+}
+
 GType
 zcloud_store_get_type(void)
 {
@@ -29,12 +134,12 @@ zcloud_store_get_type(void)
             sizeof (ZCloudStoreClass),
             (GBaseInitFunc) NULL,
             (GBaseFinalizeFunc) NULL,
-            (GClassInitFunc) NULL,
+            (GClassInitFunc) class_init,
             (GClassFinalizeFunc) NULL,
             NULL /* class_data */,
             sizeof (ZCloudStore),
             0 /* n_preallocs */,
-            (GInstanceInitFunc) NULL,
+            (GInstanceInitFunc) init_impl,
             NULL
         };
 
@@ -48,6 +153,18 @@ zcloud_store_get_type(void)
 /*
  * method stubs
  */
+
+gboolean
+zcloud_store_set_property(
+    ZCloudStore *self,
+    const gchar *name,
+    GValue *value,
+    GError **error)
+{
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self);
+    g_assert(c->set_property != NULL);
+    return (c->set_property)(self, name, value, error);
+}
 
 gboolean
 zcloud_store_create(

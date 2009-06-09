@@ -29,7 +29,7 @@ G_BEGIN_DECLS
  * @returns: new object
  */
 G_GNUC_INTERNAL
-ZCloudStorePluginPropertySpec *
+ZCloudPropertySpec *
 zc_propspec_new(
     const gchar *name,
     GType type,
@@ -42,7 +42,7 @@ zc_propspec_new(
 G_GNUC_INTERNAL
 void
 zc_propspec_free(
-    ZCloudStorePluginPropertySpec *spec);
+    ZCloudPropertySpec *spec);
 
 /* Convert a string, as given in a <property> element, into a GType.
  *

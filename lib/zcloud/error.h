@@ -36,6 +36,7 @@ typedef enum ZCloudError_e {
     ZCERR_UNKNOWN = 1,
     ZCERR_MODULE = 2,           /* error loading a module */
     ZCERR_PLUGIN = 3,           /* error from a plugin, if nothing else is more suitable */
+    ZCERR_PROPERTY = 4,         /* property-related error */
 } ZCloudError;
 
 G_END_DECLS
