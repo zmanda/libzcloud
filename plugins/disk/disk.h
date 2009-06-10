@@ -26,10 +26,13 @@ G_BEGIN_DECLS
 
 /* store.c */
 
-ZCloudStore *disk_constructor(
-        const gchar *prefix,
-        const gchar *specsuffix,
-        GError **error);
+GType disk_store_get_type(void);
+#define DISK_TYPE_STORE (disk_store_get_type())
+#define DISK_STORE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), DISK_TYPE_STORE, DiskStore))
+#define DISK_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), DISK_TYPE_STORE, DiskStoreClass))
+#define DISK_IS_STORE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), DISK_TYPE_STORE))
+#define DISK_IS_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), DISK_TYPE_STORE))
+#define DISK_STORE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), DISK_TYPE_STORE, DiskStoreClass))
 
 G_END_DECLS
 

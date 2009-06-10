@@ -37,19 +37,16 @@ GType zcloud_store_get_type(void);
 
 typedef struct ZCloudStore_s {
     GObject parent;
-
-    struct ZCloudStorePlugin_s *plugin; /* forward declaration */
-    GHashTable *properties;
 } ZCloudStore;
 
 typedef struct ZCloudStoreClass_s {
     GObjectClass parent_class;
 
-    /* property management */
-    gboolean (*set_property)(
+    gboolean (*setup)(
         ZCloudStore *self,
-        const gchar *name,
-        GValue *value,
+        const gchar *suffix,
+        gint n_parameters,
+        GParameter *parameters,
         GError **error);
 
     /* general methods */
@@ -95,25 +92,15 @@ typedef struct ZCloudStoreClass_s {
  */
 ZCloudStore *zcloud_store_new(const gchar *storespec, GError **error);
 
-/* constructor function type
- *
- * @param prefix: the store spec prefix
- * @param specsuffix: the store spec after the colon
- * @returns: a new object or NULL on error (with ERROR set correctly)
- */
-typedef ZCloudStore *(* ZCloudStoreConstructor)(
-    const gchar *prefix,
-    const gchar *specsuffix,
-    GError **error);
-
 /*
  * Method stubs
  */
 
-gboolean zcloud_store_set_property(
+gboolean zcloud_store_setup(
     ZCloudStore *self,
-    const gchar *name,
-    GValue *value,
+    const gchar *suffix,
+    gint n_parameters,
+    GParameter *parameters,
     GError **error);
 
 gboolean zcloud_store_create(

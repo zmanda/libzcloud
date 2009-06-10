@@ -91,20 +91,6 @@ mock_store_get_type(void)
     return type;
 }
 
-static ZCloudStore *
-mock_constructor(
-    const gchar *prefix G_GNUC_UNUSED,
-    const gchar *storespec_suffix,
-    GError **error)
-{
-    MockStore *store;
-
-    store = g_object_new(MOCK_TYPE_STORE, NULL);
-    g_assert(store != NULL);
-
-    return ZCLOUD_STORE(store);
-}
-
 void
 mock_setup(void)
 {
@@ -120,5 +106,5 @@ mock_setup(void)
     if (error)
         g_error("could not load mock plugin: %s", error->message);
 
-    zcloud_register_store_plugin("mock", "mock", mock_constructor);
+    zcloud_register_store_plugin("mock", "mock", MOCK_TYPE_STORE);
 }

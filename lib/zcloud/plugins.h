@@ -36,8 +36,10 @@ G_BEGIN_DECLS
  * @returns: NULL on success, or an error string on failure (return this string
  *   from g_module_check_init)
  */
-gchar *zcloud_register_store_plugin(const gchar *module_name,
-                    const gchar *prefix, ZCloudStoreConstructor constructor);
+gchar *zcloud_register_store_plugin(
+            const gchar *module_name,
+            const gchar *prefix,
+            GType type);
 
 /*
  * Types
@@ -64,8 +66,8 @@ typedef struct ZCloudStorePlugin_s {
     /* the module defining this store plugin */
     ZCloudModule *module;
 
-    /* constructor for the store class, or NULL if the plugin isn't loaded */
-    ZCloudStoreConstructor constructor;
+    /* type of the store class to be instantiated */
+    GType type;
 
     /* list of ZCloudPropertySpec objects */
     GSList *property_specs;
