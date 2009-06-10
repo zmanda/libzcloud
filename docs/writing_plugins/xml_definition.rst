@@ -7,10 +7,13 @@ shared object without the "lib" prefix.  For example, ``libs3.so`` is paired
 with ``s3.xml``.  The XML file has the following structure::
 
     <zcloud-module basename="mycloud">
-      <property name="access_key" type="string"
-            description="access key for mycloud service"/>
       <store-plugin prefix="mycl">
-        <property name="block-size" type="int"/>
+        <property name="access_key" type="string">
+          Authentication token
+        </property>
+        <property name="redundancy" type="int">
+          Requested storage redundancy level
+        </property>
       </store-plugin>
     </zcloud-module>
 
@@ -28,7 +31,6 @@ instructions.
     module.  It can contain the following elements:
 
        * ``store-plugin``
-       * ``property``
 
     The base name is used to find the shared object, and should name the object
     without any suffixes or prefixes.  The shared object is assumed to reside
@@ -46,11 +48,6 @@ instructions.
 
        * ``property``
 
-    The properties available on the plugin are all those specified in the
-    parent ``zcloud-module`` element as well as those specified in the
-    ``store-plugin`` element itself.  It is an error to specify the same
-    property at the module level and the plugin level.
-
 .. index:: property
 
 .. describe:: property
@@ -67,8 +64,6 @@ instructions.
     data within the module.  It is case-insensitive and must be one of:
 
         * ``string``
-        * ``int``
-        * ``boolean``
 
     The property name should be lower case, and should use underscores (``_``),
     not dashes, to connect words.  The property description may be displayed in

@@ -103,55 +103,46 @@ test_xml_parser(void)
 
     load_xml("<property name=\"foo\" type=\"string\" description=\"bar\" />",
          &error);
-    gerror_is_set(&error, "*element 'property' must appear in another element",
+    gerror_is_set(&error, "*element 'property' must appear in a 'store-plugin' element",
             G_MARKUP_ERROR_INVALID_CONTENT, "property with no module");
 
-    load_xml("<zcloud-module basename=\"myext\">"
+    load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
         "<property type=\"string\" description=\"bar\" />", &error);
     gerror_is_set(&error, "*'property' attribute 'name' is required",
                 G_MARKUP_ERROR_INVALID_CONTENT, "missing name attribute");
 
-    load_xml("<zcloud-module basename=\"myext\">"
+    load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
         "<property name=\"foo\" description=\"bar\" />", &error);
     gerror_is_set(&error, "*'property' attribute 'type' is required",
                 G_MARKUP_ERROR_INVALID_CONTENT, "missing type attribute");
 
-    load_xml("<zcloud-module basename=\"myext\">"
+    load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
         "<property name=\"foo\" type=\"string\" />", &error);
     gerror_is_set(&error, "*'property' attribute 'description' is required",
                 G_MARKUP_ERROR_INVALID_CONTENT, "missing description attribute");
 
-    load_xml("<zcloud-module basename=\"myext\">"
+    load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
         "<property name=\"foo\" hype=\"string\" />", &error);
     gerror_is_set(&error, "*'property' attribute 'hype' not recognized",
                 G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE, "bad property attribute");
 
-    load_xml("<zcloud-module basename=\"myext\">"
+    load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
         "<property name=\"foo\" type=\"rectangle\" description=\"bar\"/>", &error);
     gerror_is_set(&error, "*invalid property type 'rectangle'",
                 G_MARKUP_ERROR_INVALID_CONTENT, "bad property type");
 
-    load_xml("<zcloud-module basename=\"myext\">"
+    load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
         "<property name=\"foo\" type=\"sTrInG\" description=\"bar\">"
         "<foo>"
         "<property>", &error);
     gerror_is_set(&error, "*'property' element must be empty",
                 G_MARKUP_ERROR_INVALID_CONTENT, "non-empty property");
 
-    load_xml("<zcloud-module basename=\"myext\">"
+    load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
         "<property name=\"foo\" type=\"string\" description=\"bar\" />"
         "<property name=\"foo\" type=\"boolean\" description=\"bar\" />", &error);
     gerror_is_set(&error, "*duplicate property name 'foo'",
                 G_MARKUP_ERROR_INVALID_CONTENT, "duplicate property");
-
-    load_xml("<zcloud-module basename=\"myext\">"
-        "<property name=\"foo\" type=\"string\" description=\"bar\" />"
-        "<store-plugin prefix=\"myext\">"
-        "<property name=\"foo\" type=\"boolean\" description=\"bar\" />"
-        "</store-plugin>"
-        "</zcloud-module>", &error);
-    gerror_is_set(&error, "*duplicate property name 'foo'",
-                G_MARKUP_ERROR_INVALID_CONTENT, "duplicate property across scopes");
 
     load_xml("<zcloud-module basename=\"myext\">"
         "<store-plugin prefix=\"myext1\"></store-plugin>"
@@ -186,27 +177,11 @@ test_xml_parser(void)
         "..and has the right module name");
 
     load_xml("<zcloud-module basename=\"mod\">"
-        "<property name=\"prop\" type=\"string\" description=\"desc ript\" />"
-        "<store-plugin prefix=\"withprop\"></store-plugin>"
-        "</zcloud-module>", &error);
-    gerror_is_clear(&error, "no error with a property at the module level");
-
-    pl = zcloud_get_store_plugin_by_prefix("withprop");
-    ok(pl != NULL, "prefix withprop exists");
-    prop = (ZCloudPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "prop"),
-        "..and has the right property name");
-    ok(prop->type == G_TYPE_STRING,
-        "..and has the right property type");
-    ok(0 == strcmp(prop->description, "desc ript"),
-        "..and has the right property description");
-
-    load_xml("<zcloud-module basename=\"mod\">"
         "<store-plugin prefix=\"withprop\">"
         " <property name=\"prop\" type=\"boolean\" description=\"verbose\" />"
         "</store-plugin>"
         "</zcloud-module>", &error);
-    gerror_is_clear(&error, "no error with a property at the plugin level");
+    gerror_is_clear(&error, "no error loading a plugin with a property");
 
     pl = zcloud_get_store_plugin_by_prefix("withprop");
     ok(pl != NULL, "prefix withprop exists");
@@ -217,95 +192,6 @@ test_xml_parser(void)
         "..and has the right property type");
     ok(0 == strcmp(prop->description, "verbose"),
         "..and has the right property description");
-
-    load_xml("<zcloud-module basename=\"mod\">"
-        "<property name=\"outer\" type=\"int\" description=\"out\" />"
-        "<store-plugin prefix=\"withprop\">"
-        " <property name=\"inner\" type=\"int\" description=\"in\" />"
-        "</store-plugin>"
-        "</zcloud-module>", &error);
-    gerror_is_clear(&error, "no error with a property at both levels");
-
-    pl = zcloud_get_store_plugin_by_prefix("withprop");
-    ok(pl != NULL, "prefix withprop exists");
-    prop = (ZCloudPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "outer"),
-        "..and ends with the module-level property");
-    ok(prop->type == G_TYPE_INT,
-        "..and has the right property type");
-    prop = (ZCloudPropertySpec *)pl->property_specs->next->data;
-    ok(0 == strcmp(prop->name, "inner"),
-        "..and begins with the plugin-level property");
-    ok(prop->type == G_TYPE_INT,
-        "..and has the right property type");
-
-    load_xml("<zcloud-module basename=\"mod\">"
-        "<store-plugin prefix=\"withprop\">"
-        " <property name=\"inner\" type=\"int\" description=\"in\" />"
-        "</store-plugin>"
-        "<property name=\"outer\" type=\"int\" description=\"out\" />"
-        "</zcloud-module>", &error);
-    gerror_is_clear(&error, "no error with a property at both levels, inner property first");
-
-    pl = zcloud_get_store_plugin_by_prefix("withprop");
-    ok(pl != NULL, "prefix withprop exists");
-    prop = (ZCloudPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "inner"),
-        "..and begins with the plugin-level property");
-    prop = (ZCloudPropertySpec *)pl->property_specs->next->data;
-    ok(0 == strcmp(prop->name, "outer"),
-        "..and ends with the module-level property");
-
-    load_xml("<zcloud-module basename=\"mod\">"
-        "<property name=\"outer\" type=\"int\" description=\"out\" />"
-        "<store-plugin prefix=\"withprop1\">"
-        " <property name=\"inner1\" type=\"int\" description=\"in1\" />"
-        "</store-plugin>"
-        "<store-plugin prefix=\"withprop2\">"
-        " <property name=\"inner2\" type=\"boolean\" description=\"in2\" />"
-        "</store-plugin>"
-        "</zcloud-module>", &error);
-    gerror_is_clear(&error, "no error with a property at both levels with two plugins");
-
-    pl = zcloud_get_store_plugin_by_prefix("withprop1");
-    ok(pl != NULL, "prefix withprop1 exists");
-    prop = (ZCloudPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "outer"),
-        "..and ends with the module-level property");
-    prop = (ZCloudPropertySpec *)pl->property_specs->next->data;
-    ok(0 == strcmp(prop->name, "inner1"),
-        "..and begins with the correct plugin-level property");
-
-    pl = zcloud_get_store_plugin_by_prefix("withprop2");
-    ok(pl != NULL, "prefix withprop2 exists");
-    prop = (ZCloudPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "outer"),
-        "..and begins with the module-level property");
-    prop = (ZCloudPropertySpec *)pl->property_specs->next->data;
-    ok(0 == strcmp(prop->name, "inner2"),
-        "..and ends with the correct plugin-level property");
-
-    load_xml("<zcloud-module basename=\"mod1\">"
-        "<property name=\"prop1\" type=\"int\" description=\"1\" />"
-        "<store-plugin prefix=\"withprop1\"></store-plugin>"
-        "</zcloud-module>"
-        "<zcloud-module basename=\"mod2\">"
-        "<property name=\"prop2\" type=\"int\" description=\"2\" />"
-        "<store-plugin prefix=\"withprop2\"></store-plugin>"
-        "</zcloud-module>", &error);
-    gerror_is_clear(&error, "no error with a property at module level with two modules");
-
-    pl = zcloud_get_store_plugin_by_prefix("withprop1");
-    ok(pl != NULL, "prefix withprop1 exists");
-    prop = (ZCloudPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "prop1"),
-        "..and has the correct module-level property");
-
-    pl = zcloud_get_store_plugin_by_prefix("withprop2");
-    ok(pl != NULL, "prefix withprop2 exists");
-    prop = (ZCloudPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "prop2"),
-        "..and has the correct module-level property");
 
     load_xml("<zcloud-module basename=\"foo\">"
         "<store-plugin prefix=\"one\"></store-plugin>"

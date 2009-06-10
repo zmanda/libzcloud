@@ -71,8 +71,6 @@ struct markup_parser_state {
     gchar *open_empty_element;
 
     ZCloudModule *current_module;
-    GSList *current_module_propspecs;
-    GSList *current_module_plugins;
     ZCloudStorePlugin *current_plugin;
 };
 
@@ -141,9 +139,6 @@ markup_start_element(GMarkupParseContext *context,
             return;
         }
 
-        g_assert(state->current_module_plugins == NULL);
-        g_assert(state->current_module_propspecs == NULL);
-
         basename = NULL;
         for (i1 = attribute_names, i2 = attribute_values;
                                     *i1 && *i2; i1++, i2++) {
@@ -185,7 +180,6 @@ markup_start_element(GMarkupParseContext *context,
         ZCloudStorePlugin *plugin;
         gchar *prefix;
         const gchar **i1, **i2;
-        GSList *iter;
 
         if (!state->current_module) {
             markup_error(state, context, error,
@@ -231,27 +225,17 @@ markup_start_element(GMarkupParseContext *context,
         plugin->module = state->current_module;
         plugin->prefix = prefix;
 
-        /* add any properties already defined at the module level.  This should not
-         * cause duplicates */
-        for (iter = state->current_module_propspecs; iter; iter = iter->next) {
-            ZCloudPropertySpec *spec = (ZCloudPropertySpec *)iter->data;
-            g_assert(propspec_list_add(&plugin->property_specs,
-                            spec->name, spec->type, spec->description));
-        }
-
-        /* add this plugin to the list of all store plugins, and to the
-         * list of plugins in this module */
-        state->current_module_plugins = g_slist_append(state->current_module_plugins, plugin);
+        /* add this plugin to the list of all store plugins */
         all_store_plugins = g_slist_append(all_store_plugins, plugin);
     } else if (g_strcasecmp(element_name, "property") == 0) {
         const gchar **i1, **i2;
         const gchar *name, *type, *description;
         GType gtype;
 
-        if (!state->current_module) {
+        if (!state->current_plugin) {
             markup_error(state, context, error,
                         G_MARKUP_ERROR_INVALID_CONTENT,
-                        "element 'property' must appear in another element");
+                        "element 'property' must appear in a 'store-plugin' element");
             return;
         }
 
@@ -301,33 +285,12 @@ markup_start_element(GMarkupParseContext *context,
         /* now do different things with this if we're in a plugin or a module.  This
          * handling is set up to detect duplicate names at the appropriate point in
          * the config file.  */
-        if (state->current_plugin) {
-            if (!propspec_list_add(&state->current_plugin->property_specs,
-                            name, gtype, description)) {
-                markup_error(state, context, error,
-                            G_MARKUP_ERROR_INVALID_CONTENT,
-                            "duplicate property name '%s'", name);
-                return;
-            }
-        } else {
-            GSList *iter;
-
-            /* for a module, add it to current_module_propspecs, and to each
-             * already-existing plugin.  Any new plugins will find the property
-             * spec in current_module_propspecs and add it there. */
-            if (!propspec_list_add(&state->current_module_propspecs,
-                            name, gtype, description)) {
-                markup_error(state, context, error,
-                            G_MARKUP_ERROR_INVALID_CONTENT,
-                            "duplicate property name '%s'", name);
-                return;
-            }
-
-            for (iter = state->current_module_plugins; iter; iter = iter->next) {
-                ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
-                propspec_list_add(&plugin->property_specs,
-                            name, gtype, description);
-            }
+        if (!propspec_list_add(&state->current_plugin->property_specs,
+                        name, gtype, description)) {
+            markup_error(state, context, error,
+                        G_MARKUP_ERROR_INVALID_CONTENT,
+                        "duplicate property name '%s'", name);
+            return;
         }
 
         /* this element must be closed immediately */
@@ -355,8 +318,6 @@ markup_end_element(GMarkupParseContext *context,
     }
 
     if (g_strcasecmp(element_name, "zcloud-module") == 0) {
-        GSList *iter;
-
         if (!state->current_module) {
             markup_error(state, context, error,
                         G_MARKUP_ERROR_INVALID_CONTENT,
@@ -369,16 +330,6 @@ markup_end_element(GMarkupParseContext *context,
                         "expected '</store-plugin>'");
             return;
         }
-
-        /* delete the lists of plugins and properties */
-        g_slist_free(state->current_module_plugins);
-        state->current_module_plugins = NULL;
-
-        for (iter = state->current_module_propspecs; iter; iter = iter->next) {
-            ZCloudPropertySpec *spec = (ZCloudPropertySpec *)iter->data;
-            zc_propspec_free(spec);
-        }
-        state->current_module_propspecs = NULL;
 
         state->current_module = NULL;
     } else if (g_strcasecmp(element_name, "store-plugin") == 0) {
@@ -441,8 +392,6 @@ markup_parser_init(
     state->filename = filename;
     state->open_empty_element = NULL;
     state->current_module = NULL;
-    state->current_module_propspecs = NULL;
-    state->current_module_plugins = NULL;
     state->current_plugin = NULL;
 }
 
