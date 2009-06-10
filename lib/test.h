@@ -102,6 +102,14 @@ gboolean isnt_byte_array(const GByteArray *got, const GByteArray *expected, cons
 gboolean load_plugin_xml(const gchar *xml, GError **error);
 
 /*
+ * Mock classes (test-mock.c)
+ */
+
+/* Set up to use the mock plugin; this clears the plugin list and
+ * adds the a module and a plugin with prefix "mock:" */
+void mock_setup(void);
+
+/*
  * Global state tracking
  */
 

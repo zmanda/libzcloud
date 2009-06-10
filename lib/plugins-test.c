@@ -351,15 +351,21 @@ test_xml_parser(void)
 }
 
 static void
-test_set_property(void)
+test_store_construction(void)
 {
-    //ZCloudStore *store;
-    //setup_disk_plugin();
+    ZCloudStore *store;
+    GError *error = NULL;
+    GValue val;
+
+    mock_setup();
+
+    store = zcloud_store_new("mock:foo", &error);
+    gerror_is_clear(&error, "create mock object");
 }
 
 void
 test_plugins(void)
 {
     test_xml_parser();
-    test_set_property();
+    test_store_construction();
 }
