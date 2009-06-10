@@ -355,7 +355,6 @@ test_store_construction(void)
 {
     ZCloudStore *store;
     GError *error = NULL;
-    GValue val;
 
     mock_setup();
 

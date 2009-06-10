@@ -88,8 +88,8 @@ gboolean isnt_byte_array(const GByteArray *got, const GByteArray *expected, cons
     ZC_INT_TYPE(goffset, G_GINT64_FORMAT)
 
 #define ZC_INT_TYPE(T, FS) \
-    gboolean is_ ##T(T got, T expected, const gchar *msg);  \
-    gboolean isnt_ ##T(T got, T expected, const gchar *msg);
+    gboolean is_##T(T got, T expected, const gchar *msg);  \
+    gboolean isnt_##T(T got, T expected, const gchar *msg);
   ZC_INT_TYPE_LIST
 #undef ZC_INT_TYPE
 
@@ -124,7 +124,8 @@ extern gint tests_failed, tests_passed, tests_run;
     TEST_MODULE(memory_upload_producer) \
     TEST_MODULE(growing_memory_download_consumer) \
     TEST_MODULE(fixed_memory_download_consumer) \
-    TEST_MODULE(plugins)
+    TEST_MODULE(plugins) \
+    TEST_MODULE(properties)
 
 /* generate test module prototypes */
 #define TEST_MODULE(n) void test_##n(void);

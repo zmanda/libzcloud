@@ -59,7 +59,8 @@ test_source = \
 	fixed_memory_download_consumer-test.c \
 	growing_memory_download_consumer-test.c \
 	memory_upload_producer-test.c \
-	plugins-test.c
+	plugins-test.c \
+	properties-test.c
 
 EXTRA_DIST = \
     libzcloud.pc.in

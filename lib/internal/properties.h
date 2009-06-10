@@ -29,8 +29,7 @@ G_BEGIN_DECLS
  * @returns: new object
  */
 G_GNUC_INTERNAL
-ZCloudPropertySpec *
-zc_propspec_new(
+ZCloudPropertySpec *zc_propspec_new(
     const gchar *name,
     GType type,
     const gchar *description);
@@ -40,8 +39,7 @@ zc_propspec_new(
  * @param spec: spec to free
  */
 G_GNUC_INTERNAL
-void
-zc_propspec_free(
+void zc_propspec_free(
     ZCloudPropertySpec *spec);
 
 /* Convert a string, as given in a <property> element, into a GType.
@@ -51,10 +49,23 @@ zc_propspec_free(
  * @returns: TRUE on success
  */
 G_GNUC_INTERNAL
-gboolean
-zc_propspec_string_to_gtype(
+gboolean zc_propspec_string_to_gtype(
     const gchar *type,
     GType *gtype);
+
+/* Parse a string into a GValue for the given property.  This assumes
+ * that the GValue is unset.
+ *
+ * @param spec: the property being converted
+ * @param str: the string to convert
+ * @param destination: the GValue to set with the result
+ * @returns: TRUE on success
+ */
+G_GNUC_INTERNAL
+gboolean zc_property_value_from_string(
+    ZCloudPropertySpec *spec,
+    const gchar *str,
+    GValue *destination);
 
 G_END_DECLS
 

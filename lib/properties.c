@@ -61,3 +61,57 @@ zc_propspec_string_to_gtype(
 
     return TRUE;
 }
+
+gboolean
+zc_property_value_from_string(
+    ZCloudPropertySpec *spec,
+    const gchar *str,
+    GValue *destination)
+{
+    g_assert(spec != NULL);
+    g_assert(str != NULL);
+
+    if (spec->type == G_TYPE_STRING) {
+        g_value_init(destination, spec->type);
+        g_value_set_string(destination, str);
+    } else if (spec->type == G_TYPE_INT) {
+        gchar *end = NULL;
+        gint64 rv;
+        if (*str == '\0')
+            return FALSE;
+        rv = g_ascii_strtoll(str, &end, 10);
+        if (*end != '\0')
+            return FALSE;
+        /* TODO: range-checking */
+        g_value_init(destination, spec->type);
+        g_value_set_int(destination, (gint)rv);
+    } else if (spec->type == G_TYPE_BOOLEAN) {
+        static char *names[] = {
+            /* even indices are false, odd indices are true */
+            "n",        "y",
+            "no",       "yes",
+            "f",        "t",
+            "false",    "true",
+            "off",      "on",
+            NULL
+        };
+        gboolean result;
+        gchar **iter;
+
+        for (iter = names; *iter; iter++) {
+            if (0 == g_strcasecmp(str, *iter))
+                break;
+        }
+        if (!*iter)
+            return FALSE;
+
+        result = (iter - names) & 1;
+
+        g_value_init(destination, spec->type);
+        g_value_set_boolean(destination, result);
+    } else {
+        g_assert_not_reached();
+    }
+
+    return TRUE;
+}
