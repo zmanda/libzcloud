@@ -134,12 +134,12 @@ markup_make_param_spec(
 
     /* check that 'name' is canonical, as per glib's description */
     name_ok = TRUE;
-    if (!g_ascii_isalpha(name[0])) {
+    if (!g_ascii_islower(name[0])) {
         name_ok = FALSE;
     } else {
         const gchar *p;
         for (p = name+1; *p; p++) {
-            if (!g_ascii_isalnum(*p) && *p != '-') {
+            if (!g_ascii_islower(*p) && !g_ascii_isdigit(*p) && *p != '-') {
                 name_ok = FALSE;
                 break;
             }
