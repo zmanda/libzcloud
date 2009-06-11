@@ -52,11 +52,11 @@ libzcloud_source = \
 test_source = \
 	test-checks.c \
 	test-util.c \
-	test-mock.c \
 	fixed_memory_download_consumer-test.c \
 	growing_memory_download_consumer-test.c \
 	memory_upload_producer-test.c \
-	plugins-test.c
+	plugins-test.c \
+	store-test.c
 
 EXTRA_DIST = \
     libzcloud.pc.in

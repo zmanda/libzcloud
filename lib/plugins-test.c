@@ -130,6 +130,23 @@ static void test_xml_parser(void) {
                 G_MARKUP_ERROR_INVALID_CONTENT, "bad parameter type");
 
     load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
+        "<parameter name=\"1foo\" type=\"string\" blurb=\"bar\"/>", &error);
+    gerror_is_set(&error, "*invalid parameter name '1foo'",
+                G_MARKUP_ERROR_INVALID_CONTENT, "bad parameter name (starts with number)");
+
+    load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
+        "<parameter name=\"f_o_o\" type=\"string\" blurb=\"bar\"/>", &error);
+    gerror_is_set(&error, "*invalid parameter name 'f_o_o'",
+                G_MARKUP_ERROR_INVALID_CONTENT, "bad parameter name (non-alphanumeric)");
+
+    load_xml("<zcloud-module basename=\"mod\">"
+        "<store-plugin prefix=\"withprop\">"
+        " <parameter name=\"ver-bose\" type=\"string\" blurb=\"lots to say\" />"
+        "</store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_clear(&error, "no error loading a plugin with a property with dashes in its name");
+
+    load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
         "<parameter name=\"foo\" type=\"sTrInG\" blurb=\"bar\">"
         "<foo>"
         "</parameter>", &error);
@@ -243,21 +260,8 @@ static void test_xml_parser(void) {
     }
 }
 
-static void
-test_store_construction(void)
-{
-    ZCloudStore *store;
-    GError *error = NULL;
-
-    mock_setup();
-
-    store = zcloud_store_new("mock:foo", &error, NULL);
-    gerror_is_clear(&error, "create mock object");
-}
-
 void
 test_plugins(void)
 {
     test_xml_parser();
-    test_store_construction();
 }

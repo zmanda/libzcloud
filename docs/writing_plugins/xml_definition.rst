@@ -1,5 +1,7 @@
-Plugin XML Definitions
-======================
+.. _xml-definition:
+
+Plugin XML Definition
+=====================
 
 Each module is accompanied by an XML file describing the plugins it contains.
 The name of the XML file is not critical, but should match the name of the
@@ -64,7 +66,8 @@ instructions.
 
         * ``string``
 
-    The parameter name should be lower case, and should use underscores (``_``),
-    not dashes, to connect words.  The parameter description may be displayed in
-    the online help of applications linked to libzcloud, so it should be short
-    (less than, say, 50 characters), declarative, and not begin with "the".
+    The parameter name must start with an ASCII letter, and all
+    subsequent digits should be letters, digits, or '-' (dash).  The
+    blurb may be displayed in the online help of applications linked to
+    libzcloud, so it should be short (less than, say, 50 characters),
+    declarative, and not begin with "the".

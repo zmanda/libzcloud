@@ -90,6 +90,7 @@ markup_make_param_spec(
 {
     const gchar **i1, **i2;
     const gchar *name, *type, *blurb, *nick;
+    gboolean name_ok;
 
     /* process attributes */
     name = type = blurb = nick = NULL;
@@ -128,6 +129,26 @@ markup_make_param_spec(
         markup_error(state, context, error,
                     G_MARKUP_ERROR_INVALID_CONTENT,
                     "'parameter' attribute 'blurb' is required");
+        return NULL;
+    }
+
+    /* check that 'name' is canonical, as per glib's description */
+    name_ok = TRUE;
+    if (!g_ascii_isalpha(name[0])) {
+        name_ok = FALSE;
+    } else {
+        const gchar *p;
+        for (p = name+1; *p; p++) {
+            if (!g_ascii_isalnum(*p) && *p != '-') {
+                name_ok = FALSE;
+                break;
+            }
+        }
+    }
+    if (!name_ok) {
+        markup_error(state, context, error,
+                    G_MARKUP_ERROR_INVALID_CONTENT,
+                    "invalid parameter name '%s'", name);
         return NULL;
     }
 
