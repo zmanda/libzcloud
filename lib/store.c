@@ -64,7 +64,7 @@ store_new_finish(
 {
     ZCloudStore *store;
 
-    if (!zcloud_load_store_plugin(plugin, error))
+    if (!zc_load_store_plugin(plugin, error))
         return NULL;
 
     /* create the object */

@@ -14,7 +14,7 @@ credentials, for example.
 
 The documentation for each plugin specifies the format of the store
 specifier and the plugin's parameters.  This information is also
-available at runtime.
+available at runtime - see :ref:`module-info`.
 
 Calling the Constructor
 -----------------------

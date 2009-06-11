@@ -654,7 +654,7 @@ zcloud_get_all_store_plugins(void)
 }
 
 gboolean
-zcloud_load_store_plugin(
+zc_load_store_plugin(
     ZCloudStorePlugin *store_plugin,
     GError **error)
 {

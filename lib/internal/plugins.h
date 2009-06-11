@@ -56,4 +56,16 @@ zc_load_module_xml(
 
 G_END_DECLS
 
+/* Load the module for the given store plugin if necessary, and ensure that the
+ * ZCloudStorePlugin's 'type' field is non-NULL on return.
+ *
+ * @param store_plugin: the plugin to load
+ * @returns: FALSE on error, with ERROR set properly
+ */
+G_GNUC_INTERNAL
+gboolean
+zc_load_store_plugin(
+    ZCloudStorePlugin *store_plugin,
+    GError **error);
+
 #endif

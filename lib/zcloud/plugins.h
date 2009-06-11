@@ -90,14 +90,6 @@ ZCloudStorePlugin *zcloud_get_store_plugin_by_prefix(const gchar *prefix);
  */
 GSList *zcloud_get_all_store_plugins(void);
 
-/* Load the module for the given store plugin if necessary, and ensure that the
- * ZCloudStorePlugin's 'type' field is non-NULL on return.
- *
- * @param store_plugin: the plugin to load
- * @returns: FALSE on error, with ERROR set properly
- */
-gboolean zcloud_load_store_plugin(ZCloudStorePlugin *store_plugin, GError **error);
-
 G_END_DECLS
 
 #endif
