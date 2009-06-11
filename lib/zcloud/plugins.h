@@ -69,8 +69,8 @@ typedef struct ZCloudStorePlugin_s {
     /* type of the store class to be instantiated */
     GType type;
 
-    /* list of ZCloudPropertySpec objects */
-    GSList *property_specs;
+    /* array of GParamSpecs */
+    GPtrArray *paramspecs;
 } ZCloudStorePlugin;
 
 /*

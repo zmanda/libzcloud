@@ -31,12 +31,10 @@ load_xml(const gchar *xml, GError **error)
     g_assert((res && !*error) || (!res && *error));
 }
 
-static void
-test_xml_parser(void)
-{
-    GError *error = NULL;
-    ZCloudStorePlugin *pl;
-    ZCloudPropertySpec *prop;
+#define get_paramspec(pl, i) ((GParamSpec *)g_ptr_array_index((pl)->paramspecs, (i)))
+
+static void test_xml_parser(void) {
+    GError *error = NULL; ZCloudStorePlugin *pl;
 
     load_xml("<zcloud-module basename=\"disk\">"
         "<store-plugin prefix=\"disk\"></store-plugin>"
@@ -101,47 +99,47 @@ test_xml_parser(void)
     gerror_is_set(&error, "*element 'store-plugin' cannot be nested",
             G_MARKUP_ERROR_INVALID_CONTENT, "nested store-plugin");
 
-    load_xml("<property name=\"foo\" type=\"string\" description=\"bar\" />",
+    load_xml("<parameter name=\"foo\" type=\"string\" blurb=\"bar\" />",
          &error);
-    gerror_is_set(&error, "*element 'property' must appear in a 'store-plugin' element",
+    gerror_is_set(&error, "*element 'parameter' must appear in a 'store-plugin' element",
             G_MARKUP_ERROR_INVALID_CONTENT, "property with no module");
 
     load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
-        "<property type=\"string\" description=\"bar\" />", &error);
-    gerror_is_set(&error, "*'property' attribute 'name' is required",
+        "<parameter type=\"string\" blurb=\"bar\" />", &error);
+    gerror_is_set(&error, "*'parameter' attribute 'name' is required",
                 G_MARKUP_ERROR_INVALID_CONTENT, "missing name attribute");
 
     load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
-        "<property name=\"foo\" description=\"bar\" />", &error);
-    gerror_is_set(&error, "*'property' attribute 'type' is required",
+        "<parameter name=\"foo\" blurb=\"bar\" />", &error);
+    gerror_is_set(&error, "*'parameter' attribute 'type' is required",
                 G_MARKUP_ERROR_INVALID_CONTENT, "missing type attribute");
 
     load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
-        "<property name=\"foo\" type=\"string\" />", &error);
-    gerror_is_set(&error, "*'property' attribute 'description' is required",
-                G_MARKUP_ERROR_INVALID_CONTENT, "missing description attribute");
+        "<parameter name=\"foo\" type=\"string\" />", &error);
+    gerror_is_set(&error, "*'parameter' attribute 'blurb' is required",
+                G_MARKUP_ERROR_INVALID_CONTENT, "missing blurb attribute");
 
     load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
-        "<property name=\"foo\" hype=\"string\" />", &error);
-    gerror_is_set(&error, "*'property' attribute 'hype' not recognized",
+        "<parameter name=\"foo\" hype=\"string\" />", &error);
+    gerror_is_set(&error, "*'parameter' attribute 'hype' not recognized",
                 G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE, "bad property attribute");
 
     load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
-        "<property name=\"foo\" type=\"rectangle\" description=\"bar\"/>", &error);
-    gerror_is_set(&error, "*invalid property type 'rectangle'",
-                G_MARKUP_ERROR_INVALID_CONTENT, "bad property type");
+        "<parameter name=\"foo\" type=\"rectangle\" blurb=\"bar\"/>", &error);
+    gerror_is_set(&error, "*invalid parameter type 'rectangle'",
+                G_MARKUP_ERROR_INVALID_CONTENT, "bad parameter type");
 
     load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
-        "<property name=\"foo\" type=\"sTrInG\" description=\"bar\">"
+        "<parameter name=\"foo\" type=\"sTrInG\" blurb=\"bar\">"
         "<foo>"
-        "<property>", &error);
-    gerror_is_set(&error, "*'property' element must be empty",
+        "</parameter>", &error);
+    gerror_is_set(&error, "*'parameter' element must be empty",
                 G_MARKUP_ERROR_INVALID_CONTENT, "non-empty property");
 
     load_xml("<zcloud-module basename=\"myext\"><store-plugin prefix=\"foo\">"
-        "<property name=\"foo\" type=\"string\" description=\"bar\" />"
-        "<property name=\"foo\" type=\"boolean\" description=\"bar\" />", &error);
-    gerror_is_set(&error, "*duplicate property name 'foo'",
+        "<parameter name=\"foo\" type=\"string\" blurb=\"bar\" />"
+        "<parameter name=\"foo\" type=\"string\" blurb=\"bar\" />", &error);
+    gerror_is_set(&error, "*duplicate parameter name 'foo'",
                 G_MARKUP_ERROR_INVALID_CONTENT, "duplicate property");
 
     load_xml("<zcloud-module basename=\"myext\">"
@@ -178,20 +176,29 @@ test_xml_parser(void)
 
     load_xml("<zcloud-module basename=\"mod\">"
         "<store-plugin prefix=\"withprop\">"
-        " <property name=\"prop\" type=\"boolean\" description=\"verbose\" />"
+        " <parameter name=\"verbose\" type=\"string\" blurb=\"talkative; wordy\" />"
         "</store-plugin>"
         "</zcloud-module>", &error);
-    gerror_is_clear(&error, "no error loading a plugin with a property");
-
+    gerror_is_clear(&error, "no error loading a plugin with a property without a nick");
     pl = zcloud_get_store_plugin_by_prefix("withprop");
-    ok(pl != NULL, "prefix withprop exists");
-    prop = (ZCloudPropertySpec *)pl->property_specs->data;
-    ok(0 == strcmp(prop->name, "prop"),
-        "..and has the right property name");
-    ok(prop->type == G_TYPE_BOOLEAN,
-        "..and has the right property type");
-    ok(0 == strcmp(prop->description, "verbose"),
-        "..and has the right property description");
+    is_string(get_paramspec(pl, 0)->name, "verbose",
+            "..name is set correctly");
+    is_string(g_param_spec_get_blurb(get_paramspec(pl, 0)), "talkative; wordy",
+            "..blurb is set correctly");
+    is_int(get_paramspec(pl, 0)->value_type, G_TYPE_STRING,
+            "..type is set correctly");
+    is_string(g_param_spec_get_nick(get_paramspec(pl, 0)), "verbose",
+            "..and the nick defaults correctly");
+
+    load_xml("<zcloud-module basename=\"mod\">"
+        "<store-plugin prefix=\"withprop\">"
+        " <parameter name=\"verbose\" type=\"string\" nick=\"loud\" blurb=\"talkative; wordy\" />"
+        "</store-plugin>"
+        "</zcloud-module>", &error);
+    gerror_is_clear(&error, "no error loading a plugin with a property with a nick");
+    pl = zcloud_get_store_plugin_by_prefix("withprop");
+    is_string(g_param_spec_get_nick(get_paramspec(pl, 0)), "loud",
+            "..and the nick defaults correctly");
 
     load_xml("<zcloud-module basename=\"foo\">"
         "<store-plugin prefix=\"one\"></store-plugin>"
@@ -244,7 +251,7 @@ test_store_construction(void)
 
     mock_setup();
 
-    store = zcloud_store_new("mock:foo", &error);
+    store = zcloud_store_new("mock:foo", &error, NULL);
     gerror_is_clear(&error, "create mock object");
 }
 

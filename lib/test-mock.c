@@ -100,7 +100,7 @@ mock_setup(void)
     zc_load_module_xml(
 "<zcloud-module basename=\"mock\">\n"
 " <store-plugin prefix=\"mock\">\n"
-"  <property name=\"bool\" type=\"boolean\" description=\"simple boolean\" />\n"
+"  <parameter name=\"bool\" type=\"string\" blurb=\"simple param\" />\n"
 " </store-plugin>\n"
 "</zcloud-module>", &error);
     if (error)

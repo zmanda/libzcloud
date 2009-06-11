@@ -8,12 +8,12 @@ with ``s3.xml``.  The XML file has the following structure::
 
     <zcloud-module basename="mycloud">
       <store-plugin prefix="mycl">
-        <property name="access_key" type="string">
+        <parameter name="access_key" type="string">
           Authentication token
-        </property>
-        <property name="redundancy" type="int">
+        </parameter>
+        <parameter name="redundancy" type="int">
           Requested storage redundancy level
-        </property>
+        </parameter>
       </store-plugin>
     </zcloud-module>
 
@@ -46,29 +46,25 @@ instructions.
     and contains elements defining the characteristics of this plugin.  It can
     contain the following element:
 
-       * ``property``
+       * ``parameter``
 
-.. index:: property
+.. index:: parameter
 
-.. describe:: property
+.. describe:: parameter
 
-    :arg name: the name of the property
-    :arg type: the type of the property
-    :arg description: a short human-readable description of the property
+    :arg name: the name of the parameter
+    :arg type: the type of the parameter
+    :arg nick: un-abbreviated form of *name* (optional; defaults to *name*)
+    :arg blurb: a short human-readable description of the parameter
 
-    The ``property`` element describes a property of a plugin.  If it is
-    specified at the module level, then it applies to all plugins.  It is
-    always an empty element.
-
-    The property type is used for validation and to convert the type to useful
-    data within the module.  It is case-insensitive and must be one of:
+    The ``parameter`` element describes a constructor parameter of the
+    store plugin.  It is always an empty element.  The parameter type is
+    used for validation and to convert the type to useful data within
+    the module.  It is case-insensitive and must be one of:
 
         * ``string``
 
-    The property name should be lower case, and should use underscores (``_``),
-    not dashes, to connect words.  The property description may be displayed in
+    The parameter name should be lower case, and should use underscores (``_``),
+    not dashes, to connect words.  The parameter description may be displayed in
     the online help of applications linked to libzcloud, so it should be short
     (less than, say, 50 characters), declarative, and not begin with "the".
-
-    Note that there is no way to mark a property as "mandatory" - that should
-    come in the documentation for the cloud being defined.

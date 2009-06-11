@@ -79,6 +79,5 @@
 
 /* include internal headers */
 #include "internal/plugins.h"
-#include "internal/properties.h"
 
 #endif

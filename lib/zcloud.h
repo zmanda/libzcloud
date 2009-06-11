@@ -36,7 +36,6 @@
 /* miscellaneous */
 #include "zcloud/error.h"
 #include "zcloud/plugins.h"
-#include "zcloud/properties.h"
 
 G_BEGIN_DECLS
 
