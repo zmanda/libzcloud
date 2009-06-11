@@ -177,10 +177,13 @@ is_string(
     const gchar *expected,
     const gchar *msg)
 {
-    if (0 == strcmp(got, expected)) {
+    if (got == NULL) {
+        diag(" got NULL expected: '%s'\n", expected);
+        return fail(msg);
+    } else if (0 == strcmp(got, expected)) {
         return pass(msg);
     } else {
-        diag(" got: %s expected: %s\n", got, expected);
+        diag(" got: '%s'; expected: '%s'\n", got, expected);
         return fail(msg);
     }
 }
