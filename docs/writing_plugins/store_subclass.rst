@@ -2,8 +2,7 @@ Store Subclass
 ==============
 
 Each plugin is linked to a particular subclass of :class:`ZCloudStore`,
-indicated by the type registered during :doc:`module initialization
-<writing_plugins/initialization>`.
+indicated by the type registered during :ref:`module-initialization`.
 
 Store Initialization
 --------------------

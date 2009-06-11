@@ -1,3 +1,5 @@
+.. _module-initialization:
+
 Module Initialization
 =====================
 
@@ -21,7 +23,7 @@ This function should return `NULL` on success, and an error message on
 failure, which is exactly the semantics of
 `zcloud_register_store_plugin`.
 
-.. cfunction:: zcloud_register_store_plugin(const gchar *module_name, const gchar *prefix, GType type)
+.. cfunction:: gchar * zcloud_register_store_plugin(const gchar *module_name, const gchar *prefix, GType type)
 
     Register store subclass *type* as the class to instantiate for
     prefix *prefix*, defined as part of the module *module_name*.

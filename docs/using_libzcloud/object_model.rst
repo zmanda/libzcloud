@@ -16,6 +16,10 @@ They should be subclassed, and that subclass instantiated.
    Stores represent a service that provides persistence of arbitrary blobs.
    An example is Amazon S3.
 
+   .. method:: setup(suffix, n_parameters, parameters, error)
+
+      Protected method - used during object construction.
+
    .. method:: create(address, progress, error)
 
       Creates whatever is represented by the address.

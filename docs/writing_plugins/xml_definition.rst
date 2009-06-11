@@ -66,8 +66,8 @@ instructions.
 
         * ``string``
 
-    The parameter name must start with an ASCII letter, and all
-    subsequent digits should be letters, digits, or '-' (dash).  The
+    The parameter name must start with an ASCII lower-case letter, and all
+    subsequent digits should be lower-case letters, digits, or '-' (dash).  The
     blurb may be displayed in the online help of applications linked to
     libzcloud, so it should be short (less than, say, 50 characters),
     declarative, and not begin with "the".
