@@ -1,25 +1,7 @@
-#  -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#  vi: set tabstop=4 shiftwidth=4 expandtab: */
-# ***** BEGIN LICENSE BLOCK *****
-# Copyright (C) 2009 Zmanda Incorporated. All Rights Reserved.
-#
-# This file is part of libzcloud.
-#
-# libzcloud is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License (the LGPL)
-# as published by the Free Software Foundation, either version 2.1 of
-# the LGPL, or (at your option) any later version.
-#
-# libzcloud is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-#  ***** END LICENSE BLOCK *****
-
 #
 # SYNOPSIS
 #
-#   ZCLOUD_CHECK_OPENSSL
+#   AC_CHECK_OPENSSL([action-if-found[, action-if-not-found]])
 #
 # OVERVIEW
 #
@@ -28,8 +10,20 @@
 #     OPENSSL_INCLUDES to the include directives required
 #     OPENSSL_LIBS to the -l directives required
 #     OPENSSL_LDFLAGS to the -L or -R flags required
-#   If OpenSSL is not found, the configure run fails.
+#   and calls ACTION-IF-FOUND or ACTION-IF-NOT-FOUND appropriately
 #
+# LAST MODIFICATION
+#
+#   2009-06-12
+#
+# COPYLEFT
+#
+#   Copyright (c) 2009 Dustin J. Mitchell <dustin@zmanda.com>
+#
+#   Copying and distribution of this file, with or without
+#   modification, are permitted in any medium without royalty provided
+#   the copyright notice and this notice are preserved.
+
 AC_DEFUN([AC_CHECK_OPENSSL], [
     found=false
     AC_ARG_WITH(openssl,
@@ -118,12 +112,3 @@ AC_DEFUN([AC_CHECK_OPENSSL], [
     AC_SUBST([OPENSSL_LDFLAGS])
 ])
 
-AC_DEFUN([ZCLOUD_CHECK_OPENSSL], [
-    dnl this is just a thin wrapper so we fail immediately with
-    dnl no OpenSSL
-    AC_CHECK_OPENSSL([
-            # cool!
-        ], [
-            AC_MSG_FAILURE([No working OpenSSL found])
-        ])
-])
