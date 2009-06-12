@@ -26,22 +26,26 @@ static GSList *all_store_plugins;
 static GSList *all_modules;
 
 /*
- * Plugin initialization support
+ * XML parser
  */
 
 /* user_data for the markup parser */
 struct markup_parser_state {
+    /* parser context */
+    GMarkupParseContext *ctxt;
+
     /* directory in which the parse is taking place */
     const gchar *dir_name;
 
     /* filename of the XML file */
     gchar *filename;
 
+    /* name of a element which must end immediately */
+    gchar *open_empty_element;
+
     ZCloudModule *current_module;
     ZCloudStorePlugin *current_plugin;
 };
-
-/* Functions for a SAX parser to parse the module XML files */
 
 static void markup_error(
     struct markup_parser_state *state,
@@ -76,6 +80,89 @@ markup_error(
     g_free(msg);
 }
 
+static GParamSpec *
+markup_make_param_spec(
+    struct markup_parser_state *state,
+    GMarkupParseContext *context,
+    const gchar **attribute_names,
+    const gchar **attribute_values,
+    GError **error)
+{
+    const gchar **i1, **i2;
+    const gchar *name, *type, *blurb, *nick;
+    gboolean name_ok;
+
+    /* process attributes */
+    name = type = blurb = nick = NULL;
+    for (i1 = attribute_names, i2 = attribute_values;
+                                *i1 && *i2; i1++, i2++) {
+        if (0 == g_ascii_strcasecmp("name", *i1)) {
+            name = *i2;
+        } else if (0 == g_ascii_strcasecmp("type", *i1)) {
+            type = *i2;
+        } else if (0 == g_ascii_strcasecmp("nick", *i1)) {
+            nick = *i2;
+        } else if (0 == g_ascii_strcasecmp("blurb", *i1)) {
+            blurb = *i2;
+        } else {
+            markup_error(state, context, error,
+                        G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
+                        "'parameter' attribute '%s' not recognized", *i1);
+            return NULL;
+        }
+    }
+    if (!name) {
+        markup_error(state, context, error,
+                    G_MARKUP_ERROR_INVALID_CONTENT,
+                    "'parameter' attribute 'name' is required");
+        return NULL;
+    }
+    if (!type) {
+        markup_error(state, context, error,
+                    G_MARKUP_ERROR_INVALID_CONTENT,
+                    "'parameter' attribute 'type' is required");
+        return NULL;
+    }
+    if (!nick)
+        nick = name;
+    if (!blurb) {
+        markup_error(state, context, error,
+                    G_MARKUP_ERROR_INVALID_CONTENT,
+                    "'parameter' attribute 'blurb' is required");
+        return NULL;
+    }
+
+    /* check that 'name' is canonical, as per glib's description */
+    name_ok = TRUE;
+    if (!g_ascii_islower(name[0])) {
+        name_ok = FALSE;
+    } else {
+        const gchar *p;
+        for (p = name+1; *p; p++) {
+            if (!g_ascii_islower(*p) && !g_ascii_isdigit(*p) && *p != '-') {
+                name_ok = FALSE;
+                break;
+            }
+        }
+    }
+    if (!name_ok) {
+        markup_error(state, context, error,
+                    G_MARKUP_ERROR_INVALID_CONTENT,
+                    "invalid parameter name '%s'", name);
+        return NULL;
+    }
+
+    if (0 == g_ascii_strcasecmp(type, "string")) {
+        return g_param_spec_string(name, nick, blurb, "",
+            G_PARAM_READABLE|G_PARAM_CONSTRUCT_ONLY);
+    } else {
+        markup_error(state, context, error,
+                    G_MARKUP_ERROR_INVALID_CONTENT,
+                    "invalid parameter type '%s'", type);
+        return NULL;
+    }
+}
+
 static void
 markup_start_element(GMarkupParseContext *context,
                    const gchar *element_name,
@@ -86,7 +173,15 @@ markup_start_element(GMarkupParseContext *context,
 {
     struct markup_parser_state *state = (struct markup_parser_state *)user_data;
 
-    if (g_strcasecmp(element_name, "zcloud-module") == 0) {
+    if (state->open_empty_element) {
+        markup_error(state, context, error,
+                    G_MARKUP_ERROR_INVALID_CONTENT,
+                    "'%s' element must be empty", state->open_empty_element);
+        return;
+    }
+
+    /* <zcloud-module> */
+    if (g_ascii_strcasecmp(element_name, "zcloud-module") == 0) {
         GSList *iter;
         ZCloudModule *module;
         gchar *basename;
@@ -102,7 +197,7 @@ markup_start_element(GMarkupParseContext *context,
         basename = NULL;
         for (i1 = attribute_names, i2 = attribute_values;
                                     *i1 && *i2; i1++, i2++) {
-            if (0 == strcasecmp("basename", *i1)) {
+            if (0 == g_ascii_strcasecmp("basename", *i1)) {
                 basename = g_strdup(*i2);
             } else {
                 markup_error(state, context, error,
@@ -136,7 +231,9 @@ markup_start_element(GMarkupParseContext *context,
         module->loaded = FALSE;
 
         all_modules = g_slist_append(all_modules, module);
-    } else if (g_strcasecmp(element_name, "store-plugin") == 0) {
+
+    /* <store-plugin> */
+    } else if (g_ascii_strcasecmp(element_name, "store-plugin") == 0) {
         ZCloudStorePlugin *plugin;
         gchar *prefix;
         const gchar **i1, **i2;
@@ -157,7 +254,7 @@ markup_start_element(GMarkupParseContext *context,
         prefix = NULL;
         for (i1 = attribute_names, i2 = attribute_values;
                                     *i1 && *i2; i1++, i2++) {
-            if (0 == strcasecmp("prefix", *i1)) {
+            if (0 == g_ascii_strcasecmp("prefix", *i1)) {
                 prefix = g_strdup(*i2);
             } else {
                 markup_error(state, context, error,
@@ -183,9 +280,53 @@ markup_start_element(GMarkupParseContext *context,
 
         plugin = state->current_plugin = g_new0(ZCloudStorePlugin, 1);
         plugin->module = state->current_module;
+        plugin->type = G_TYPE_INVALID;
         plugin->prefix = prefix;
+        plugin->paramspecs = g_ptr_array_new();
 
+        /* add this plugin to the list of all store plugins */
         all_store_plugins = g_slist_append(all_store_plugins, plugin);
+
+    /* <parameter> */
+    } else if (g_ascii_strcasecmp(element_name, "parameter") == 0) {
+        GParamSpec *spec;
+        GPtrArray *speclist;
+        guint i;
+
+        if (!state->current_plugin) {
+            markup_error(state, context, error,
+                        G_MARKUP_ERROR_INVALID_CONTENT,
+                        "element 'parameter' must appear in a 'store-plugin' element");
+            return;
+        }
+
+        spec = markup_make_param_spec(state, context, attribute_names,
+                                      attribute_values, error);
+        if (!spec)
+            return;
+
+        /* capture the floating reference to this param spec */
+        g_param_spec_ref(spec);
+        g_param_spec_sink(spec);
+
+        /* search for duplicates */
+        speclist = state->current_plugin->paramspecs;
+        for (i = 0; i < speclist->len; i++) {
+            GParamSpec *inlist = (GParamSpec *)g_ptr_array_index(speclist, i);
+            if (0 == g_ascii_strcasecmp(spec->name, inlist->name)) {
+                markup_error(state, context, error,
+                            G_MARKUP_ERROR_INVALID_CONTENT,
+                            "duplicate parameter name '%s'", spec->name);
+                g_param_spec_unref(spec);
+                return;
+            }
+        }
+
+        /* add to the list */
+        g_ptr_array_add(state->current_plugin->paramspecs, spec);
+
+        /* this element must be closed immediately */
+        state->open_empty_element = g_strdup(element_name);
     } else {
         markup_error(state, context, error,
                     G_MARKUP_ERROR_UNKNOWN_ELEMENT,
@@ -202,21 +343,25 @@ markup_end_element(GMarkupParseContext *context,
 {
     struct markup_parser_state *state = (struct markup_parser_state *)user_data;
 
-    if (g_strcasecmp(element_name, "zcloud-module") == 0) {
-        if (!state->current_module) {
+    if (state->open_empty_element) {
+        g_assert(0 == g_ascii_strcasecmp(element_name, state->open_empty_element));
+        g_free(state->open_empty_element);
+        state->open_empty_element = NULL;
+    }
+
+    /* </zcloud-module> */
+    if (g_ascii_strcasecmp(element_name, "zcloud-module") == 0) {
+        if (!state->current_module || state->current_plugin) {
             markup_error(state, context, error,
                         G_MARKUP_ERROR_INVALID_CONTENT,
                         "unexpected '</zcloud-module>'");
             return;
         }
-        if (state->current_plugin) {
-            markup_error(state, context, error,
-                        G_MARKUP_ERROR_INVALID_CONTENT,
-                        "expected '</store-plugin>'");
-            return;
-        }
+
         state->current_module = NULL;
-    } else if (g_strcasecmp(element_name, "store-plugin") == 0) {
+
+    /* </store-plugin> */
+    } else if (g_ascii_strcasecmp(element_name, "store-plugin") == 0) {
         if (!state->current_plugin) {
             markup_error(state, context, error,
                         G_MARKUP_ERROR_INVALID_CONTENT,
@@ -224,6 +369,10 @@ markup_end_element(GMarkupParseContext *context,
             return;
         }
         state->current_plugin = NULL;
+
+    /* </parameter> */
+    } else if (g_ascii_strcasecmp(element_name, "parameter") == 0) {
+        return; /* parameter is an empty element, so the end tag is boring */
     } else {
         markup_error(state, context, error,
                     G_MARKUP_ERROR_UNKNOWN_ELEMENT,
@@ -242,7 +391,8 @@ markup_text(GMarkupParseContext *context,
     struct markup_parser_state *state = (struct markup_parser_state *)user_data;
     gsize i;
 
-    /* if there's any non whitespace, then this is unexpected */
+    /* if there's any non whitespace, then this is unexpected.  If this changes
+     * to allow text in some places, then it should check open_empty_element */
     for (i = 0; i < text_len; i++) {
         if (!g_ascii_isspace(text[i])) {
             markup_error(state, context, error,
@@ -254,25 +404,12 @@ markup_text(GMarkupParseContext *context,
 
 }
 
-/* Load and parse a single XML file, creating the corresponding ZCloudStorePlugin and
- * ZCloudModule objects along the way.
- *
- * Side effect: populates all_store_plugins and all_modules
- *
- * @param dir_name: directory containing the file
- * @param file: filename
- * @returns: FALSE on error, with ERROR set properly
- */
-gboolean
-zc_load_module_xml(
+static void
+markup_parser_init(
+    struct markup_parser_state *state,
     const gchar *dir_name,
-    const gchar *file,
-    GError **error)
+    gchar *filename)
 {
-    GMarkupParseContext *ctxt = NULL;
-    int fd = -1;
-    gboolean success = FALSE;
-    struct markup_parser_state state = { NULL, NULL, NULL, NULL };
     static GMarkupParser parser = {
         markup_start_element,
         markup_end_element,
@@ -281,8 +418,62 @@ zc_load_module_xml(
         NULL
     };
 
-    state.dir_name = dir_name;
-    state.filename = g_build_path("/", dir_name, file, NULL);
+    state->ctxt = g_markup_parse_context_new(&parser, 0, (gpointer)state, NULL);
+    state->dir_name = dir_name;
+    state->filename = filename;
+    state->open_empty_element = NULL;
+    state->current_module = NULL;
+    state->current_plugin = NULL;
+}
+
+static void
+markup_parser_cleanup(
+    struct markup_parser_state *state)
+{
+    if (state->ctxt)
+        g_markup_parse_context_free(state->ctxt);
+    if (state->open_empty_element)
+        g_free(state->open_empty_element);
+}
+
+gboolean
+zc_load_module_xml(
+    const gchar *xml,
+    GError **error)
+{
+    gboolean success = FALSE;
+    struct markup_parser_state state;
+
+    markup_parser_init(&state, ".", "(string)");
+
+    if (!g_markup_parse_context_parse(state.ctxt, xml, strlen(xml), error)) {
+        goto error;
+    }
+
+    if (!g_markup_parse_context_end_parse(state.ctxt, error)) {
+        goto error;
+    }
+
+    success = TRUE;
+
+error:
+    /* free everything */
+    markup_parser_cleanup(&state);
+
+    return success;
+}
+
+static gboolean
+load_module_xml_file(
+    const gchar *dir_name,
+    const gchar *file,
+    GError **error)
+{
+    int fd = -1;
+    gboolean success = FALSE;
+    struct markup_parser_state state;
+
+    markup_parser_init(&state, dir_name, g_build_path("/", dir_name, file, NULL));
 
     fd = open(state.filename, O_RDONLY, 0);
     if (fd < 0) {
@@ -294,7 +485,6 @@ zc_load_module_xml(
         goto error;
     }
 
-    ctxt = g_markup_parse_context_new(&parser, 0, (gpointer)&state, NULL);
     while (1) {
         gchar buf[4096];
         gsize len;
@@ -310,12 +500,12 @@ zc_load_module_xml(
             goto error;
         }
 
-        if (!g_markup_parse_context_parse(ctxt, buf, len, error)) {
+        if (!g_markup_parse_context_parse(state.ctxt, buf, len, error)) {
             goto error;
         }
     }
 
-    if (!g_markup_parse_context_end_parse(ctxt, error)) {
+    if (!g_markup_parse_context_end_parse(state.ctxt, error)) {
         goto error;
     }
 
@@ -323,8 +513,7 @@ zc_load_module_xml(
 
 error:
     /* free everything */
-    if (ctxt)
-        g_markup_parse_context_free(ctxt);
+    markup_parser_cleanup(&state);
     if (fd >= 0)
         close(fd);
     if (state.filename)
@@ -375,7 +564,7 @@ scan_plugin_dir(
         size_t len = strlen(elt);
         /* if the file ends in .xml, load it */
         if (len > 4 && 0 == g_ascii_strcasecmp(".xml", elt + len - 4)) {
-            if (!zc_load_module_xml(dir_name, elt, error)) {
+            if (!load_module_xml_file(dir_name, elt, error)) {
                 g_dir_close(dir);
                 return FALSE;
             }
@@ -417,11 +606,9 @@ gchar *
 zcloud_register_store_plugin(
     const gchar *module_name,
     const gchar *prefix,
-    ZCloudStoreConstructor constructor)
+    GType type)
 {
     ZCloudStorePlugin *plugin;
-
-    g_assert(constructor != NULL);
 
     plugin = zcloud_get_store_plugin_by_prefix(prefix);
     if (!plugin) {
@@ -430,7 +617,7 @@ zcloud_register_store_plugin(
                 "prefix '%s' is defined", prefix);
     }
 
-    if (plugin->constructor != NULL) {
+    if (plugin->type != G_TYPE_INVALID) {
         return g_strdup_printf("zcloud_register_store_plugin: "
                 "prefix '%s' is already registered", prefix);
     }
@@ -441,7 +628,7 @@ zcloud_register_store_plugin(
                 prefix, plugin->module->basename);
     }
 
-    plugin->constructor = constructor;
+    plugin->type = type;
     return NULL;
 }
 
@@ -467,7 +654,7 @@ zcloud_get_all_store_plugins(void)
 }
 
 gboolean
-zcloud_load_store_plugin(
+zc_load_store_plugin(
     ZCloudStorePlugin *store_plugin,
     GError **error)
 {
@@ -482,7 +669,7 @@ zcloud_load_store_plugin(
     g_static_mutex_lock(&mutex);
 
     /* check whether the type is loaded after acquiring the mutex */
-    if (store_plugin->constructor != NULL) {
+    if (store_plugin->type != G_TYPE_INVALID) {
         g_static_mutex_unlock(&mutex);
         return TRUE;
     }
@@ -497,8 +684,8 @@ zcloud_load_store_plugin(
         goto error;
     }
 
-    /* this process should load all of the plugins for this module, and
-     * fail with g_critical if not. */
+    /* this process should load all of the plugins for this module, and return
+     * NULL if there is an error */
     gmod = g_module_open(zcmod->module_path, 0);
 
     if (!gmod) {
@@ -508,12 +695,14 @@ zcloud_load_store_plugin(
                     "%s", g_module_error());
         goto error;
     }
+
+    /* keep this module around for the duration */
     g_module_make_resident(gmod);
 
     /* check that it lived up to its advertisement */
     for (iter = all_store_plugins; iter; iter = iter->next) {
         ZCloudStorePlugin *pl = (ZCloudStorePlugin *)iter->data;
-        if (pl->module == zcmod && pl->constructor == NULL) {
+        if (pl->module == zcmod && pl->type == G_TYPE_INVALID) {
             g_set_error(error,
                         ZCLOUD_ERROR,
                         ZCERR_MODULE,
@@ -561,11 +750,16 @@ zc_plugins_clear(void)
 
     for (iter = all_store_plugins; iter; iter = iter->next) {
         ZCloudStorePlugin *plugin = (ZCloudStorePlugin *)iter->data;
-
-        g_assert(plugin->constructor == NULL);
+        guint i;
 
         if (plugin->prefix)
             g_free(plugin->prefix);
+
+        for (i = 0; i < plugin->paramspecs->len; i++) {
+            GParamSpec *spec = (GParamSpec *)g_ptr_array_index(plugin->paramspecs, i);
+            g_param_spec_unref(spec);
+        }
+        g_ptr_array_free(plugin->paramspecs, TRUE);
 
         g_free(plugin);
     }

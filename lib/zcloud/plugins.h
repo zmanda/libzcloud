@@ -16,13 +16,10 @@
  * GNU Lesser General Public License for more details.
  *  ***** END LICENSE BLOCK ***** */
 
-
-/* This file need only be included by plugin modules' source files, not by
- * libzcloud users.  It defines the data formats and functions used to
- * set up communication between libzcloud and its plugins. */
-
 #ifndef ZCLOUD_PLUGINS_H
 #define ZCLOUD_PLUGINS_H
+
+#include "store.h"
 
 G_BEGIN_DECLS
 
@@ -30,14 +27,7 @@ G_BEGIN_DECLS
  * Plugin registration
  */
 
-/* plugin-creation function
- *
- * @param storenode: the node (store specification string without prefix)
- * @returns: a new object or NULL on error (with ERROR set correctly)
- */
-typedef ZCloudStore *(* ZCloudStoreConstructor)(const gchar *storenode, GError **error);
-
-/* Plugins call this function from g_module_check_init.  It is invalid to
+/* Modules call this function from g_module_check_init.  It is invalid to
  * call this at any other time.
  *
  * @param module_name: name of the module registering this plugin
@@ -46,8 +36,10 @@ typedef ZCloudStore *(* ZCloudStoreConstructor)(const gchar *storenode, GError *
  * @returns: NULL on success, or an error string on failure (return this string
  *   from g_module_check_init)
  */
-gchar *zcloud_register_store_plugin(const gchar *module_name,
-                    const gchar *prefix, ZCloudStoreConstructor constructor);
+gchar *zcloud_register_store_plugin(
+            const gchar *module_name,
+            const gchar *prefix,
+            GType type);
 
 /*
  * Types
@@ -74,8 +66,11 @@ typedef struct ZCloudStorePlugin_s {
     /* the module defining this store plugin */
     ZCloudModule *module;
 
-    /* constructor for the store class, or NULL if the plugin isn't loaded */
-    ZCloudStoreConstructor constructor;
+    /* type of the store class to be instantiated */
+    GType type;
+
+    /* array of GParamSpecs */
+    GPtrArray *paramspecs;
 } ZCloudStorePlugin;
 
 /*
@@ -94,14 +89,6 @@ ZCloudStorePlugin *zcloud_get_store_plugin_by_prefix(const gchar *prefix);
  * @returns: GSList containing all ZCloudStorePlugin objects
  */
 GSList *zcloud_get_all_store_plugins(void);
-
-/* Load the module for the given store plugin if necessary, and ensure that the
- * ZCloudStorePlugin's 'type' field is non-NULL on return.
- *
- * @param store_plugin: the plugin to load
- * @returns: FALSE on error, with ERROR set properly
- */
-gboolean zcloud_load_store_plugin(ZCloudStorePlugin *store_plugin, GError **error);
 
 G_END_DECLS
 

@@ -23,5 +23,5 @@
 const gchar *
 g_module_check_init(GModule *module)
 {
-    return zcloud_register_store_plugin("disk", "disk", disk_constructor);
+    return zcloud_register_store_plugin("disk", "disk", DISK_TYPE_STORE);
 }

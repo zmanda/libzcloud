@@ -37,13 +37,19 @@ GType zcloud_store_get_type(void);
 
 typedef struct ZCloudStore_s {
     GObject parent;
-
-    GHashTable *simple_properties;
 } ZCloudStore;
 
 typedef struct ZCloudStoreClass_s {
     GObjectClass parent_class;
 
+    gboolean (*setup)(
+        ZCloudStore *self,
+        const gchar *suffix,
+        gint n_parameters,
+        GParameter *parameters,
+        GError **error);
+
+    /* general methods */
     gboolean (*create)(
         ZCloudStore *self,
         gchar *address,
@@ -78,6 +84,38 @@ typedef struct ZCloudStoreClass_s {
         ZCloudProgressListener *progress,
         GError **error);
 } ZCloudStoreClass;
+
+/* Create a new ZCloudStore object with the given prefix.
+ *
+ * @param storespec: store specifier
+ * @param n_parameters: length of the PARAMETERS array
+ * @param parameters: store parameters
+ * @returns: NULL on error, with ERROR set properly
+ */
+ZCloudStore *zcloud_store_newv(
+        const gchar *storespec,
+        gint n_parameters,
+        GParameter *parameters,
+        GError **error);
+
+/* Similar to zcloud_store_newv, but taking alternating parameter names
+ * and values, terminated by a NULL, instead of a GParameter array */
+ZCloudStore *zcloud_store_new(
+        const gchar *storespec,
+        GError **error,
+        const gchar *first_param_name,
+        ...);
+
+/*
+ * Method stubs
+ */
+
+gboolean zcloud_store_setup(
+    ZCloudStore *self,
+    const gchar *suffix,
+    gint n_parameters,
+    GParameter *parameters,
+    GError **error);
 
 gboolean zcloud_store_create(
     ZCloudStore *self,

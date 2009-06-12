@@ -19,14 +19,6 @@
 
 #include "disk.h"
 
-GType disk_store_get_type(void);
-#define DISK_TYPE_STORE (disk_store_get_type())
-#define DISK_STORE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), DISK_TYPE_STORE, DiskStore))
-#define DISK_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), DISK_TYPE_STORE, DiskStoreClass))
-#define DISK_IS_STORE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), DISK_TYPE_STORE))
-#define DISK_IS_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), DISK_TYPE_STORE))
-#define DISK_STORE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), DISK_TYPE_STORE, DiskStoreClass))
-
 typedef struct DiskStore_s {
     ZCloudStore parent;
 
@@ -98,22 +90,24 @@ disk_store_get_type(void)
     return type;
 }
 
+/* TODO - this should become disk_store_setup */
 ZCloudStore *
 disk_constructor(
-    const gchar *storenode,
+    const gchar *prefix G_GNUC_UNUSED,
+    const gchar *storespec_suffix,
     GError **error)
 {
     DiskStore *store;
 
-    if(!g_file_test(storenode, G_FILE_TEST_IS_DIR)) {
+    if(!g_file_test(storespec_suffix, G_FILE_TEST_IS_DIR)) {
         g_set_error(error, ZCLOUD_ERROR, ZCERR_PLUGIN,
-            "'%s' is not a directory", storenode);
+            "'%s' is not a directory", storespec_suffix);
         return NULL;
     }
 
     store = g_object_new(DISK_TYPE_STORE, NULL);
     g_assert(store != NULL);
-    store->basedir = g_strdup(storenode);
+    store->basedir = g_strdup(storespec_suffix);
 
     return ZCLOUD_STORE(store);
 }

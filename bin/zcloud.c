@@ -36,7 +36,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    store = zcloud_new(argv[1], &error);
+    store = zcloud_store_new(argv[1], &error, NULL);
     if (!store) {
         fprintf(stderr, "Could not load store '%s': %s\n", argv[1], error->message);
         g_error_free(error);
