@@ -25,8 +25,6 @@ EXTRA_DIST = $(zcplugin_DATA)
 
 zcplugin_LTLIBRARIES = libdisk.la
 libdisk_la_LDFLAGS = -avoid-version -module
-libdisk_la_LIBADD = \
-    $(top_builddir)/lib/libzcloud.la
 libdisk_la_SOURCES = \
     disk.h \
     init.c \
