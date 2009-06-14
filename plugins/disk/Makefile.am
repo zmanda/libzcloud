@@ -17,7 +17,7 @@
 #  ***** END LICENSE BLOCK *****
 
 
-INCLUDES = -I $(top_srcdir)/lib
+INCLUDES = -I $(top_srcdir)/lib -I $(top_srcdir)/config
 AM_CPPFLAGS = $(GLIB_CFLAGS)
 
 zcplugin_DATA = disk.xml

@@ -8,7 +8,8 @@ automatically runs `g_module_check_init` on load.  This is the
 appropriate time to register all plugins supplied with the module.  The
 function usually looks something like::
 
-    #include "mycloud.h"
+    #include "config.h"
+    #include "zcloud.h"
     #include <gmodule.h>
 
     const gchar *

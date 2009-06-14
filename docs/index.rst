@@ -19,6 +19,7 @@ Table of Contents:
    using_libzcloud
    writing_plugins
    hacking_libzcloud
+   api
    plugins
 
 To Do

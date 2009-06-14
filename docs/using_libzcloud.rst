@@ -13,7 +13,6 @@ Source files using libzcloud functionality should begin with ::
 
 .. toctree::
 
-   using_libzcloud/object_model
    using_libzcloud/library_setup
    using_libzcloud/module_info
    using_libzcloud/creating_a_store
