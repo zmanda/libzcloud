@@ -12,6 +12,10 @@
 #     OPENSSL_LDFLAGS to the -L or -R flags required
 #   and calls ACTION-IF-FOUND or ACTION-IF-NOT-FOUND appropriately
 #
+#   This macro sets OPENSSL_INCLUDES such that source files should use
+#   the openssl/ directory in include directives:
+#     #include <openssl/hmac.h>
+#
 # LAST MODIFICATION
 #
 #   2009-06-12
@@ -84,16 +88,16 @@ AC_DEFUN([AC_CHECK_OPENSSL], [
     # try the preprocessor and linker with our new flags,
     # being careful not to pollute the global LIBS, LDFLAGS, and CPPFLAGS
 
+    AC_MSG_CHECKING([whether compiling and linking against OpenSSL works])
     echo "Trying link with OPENSSL_LDFLAGS=$OPENSSL_LDFLAGS;" \
-        "OPENSSL_LIBS=$OPENSSL_LIBS; OPENSSL_CPPFLAGS=$OPENSSL_CPPFLAGS" >&AS_MESSAGE_LOG_FD
+        "OPENSSL_LIBS=$OPENSSL_LIBS; OPENSSL_INCLUDES=$OPENSSL_INCLUDES" >&AS_MESSAGE_LOG_FD
 
     save_LIBS="$LIBS"
     save_LDFLAGS="$LDFLAGS"
     save_CPPFLAGS="$CPPFLAGS"
     LDFLAGS="$LDFLAGS $OPENSSL_LDFLAGS"
     LIBS="$OPENSSL_LIBS $LIBS"
-    CPPFLAGS="$OPENSSL_CPPFLAGS $CPPFLAGS"
-    AC_MSG_CHECKING([whether compiling and linking against OpenSSL works])
+    CPPFLAGS="$OPENSSL_INCLUDES $CPPFLAGS"
     AC_LINK_IFELSE(
         AC_LANG_PROGRAM([#include <openssl/ssl.h>], [SSL_new(NULL)]),
         [
