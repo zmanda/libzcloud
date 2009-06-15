@@ -47,10 +47,6 @@ ZCLOUD_ADD_GCC_WARNING_OPTION([-Wold-style-definition])
 ZCLOUD_ADD_GCC_WARNING_OPTION([-Wno-strict-aliasing])
 ZCLOUD_ADD_GCC_WARNING_OPTION([-Wno-unknown-pragmas])
 
-# Checks for libraries.
-ZCLOUD_CHECK_GLIB
-ZCLOUD_CHECK_OPENSSL
-
 # Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
@@ -71,6 +67,10 @@ AC_TYPE_SIZE_T
 
 # Checks for library functions.
 AC_CHECK_FUNCS([bzero regcomp])
+
+# Checks for libraries.
+ZCLOUD_CHECK_GLIB
+ZCLOUD_CHECK_OPENSSL
 
 # Set up directories
 ZCLOUD_WITH_ZCPLUGINDIR
