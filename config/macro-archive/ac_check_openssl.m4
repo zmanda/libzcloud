@@ -70,8 +70,8 @@ AC_DEFUN([AC_CHECK_OPENSSL], [
         for ssldir in $ssldirs; do
             AC_MSG_CHECKING([for openssl/ssl.h in $ssldir])
             if test -f "$ssldir/include/openssl/ssl.h"; then
-                test "$ssldir" = "/usr" || OPENSSL_INCLUDES="-I$ssldir/include"
-                test "$ssldir" = "/usr" || OPENSSL_LDFLAGS="-L $ssldir/lib"
+                OPENSSL_INCLUDES="-I$ssldir/include"
+                OPENSSL_LDFLAGS="-L $ssldir/lib"
                 OPENSSL_LIBS="-lssl -lcrypto"
                 found=true
                 AC_MSG_RESULT([yes])
