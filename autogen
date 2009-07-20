@@ -46,7 +46,7 @@ PLUGINS=$(cd plugins; ls -1)
 ) > plugins/configure.m4
 
 echo "..aclocal"
-aclocal $includes || die "aclocal failed"
+aclocal $includes || exit 1
 
 echo "...aclocal patches"
 # See http://bugzilla.gnome.org/show_bug.cgi?id=418778
@@ -61,11 +61,11 @@ sed -e  \
 mv aclocal.m4~ aclocal.m4
 
 echo "..autoconf"
-autoconf || die "autoconf failed"
+autoconf || exit 1
 
 echo "..autoheader"
-autoheader || die "autoheader failed"
+autoheader || exit 1
 touch config/config.h.in
 
 echo "..automake"
-automake --force --copy --warnings=none || die "automake failed"
+automake --force --copy --warnings=none || exit 1
