@@ -46,5 +46,9 @@ AC_DEFUN([ZCLOUD_DEFINE_PLUGIN], [
     fi
 
     AC_SUBST(PLUGIN_SUBDIRS)
+
+    plugins=`echo $PLUGIN_SUBDIRS | sed 's,plugins/,,g'`
+    ZCLOUD_SUMMARY_ADD([Enabled plugins: $plugins])
+    plugins=
 ])
 

@@ -5,7 +5,7 @@
 # OVERVIEW
 #
 #   Search for glib.  This is basically a wrapper for AM_PATH_GLIB_2_0, with
-#   the addition of system-specific configuration to convince Amanda to compile
+#   the addition of system-specific configuration to convince Libzcloud to compile
 #   "out of the box" on more boxes.
 #
 AC_DEFUN([ZCLOUD_CHECK_GLIB], [
@@ -27,4 +27,6 @@ AC_DEFUN([ZCLOUD_CHECK_GLIB], [
     esac
 
     AM_PATH_GLIB_2_0(2.2.0, , [ AC_MSG_ERROR(glib not found or too old) ], gmodule gobject gthread)
+    ZCLOUD_SUMMARY_ADD([GLIB_LDFLAGS=$GLIB_LDFLAGS])
+    ZCLOUD_SUMMARY_ADD([GLIB_LIBS=$GLIB_LIBS])
 ])
