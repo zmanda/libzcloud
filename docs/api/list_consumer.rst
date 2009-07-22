@@ -3,8 +3,8 @@ List Consumer
 
 .. class:: ListConsumer
 
-   .. method:: got_result(address)
+   .. method:: got_result(key)
 
-      :param address: an address
-      :type address: String
+      :param key: a store key
+      :type key: String
 

@@ -38,10 +38,10 @@ typedef struct ZCloudListConsumer_s {
 typedef struct ZCloudListConsumerClass_s {
     GObjectClass parent_class;
 
-    void (*got_result)(ZCloudListConsumer *self, gchar *address);
+    void (*got_result)(ZCloudListConsumer *self, gchar *key);
 } ZCloudListConsumerClass;
 
-void zcloud_list_consumer_got_result(ZCloudListConsumer *self, gchar *address);
+void zcloud_list_consumer_got_result(ZCloudListConsumer *self, gchar *key);
 
 G_END_DECLS
 

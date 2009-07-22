@@ -10,63 +10,64 @@ Store
 
       Protected method - used during object construction.
 
-   .. method:: create(address, progress, error)
+   .. method:: create(key, progress, error)
 
-      Creates whatever is represented by the address.
+      Creates the key with an empty value.  This is not required by all store
+      classes.
 
-      :param address: the address to create
-      :type address: String
+      :param key: the key to create
+      :type key: String
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
       :rtype: boolean
 
-   .. method:: upload(address, producer, progress, error)
+   .. method:: upload(key, producer, progress, error)
 
       Upload some data.  ``producer`` will be consulted for metadata
       (e.g. MD5 hash and size) and is responsible for actually reading the data
       to be uploaded. The :class:`Store` handles actually uploading the data
       to the storage service.
 
-      :param address: the address to store the data at
-      :type address: String
+      :param key: the key to store the data at
+      :type key: String
       :param producer: an :class:`UploadProducer`
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
       :rtype: boolean
 
-   .. method:: download(address, consumer, progress, error)
+   .. method:: download(key, consumer, progress, error)
 
-      Download data from ``address``. The ``consumer`` is responsible for
+      Download data from `key`. The ``consumer`` is responsible for
       "doing something useful" with the data received from the storage service.
       For example, it could save it to a file.
 
-      :param address: the address to fetch data from
-      :type address: String
+      :param key: the key to fetch data from
+      :type key: String
       :param consumer: a :class:`DownloadConsumer`
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
       :rtype: boolean
 
-   .. method:: exists(address, progress, error)
+   .. method:: exists(key, progress, error)
 
-      Checks if the given ``address`` exists
+      Checks if `key` exists
 
-      :param address: the address to check
-      :type address: String
+      :param key: the key to check
+      :type key: String
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
       :rtype: boolean
 
-   .. method:: delete(address, progress, error)
+   .. method:: delete(key, progress, error)
 
-      Delete whatever is represented by ``address``
+      Delete whatever is represented by `key`
 
-      :param address: the address to delete
-      :type address: String
+      :param key: the key to delete
+      :type key: String
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
@@ -74,10 +75,11 @@ Store
 
    .. method:: list(template, consumer, progress, error)
 
-      List all addresses matching ``template``, calling
-      List all :class:`addresses <Address>` matching ``template``, calling
+      List all keys matching `template`, calling
       :meth:`ListConsumer.got_result` for each one. The ``template`` should
       just use ``%s`` as a placeholder and ``%%`` to represent ``%``.
+
+      TODO: that's not right..
 
       :param template: the template to list matches for
       :param consumer: a :class:`DownloadConsumer`

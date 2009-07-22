@@ -344,63 +344,63 @@ zcloud_store_setup(
 gboolean
 zcloud_store_create(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudProgressListener *progress,
     GError **error)
 {
     ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self);
     g_assert(c->create != NULL);
-    return (c->create)(self, address, progress, error);
+    return (c->create)(self, key, progress, error);
 }
 
 gboolean
 zcloud_store_upload(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudUploadProducer *upload,
     ZCloudProgressListener *progress,
     GError **error)
 {
     ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
     g_assert(c->upload != NULL); \
-    return (c->upload)(self, address, upload, progress, error);
+    return (c->upload)(self, key, upload, progress, error);
 }
 
 gboolean
 zcloud_store_download(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudDownloadConsumer *download,
     ZCloudProgressListener *progress,
     GError **error)
 {
     ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
     g_assert(c->download != NULL); \
-    return (c->download)(self, address, download, progress, error);
+    return (c->download)(self, key, download, progress, error);
 }
 
 gboolean
 zcloud_store_delete(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudProgressListener *progress,
     GError **error)
 {
     ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
     g_assert(c->delete != NULL); \
-    return (c->delete)(self, address, progress, error);
+    return (c->delete)(self, key, progress, error);
 }
 
 gboolean
 zcloud_store_exists(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudProgressListener *progress,
     GError **error)
 {
     ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
     g_assert(c->exists != NULL); \
-    return (c->exists)(self, address, progress, error);
+    return (c->exists)(self, key, progress, error);
 }
 
 gboolean

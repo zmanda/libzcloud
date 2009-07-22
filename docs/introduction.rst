@@ -10,8 +10,9 @@ The library provides an object called a "store," with the various operations
 exposed as methods on that object.  The store is specified using a string that
 gives the cloud provider and any other information required to find the data.
 
-The store operations take an "address" to specify the key in question, and
-values are represented as arbitrary byte streams.
+Most of the store operations take a key as an index into the key/value store.
+The key is generally a printable string.  Values are represented as arbitrary
+byte streams.
 
 Since values are often very large, libzcloud operates on streams rather than
 pre-allocated strings.   Upload operations pull data from a "producer", and
@@ -20,7 +21,7 @@ common producer and consumer implementations, but more sophisticated
 applications can easily construct their own implementations.
 
 Some cloud vendors provide sophisticated key-listing methods to filter the keys
-returned.  Libzcloud abstracts those methods using "address templates" which
+returned.  Libzcloud abstracts those methods using "key templates" which
 contain wildcards and other special characters to indicate which keys are of
 interest.  Store implementations map these templates to the most efficient
 operations available from the cloud vendor.

@@ -52,29 +52,29 @@ typedef struct ZCloudStoreClass_s {
     /* general methods */
     gboolean (*create)(
         ZCloudStore *self,
-        gchar *address,
+        gchar *key,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*upload)(
         ZCloudStore *self,
-        gchar *address,
+        gchar *key,
         ZCloudUploadProducer *upload,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*download)(
         ZCloudStore *self,
-        gchar *address,
+        gchar *key,
         ZCloudDownloadConsumer *download,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*delete)(
         ZCloudStore *self,
-        gchar *address,
+        gchar *key,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*exists)(
         ZCloudStore *self,
-        gchar *address,
+        gchar *key,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*list)(
@@ -119,33 +119,33 @@ gboolean zcloud_store_setup(
 
 gboolean zcloud_store_create(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_upload(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudUploadProducer *upload,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_download(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudDownloadConsumer *download,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_delete(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_exists(
     ZCloudStore *self,
-    gchar *address,
+    gchar *key,
     ZCloudProgressListener *progress,
     GError **error);
 
