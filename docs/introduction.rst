@@ -1,37 +1,26 @@
 .. _introduction:
-
-************
 Introduction
 ************
 
-This is an initial draft of the libzcloud interfaces, which aim to provide an
-abstraction for the various cloud storage services.
+Libzcloud is an abstract interface to cloud-based key/value stores.  It
+supports the basic operations: list keys, set a value (upload), get a value
+(download), and delete a value.
 
-The core of libzcloud's abstraction is the "store". The methods that the
-store must support are:
+The library provides an object called a "store," with the various operations
+exposed as methods on that object.  The store is specified using a string that
+gives the cloud provider and any other information required to find the data.
 
-* create
-* upload
-* download
-* delete
-* exists
-* list
+The store operations take an "address" to specify the key in question, and
+values are represented as arbitrary byte streams.
 
-Most of the operations above take an "address" to operate on. Addresses are
-specific to an individual store (e.g bucket name and key for Amazon S3) and
-are represented by a simple string, which parse_address should interpret.
+Since values are often very large, libzcloud operates on streams rather than
+pre-allocated strings.   Upload operations pull data from a "producer", and
+download operations push data to a "consumer."  The library includes some
+common producer and consumer implementations, but more sophisticated
+applications can easily construct their own implementations.
 
-Address templates (used when listing addresses) are simply a sprintf-style
-pattern (which only accepts strings, "%s", and the escape sequence, "%%").
-They allow programs using libzcloud to specicfy simple patterns and still have
-the store (probably) be able to list everything matching that pattern. Only
-permitting strings in the pattern is only meant to simplify the parsing of the
-pattern by the store; programs using libzcloud might only substitute, say,
-a number.
-
-Independent of particular stores are the download consumer, upload producer,
-progress listener, and list consumer. They are the concern of programs using libzcloud.
-
-libzcloud will eventually include some implementations of its abstractions.
-An implementation of an Amazon S3 store is expected along with consumers
-(and producers) that write to (and read from) memory buffers and files.
+Some cloud vendors provide sophisticated key-listing methods to filter the keys
+returned.  Libzcloud abstracts those methods using "address templates" which
+contain wildcards and other special characters to indicate which keys are of
+interest.  Store implementations map these templates to the most efficient
+operations available from the cloud vendor.
