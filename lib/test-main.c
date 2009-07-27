@@ -35,6 +35,14 @@ struct test_t all_tests[] = {
 };
 #undef TEST_MODULE
 
+static void
+null_log(const gchar *log_domain G_GNUC_UNUSED,
+     GLogLevelFlags log_level G_GNUC_UNUSED,
+     const gchar *message G_GNUC_UNUSED,
+     gpointer user_data G_GNUC_UNUSED)
+{
+}
+
 int
 main(int argc, char **argv)
 {
@@ -44,6 +52,8 @@ main(int argc, char **argv)
         g_fprintf(stderr, "usage: %s\n", argv[0]);
         return 1;
     }
+
+    g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, null_log, NULL);
 
     for (t = all_tests; t->test_name; t++) {
         g_fprintf(stderr, "TESTING %s\n", t->test_name);

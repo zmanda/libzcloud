@@ -473,6 +473,7 @@ load_module_xml_file(
     gboolean success = FALSE;
     struct markup_parser_state state;
 
+    g_debug("loading module XML file '%s/%s'", dir_name, file);
     markup_parser_init(&state, dir_name, g_build_path("/", dir_name, file, NULL));
 
     fd = open(state.filename, O_RDONLY, 0);
@@ -556,6 +557,7 @@ scan_plugin_dir(
     GDir *dir;
     const gchar *elt;
     
+    g_debug("scanning plugin directory '%s'", dir_name);
     dir = g_dir_open(dir_name, 0, error);
     if (!dir)
         return FALSE;
@@ -610,6 +612,7 @@ zcloud_register_store_plugin(
 {
     ZCloudStorePlugin *plugin;
 
+    g_debug("registering prefix '%s' with module '%s'", prefix, module_name);
     plugin = zcloud_get_store_plugin_by_prefix(prefix);
     if (!plugin) {
         /* (this probably leaks memory -- GLib is vague on the topic) */

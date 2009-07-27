@@ -74,6 +74,13 @@
 #endif
 #endif
 
+/* The glib logging macros all use the symbol G_LOG_DOMAIN internally, allowing
+ * us to easily change the domain used for zcloud logging */
+#ifdef G_LOG_DOMAIN
+#undef G_LOG_DOMAIN
+#endif
+#define G_LOG_DOMAIN "ZCLOUD"
+
 /* include the public headers so the internal headers can use the types */
 #include "zcloud.h"
 
