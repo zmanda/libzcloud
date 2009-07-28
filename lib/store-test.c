@@ -179,7 +179,7 @@ test_store(void)
         g_value_set_string(&params[i].value, "mystr");
         i++;
 
-        store = zcloud_store_newv("fake:foo", G_N_ELEMENTS(params), params, &error);
+        store = zcloud_store_newv("fake:foo", i, params, &error);
         fstore = FAKE_STORE(store);
         gerror_is_clear(&error, "create fake store with an array of properties:");
         is_string(fstore->param_str, "mystr", " param_str is set correctly");

@@ -147,6 +147,7 @@ zcloud_store_newv(
         }
 
         /* and try transforming the value */
+        bzero(&my_params[j].value, sizeof(my_params[j].value));
         g_value_init(&my_params[j].value, spec->value_type);
         if (!g_param_value_convert(spec, &input_params[i].value,
                                    &my_params[j].value, TRUE)) {
