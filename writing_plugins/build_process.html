@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Plugin Build Process &mdash; libzcloud v1.0alpha documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0alpha',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
+    <link rel="up" title="Writing libzcloud Plugins" href="../writing_plugins.html" />
+    <link rel="next" title="Plugin XML Definition" href="xml_definition.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="xml_definition.html" title="Plugin XML Definition"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="plugin-build-process">
+<h1>Plugin Build Process<a class="headerlink" href="#plugin-build-process" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="local-plugins">
+<h2>Local Plugins<a class="headerlink" href="#local-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Local plugins are stored in subdirectories of <tt class="docutils literal"><span class="pre">plugins/</span></tt>, and are integrated
+into libzcloud&#8217;s compilation process.  They should include a <tt class="docutils literal"><span class="pre">configure.m4</span></tt>,
+which will be automatically linked into the top-level <tt class="docutils literal"><span class="pre">configure.ac</span></tt> by
+<tt class="docutils literal"><span class="pre">autogen</span></tt>.  This M4 file should invoke <tt class="xref docutils literal"><span class="pre">ZCLOUD_DEFINE_PLUGIN</span></tt>:</p>
+<span class="target" id="index-1"></span><dl class="describe">
+<dt>
+<tt class="descname">ZCLOUD_DEFINE_PLUGIN(name, bydefault, description, if-enabled)</tt></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>name</em> &#8211; plugin name (name of the <tt class="docutils literal"><span class="pre">plugins/</span></tt> subdirectory)</li>
+<li><em>bydefault</em> &#8211; installed by default (<tt class="docutils literal"><span class="pre">yes</span></tt> or <tt class="docutils literal"><span class="pre">no</span></tt>)</li>
+<li><em>description</em> &#8211; description for <tt class="docutils literal"><span class="pre">./configure</span> <span class="pre">--help</span></tt></li>
+<li><em>if-enabled</em> &#8211; shell code to execute if the plugin is enabled</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Define a plugin.  This adds <tt class="docutils literal"><span class="pre">--enable-NAME</span></tt> and <tt class="docutils literal"><span class="pre">--disable-NAME</span></tt>
+options, with the appropriate default.  At configure time, if the plugin is
+enabled, <em>if-enabled</em> is executed.</p>
+<p>This macro adds the plugin subdirectory&#8217;s Makefile to <tt class="docutils literal"><span class="pre">AC_CONFIG_FILES</span></tt>,
+and adds the subdirectory itself to the list of directories to be built by
+the top-level Makefile.</p>
+</dd></dl>
+
+<p>The plugin&#8217;s <tt class="docutils literal"><span class="pre">Makefile.am</span></tt> should look something like:</p>
+<div class="highlight-python"><pre>INCLUDES = -I $(top_srcdir)/lib -I $(top_srcdir)/config
+AM_CPPFLAGS = $(GLIB_CFLAGS)
+
+zcplugin_DATA = mymodule.xml
+EXTRA_DIST = $(zcplugin_DATA)
+
+zcplugin_LTLIBRARIES = libmymodule.la
+libmymodule_la_LDFLAGS = -avoid-version -module
+libmymodule_la_SOURCES = \
+    mymodule.h \
+    mymodule.c</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">INCLDUES</span></tt> point to <tt class="docutils literal"><span class="pre">lib/</span></tt>, which contains <tt class="docutils literal"><span class="pre">zcloud.h</span></tt>, and to
+<tt class="docutils literal"><span class="pre">config/</span></tt>, which contains <tt class="docutils literal"><span class="pre">config.h</span></tt>.  The <tt class="docutils literal"><span class="pre">AM_CPPFLAGS</span></tt> include the
+flags required to compile against GLib.</p>
+<p>The next stanza installs the module&#8217;s XML file (<tt class="docutils literal"><span class="pre">mymodule.xml</span></tt>) into the
+plugin directory, and ensures that it is included in the distribution tarball.</p>
+<p>The final stanza defines the plugin shared object, including the required
+libtool flags and the list of header and source files
+(<tt class="docutils literal"><span class="pre">libmymodule_la_SOURCES</span></tt>).  Any additional required libraries would appear
+in <tt class="docutils literal"><span class="pre">libmymodule_la_LIBADD</span></tt>.</p>
+<p>Because the plugin is configured along with the rest of libzcloud, any C
+preprocessor symbols are added to libzcloud&#8217;s <tt class="docutils literal"><span class="pre">config.h</span></tt>.  This file is not
+included by <tt class="docutils literal"><span class="pre">zcloud.h</span></tt>, so it must be named explicitly in every source file.
+Such files should begin with:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="cp">#include &quot;config.h&quot;</span>
+<span class="cp">#include &quot;zcloud.h&quot;</span>
+</pre></div>
+</div>
+<p>followed by any plugin-specific header files.</p>
+</div>
+<div class="section" id="external-plugins">
+<h2>External Plugins<a class="headerlink" href="#external-plugins" title="Permalink to this headline">¶</a></h2>
+<p>(to be written)</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Plugin Build Process</a><ul>
+<li><a class="reference external" href="#local-plugins">Local Plugins</a></li>
+<li><a class="reference external" href="#external-plugins">External Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="introduction.html" title="previous chapter">Introduction</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="xml_definition.html" title="next chapter">Plugin XML Definition</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../sources/writing_plugins/build_process.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="../search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="xml_definition.html" title="Plugin XML Definition"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
+      Last updated on Jul 31, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

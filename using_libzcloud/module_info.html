@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Module Information &mdash; libzcloud v1.0alpha documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0alpha',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
+    <link rel="up" title="Using libzcloud" href="../using_libzcloud.html" />
+    <link rel="next" title="Creating a Store" href="creating_a_store.html" />
+    <link rel="prev" title="Library Setup" href="library_setup.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="creating_a_store.html" title="Creating a Store"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="library_setup.html" title="Library Setup"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="getting-module-information">
+<span id="module-info"></span><h1>Getting Module Information<a class="headerlink" href="#getting-module-information" title="Permalink to this headline">¶</a></h1>
+<p>Among other things, <a title="zcloud_init" class="reference external" href="library_setup.html#zcloud_init"><tt class="xref docutils literal"><span class="pre">zcloud_init</span></tt></a> gathers basic information about the
+available plugins.  It does this in such a way that those plugins are not
+actually loaded, so it is quick and does not require that all dependencies of
+all plugins be available.</p>
+<p>Information on available plugins is available from either of these functions:</p>
+<dl class="cfunction">
+<dt id="zcloud_get_store_plugin_by_prefix">
+<!--[zcloud_get_store_plugin_by_prefix]--><a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a> *<tt class="descname">zcloud_get_store_plugin_by_prefix</tt><big>(</big>const gchar<em> *prefix</em><big>)</big><a class="headerlink" href="#zcloud_get_store_plugin_by_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the plugin object for the given prefix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>prefix</em> &#8211; desired storage specification prefix</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a plugin object, or NULL if not found</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="cfunction">
+<dt id="zcloud_get_all_store_plugins">
+<!--[zcloud_get_all_store_plugins]-->GSList *<tt class="descname">zcloud_get_all_store_plugins</tt><big>(</big>void<big>)</big><a class="headerlink" href="#zcloud_get_all_store_plugins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all plugins.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a GSList of pointers to <a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin"><tt class="xref docutils literal"><span class="pre">ZCloudStorePlugin</span></tt></a> objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="plugin-information">
+<h2>Plugin Information<a class="headerlink" href="#plugin-information" title="Permalink to this headline">¶</a></h2>
+<dl class="ctype">
+<dt id="ZCloudStorePlugin">
+<!--[ZCloudStorePlugin]--><tt class="descname">ZCloudStorePlugin</tt><a class="headerlink" href="#ZCloudStorePlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information about a single libzcloud plugin</p>
+<dl class="cmember">
+<dt id="prefix">
+<!--[prefix]-->gchar *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">prefix</tt><a class="headerlink" href="#prefix" title="Permalink to this definition">¶</a></dt>
+<dd>The prefix for this plugin</dd></dl>
+
+<dl class="cmember">
+<dt id="module">
+<!--[module]--><a title="ZCloudModule" class="reference internal" href="#ZCloudModule">ZCloudModule</a> *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">module</tt><a class="headerlink" href="#module" title="Permalink to this definition">¶</a></dt>
+<dd>Information about the module that will define this plugin</dd></dl>
+
+<dl class="cmember">
+<dt id="type">
+<!--[type]-->GType <a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">type</tt><a class="headerlink" href="#type" title="Permalink to this definition">¶</a></dt>
+<dd>The type of the store class that will be instantiated for this plugin</dd></dl>
+
+<dl class="cmember">
+<dt id="paramspecs">
+<!--[paramspecs]-->GPtrArray *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">paramspecs</tt><a class="headerlink" href="#paramspecs" title="Permalink to this definition">¶</a></dt>
+<dd>A list of <tt class="docutils literal"><span class="pre">GParamSpec</span></tt> objects describing the parameters for this plugin.
+The GLib documentation has the complete story on these objects.  Briefly,
+the parameter name is availble in <tt class="docutils literal"><span class="pre">spec.name</span></tt>, the expected type is in
+<tt class="docutils literal"><span class="pre">spec.value_type</span></tt>, and the nick and blurb are available via
+<tt class="docutils literal"><span class="pre">g_param_spec_nick(spec)</span></tt> and <tt class="docutils literal"><span class="pre">g_param_spec_blurb(spec)</span></tt>, respectively.</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-information">
+<h2>Module Information<a class="headerlink" href="#module-information" title="Permalink to this headline">¶</a></h2>
+<dl class="ctype">
+<dt id="ZCloudModule">
+<!--[ZCloudModule]--><tt class="descname">ZCloudModule</tt><a class="headerlink" href="#ZCloudModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information about a module implementing plugins</p>
+<dl class="cmember">
+<dt id="basename">
+<!--[basename]-->gchar *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">basename</tt><a class="headerlink" href="#basename" title="Permalink to this definition">¶</a></dt>
+<dd>Base name of this module</dd></dl>
+
+<dl class="cmember">
+<dt id="module_path">
+<!--[module_path]-->gchar *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">module_path</tt><a class="headerlink" href="#module_path" title="Permalink to this definition">¶</a></dt>
+<dd>Full pathname to the loadable shared object</dd></dl>
+
+<dl class="cmember">
+<dt id="xml_path">
+<!--[xml_path]-->gchar *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">xml_path</tt><a class="headerlink" href="#xml_path" title="Permalink to this definition">¶</a></dt>
+<dd>Full pathname of the <a class="reference external" href="../writing_plugins/xml_definition.html#xml-definition"><em>XML file</em></a> defining this module</dd></dl>
+
+<dl class="cmember">
+<dt id="loaded">
+<!--[loaded]-->gboolean <a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">loaded</tt><a class="headerlink" href="#loaded" title="Permalink to this definition">¶</a></dt>
+<dd>True if this module has been loaded</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Getting Module Information</a><ul>
+<li><a class="reference external" href="#plugin-information">Plugin Information</a></li>
+<li><a class="reference external" href="#module-information">Module Information</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="library_setup.html" title="previous chapter">Library Setup</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="creating_a_store.html" title="next chapter">Creating a Store</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../sources/using_libzcloud/module_info.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="../search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="creating_a_store.html" title="Creating a Store"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="library_setup.html" title="Library Setup"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
+      Last updated on Jul 31, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

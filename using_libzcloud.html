@@ -17,8 +17,10 @@
     </script>
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="libzcloud v1.0alpha documentation" href="index.html" />
-    <link rel="next" title="Model" href="using_libzcloud/object_model.html" />
+    <link rel="next" title="Library Setup" href="using_libzcloud/library_setup.html" />
     <link rel="prev" title="Using zcloud" href="using_zcloud.html" /> 
   </head>
   <body>
@@ -29,7 +31,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="using_libzcloud/object_model.html" title="Model"
+          <a href="using_libzcloud/library_setup.html" title="Library Setup"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="using_zcloud.html" title="Using zcloud"
@@ -45,9 +47,33 @@
   
   <div class="section" id="using-libzcloud">
 <h1>Using libzcloud<a class="headerlink" href="#using-libzcloud" title="Permalink to this headline">¶</a></h1>
-<p>Description of the libzcloud binary API</p>
+<p>The zcloud library provides a generic C API for cloud operations.</p>
+<p>The library is built on the GTK+ C library: GLib.  This section assumes
+familiarity with GLib, and in particular on GLib&#8217;s object system
+(GObject), error handling (GError), and data structures.</p>
+<p>Source files using libzcloud functionality should begin with</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#include &lt;zcloud.h&gt;</span>
+</pre></div>
+</div>
 <ul>
-<li class="toctree-l1"><a class="reference" href="using_libzcloud/object_model.html">Model</a></li>
+<li class="toctree-l1"><a class="reference external" href="using_libzcloud/library_setup.html">Library Setup</a><ul>
+<li class="toctree-l2"><a class="reference external" href="using_libzcloud/library_setup.html#logging">Logging</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="using_libzcloud/module_info.html">Getting Module Information</a><ul>
+<li class="toctree-l2"><a class="reference external" href="using_libzcloud/module_info.html#plugin-information">Plugin Information</a></li>
+<li class="toctree-l2"><a class="reference external" href="using_libzcloud/module_info.html#module-information">Module Information</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="using_libzcloud/creating_a_store.html">Creating a Store</a><ul>
+<li class="toctree-l2"><a class="reference external" href="using_libzcloud/creating_a_store.html#calling-the-constructor">Calling the Constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="using_libzcloud/creating_a_store.html#specifying-parameters-at-runtime">Specifying Parameters at Runtime</a></li>
+</ul>
+</li>
 </ul>
 </div>
 
@@ -60,7 +86,7 @@
             <h4>Previous topic</h4>
             <p class="topless"><a href="using_zcloud.html" title="previous chapter">Using zcloud</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="using_libzcloud/object_model.html" title="next chapter">Model</a></p>
+            <p class="topless"><a href="using_libzcloud/library_setup.html" title="next chapter">Library Setup</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="sources/using_libzcloud.txt">Show Source</a></li>
@@ -82,7 +108,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="using_libzcloud/object_model.html" title="Model"
+          <a href="using_libzcloud/library_setup.html" title="Library Setup"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="using_zcloud.html" title="Using zcloud"
@@ -92,8 +118,8 @@
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Jun 04, 2009.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
+      Last updated on Jul 31, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
     </div>
   </body>
 </html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Library Setup &mdash; libzcloud v1.0alpha documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0alpha',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
+    <link rel="up" title="Using libzcloud" href="../using_libzcloud.html" />
+    <link rel="next" title="Getting Module Information" href="module_info.html" />
+    <link rel="prev" title="Using libzcloud" href="../using_libzcloud.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="module_info.html" title="Getting Module Information"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../using_libzcloud.html" title="Using libzcloud"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="library-setup">
+<h1>Library Setup<a class="headerlink" href="#library-setup" title="Permalink to this headline">¶</a></h1>
+<p>Before calling any other libzcloud functions, call <tt class="docutils literal"><span class="pre">zcloud_init</span></tt> to
+set up the library.</p>
+<dl class="cfunction">
+<dt id="zcloud_init">
+<!--[zcloud_init]-->gboolean <tt class="descname">zcloud_init</tt><big>(</big>GError<em> **error</em><big>)</big><a class="headerlink" href="#zcloud_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes libzcloud, including calling GLib&#8217;s <tt class="docutils literal"><span class="pre">g_thread_init</span></tt>
+and <tt class="docutils literal"><span class="pre">g_type_init</span></tt>.  This function loads and caches information
+about the zcloud modules installed.</p>
+<p>An error from this function means that there was an error loading
+the module information, and is generally fatal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>error</em> &#8211; error information</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">true on success</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<p>Libzcloud use glib&#8217;s message logging facility, with the domain <tt class="docutils literal"><span class="pre">&quot;ZCLOUD&quot;</span></tt>.
+Glib&#8217;s default handling for log messages is to print them to stdout or stderr,
+so simple applications may wish to silence the logging:</p>
+<div class="highlight-python"><pre>static void
+null_log(const gchar *log_domain G_GNUC_UNUSED,
+     GLogLevelFlags log_level G_GNUC_UNUSED,
+     const gchar *message G_GNUC_UNUSED,
+     gpointer user_data G_GNUC_UNUSED)
+{
+}
+
+/* ... */
+g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, null_log, NULL);</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Library Setup</a><ul>
+<li><a class="reference external" href="#logging">Logging</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="../using_libzcloud.html" title="previous chapter">Using libzcloud</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="module_info.html" title="next chapter">Getting Module Information</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../sources/using_libzcloud/library_setup.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="../search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="module_info.html" title="Getting Module Information"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../using_libzcloud.html" title="Using libzcloud"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
+      Last updated on Jul 31, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

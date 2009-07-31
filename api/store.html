@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Store &mdash; libzcloud v1.0alpha documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0alpha',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
+    <link rel="up" title="API Documentation" href="../api.html" />
+    <link rel="next" title="Progress Listener" href="progress_listener.html" />
+    <link rel="prev" title="API Documentation" href="../api.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="progress_listener.html" title="Progress Listener"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../api.html" title="API Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="store">
+<h1>Store<a class="headerlink" href="#store" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="ZCloudStore">
+<!--[ZCloudStore]-->class <tt class="descname">ZCloudStore</tt><a class="headerlink" href="#ZCloudStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores represent a service that provides persistence of arbitrary blobs.
+An example is Amazon S3.</p>
+<dl class="method">
+<dt id="ZCloudStore.setup">
+<!--[ZCloudStore.setup]--><tt class="descname">setup</tt><big>(</big><em>suffix</em>, <em>n_parameters</em>, <em>parameters</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.setup" title="Permalink to this definition">¶</a></dt>
+<dd>Protected method - used during object construction.</dd></dl>
+
+<dl class="method">
+<dt id="ZCloudStore.create">
+<!--[ZCloudStore.create]--><tt class="descname">create</tt><big>(</big><em>key</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the key with an empty value.  This is not required by all store
+classes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>key</em> (String) &#8211; the key to create</li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>error</em> &#8211; optional storage for an error</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true (on success) or false (on failure)</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ZCloudStore.upload">
+<!--[ZCloudStore.upload]--><tt class="descname">upload</tt><big>(</big><em>key</em>, <em>producer</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload some data.  <tt class="docutils literal"><span class="pre">producer</span></tt> will be consulted for metadata
+(e.g. MD5 hash and size) and is responsible for actually reading the data
+to be uploaded. The <tt class="xref docutils literal"><span class="pre">Store</span></tt> handles actually uploading the data
+to the storage service.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>key</em> (String) &#8211; the key to store the data at</li>
+<li><em>producer</em> &#8211; an <a title="UploadProducer" class="reference external" href="upload_producer.html#UploadProducer"><tt class="xref docutils literal"><span class="pre">UploadProducer</span></tt></a></li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>error</em> &#8211; optional storage for an error</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true (on success) or false (on failure)</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ZCloudStore.download">
+<!--[ZCloudStore.download]--><tt class="descname">download</tt><big>(</big><em>key</em>, <em>consumer</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download data from <cite>key</cite>. The <tt class="docutils literal"><span class="pre">consumer</span></tt> is responsible for
+&#8220;doing something useful&#8221; with the data received from the storage service.
+For example, it could save it to a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>key</em> (String) &#8211; the key to fetch data from</li>
+<li><em>consumer</em> &#8211; a <a title="DownloadConsumer" class="reference external" href="download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a></li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>error</em> &#8211; optional storage for an error</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true (on success) or false (on failure)</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ZCloudStore.exists">
+<!--[ZCloudStore.exists]--><tt class="descname">exists</tt><big>(</big><em>key</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if <cite>key</cite> exists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>key</em> (String) &#8211; the key to check</li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>error</em> &#8211; optional storage for an error</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true (on success) or false (on failure)</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ZCloudStore.delete">
+<!--[ZCloudStore.delete]--><tt class="descname">delete</tt><big>(</big><em>key</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete whatever is represented by <cite>key</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>key</em> (String) &#8211; the key to delete</li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>error</em> &#8211; optional storage for an error</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true (on success) or false (on failure)</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ZCloudStore.list">
+<!--[ZCloudStore.list]--><tt class="descname">list</tt><big>(</big><em>template</em>, <em>consumer</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.list" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all keys matching <cite>template</cite>, calling
+<a title="ListConsumer.got_result" class="reference external" href="list_consumer.html#ListConsumer.got_result"><tt class="xref docutils literal"><span class="pre">ListConsumer.got_result()</span></tt></a> for each one. The <tt class="docutils literal"><span class="pre">template</span></tt> should
+just use <tt class="docutils literal"><span class="pre">%s</span></tt> as a placeholder and <tt class="docutils literal"><span class="pre">%%</span></tt> to represent <tt class="docutils literal"><span class="pre">%</span></tt>.</p>
+<p>TODO: that&#8217;s not right..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>template</em> &#8211; the template to list matches for</li>
+<li><em>consumer</em> &#8211; a <a title="DownloadConsumer" class="reference external" href="download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a></li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>error</em> &#8211; optional storage for an error</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true (on success) or false (on failure)</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="../api.html" title="previous chapter">API Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="progress_listener.html" title="next chapter">Progress Listener</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../sources/api/store.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="../search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="progress_listener.html" title="Progress Listener"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../api.html" title="API Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../api.html" accesskey="U">API Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
+      Last updated on Jul 31, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

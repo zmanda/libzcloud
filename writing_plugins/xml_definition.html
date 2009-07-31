@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Plugin XML Definitions &mdash; libzcloud v1.0alpha documentation</title>
+    <title>Plugin XML Definition &mdash; libzcloud v1.0alpha documentation</title>
     <link rel="stylesheet" href="../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -17,10 +17,12 @@
     </script>
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
     <link rel="up" title="Writing libzcloud Plugins" href="../writing_plugins.html" />
-    <link rel="next" title="Hacking libzcloud" href="../hacking_libzcloud.html" />
-    <link rel="prev" title="Writing libzcloud Plugins" href="../writing_plugins.html" /> 
+    <link rel="next" title="Module Initialization" href="initialization.html" />
+    <link rel="prev" title="Plugin Build Process" href="build_process.html" /> 
   </head>
   <body>
     <div class="related">
@@ -30,10 +32,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../hacking_libzcloud.html" title="Hacking libzcloud"
+          <a href="initialization.html" title="Module Initialization"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../writing_plugins.html" title="Writing libzcloud Plugins"
+          <a href="build_process.html" title="Plugin Build Process"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
           <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
@@ -45,21 +47,27 @@
           <div class="body">
             
   
-  <div class="section" id="plugin-xml-definitions">
-<h1>Plugin XML Definitions<a class="headerlink" href="#plugin-xml-definitions" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="plugin-xml-definition">
+<span id="xml-definition"></span><h1>Plugin XML Definition<a class="headerlink" href="#plugin-xml-definition" title="Permalink to this headline">¶</a></h1>
 <p>Each module is accompanied by an XML file describing the plugins it contains.
 The name of the XML file is not critical, but should match the name of the
 shared object without the &#8220;lib&#8221; prefix.  For example, <tt class="docutils literal"><span class="pre">libs3.so</span></tt> is paired
 with <tt class="docutils literal"><span class="pre">s3.xml</span></tt>.  The XML file has the following structure:</p>
 <div class="highlight-python"><pre>&lt;zcloud-module basename="mycloud"&gt;
   &lt;store-plugin prefix="mycl"&gt;
+    &lt;parameter name="access_key" type="string"&gt;
+      Authentication token
+    &lt;/parameter&gt;
+    &lt;parameter name="redundancy" type="int"&gt;
+      Requested storage redundancy level
+    &lt;/parameter&gt;
   &lt;/store-plugin&gt;
 &lt;/zcloud-module&gt;</pre>
 </div>
 <p>Note that, at present, the XML is parsed with the GLib <em>Simple XML Parser</em>,
 which does not handle non-UTF8 encodings, user entities, or processing
 instructions.</p>
-<span class="target" id="index-0"></span><dl class="describe">
+<span class="target" id="index-3"></span><dl class="describe">
 <dt>
 <tt class="descname">zcloud-module</tt></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
@@ -85,7 +93,7 @@ without any suffixes or prefixes.  The shared object is assumed to reside
 in the same directory as the XML file.</p>
 </dd></dl>
 
-<span class="target" id="index-1"></span><dl class="describe">
+<span class="target" id="index-4"></span><dl class="describe">
 <dt>
 <tt class="descname">store-plugin</tt></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
@@ -101,7 +109,45 @@ in the same directory as the XML file.</p>
 </table>
 <p>The <tt class="docutils literal"><span class="pre">store-plugin</span></tt> element identifies a particular plugin within a module,
 and contains elements defining the characteristics of this plugin.  It can
-not contain any other elements.</p>
+contain the following element:</p>
+<blockquote>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">parameter</span></tt></li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<span class="target" id="index-5"></span><dl class="describe">
+<dt>
+<tt class="descname">parameter</tt></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>name</em> &#8211; the name of the parameter</li>
+<li><em>type</em> &#8211; the type of the parameter</li>
+<li><em>nick</em> &#8211; un-abbreviated form of <em>name</em> (optional; defaults to <em>name</em>)</li>
+<li><em>blurb</em> &#8211; a short human-readable description of the parameter</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <tt class="docutils literal"><span class="pre">parameter</span></tt> element describes a constructor parameter of the
+store plugin.  It is always an empty element.  The parameter type is
+used for validation and to convert the type to useful data within
+the module.  It is case-insensitive and must be one of:</p>
+<blockquote>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">string</span></tt></li>
+</ul>
+</blockquote>
+<p>The parameter name must start with an ASCII lower-case letter, and all
+subsequent digits should be lower-case letters, digits, or &#8216;-&#8216; (dash).  The
+blurb may be displayed in the online help of applications linked to
+libzcloud, so it should be short (less than, say, 50 characters),
+declarative, and not begin with &#8220;the&#8221;.</p>
 </dd></dl>
 
 </div>
@@ -113,9 +159,9 @@ not contain any other elements.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <h4>Previous topic</h4>
-            <p class="topless"><a href="../writing_plugins.html" title="previous chapter">Writing libzcloud Plugins</a></p>
+            <p class="topless"><a href="build_process.html" title="previous chapter">Plugin Build Process</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="../hacking_libzcloud.html" title="next chapter">Hacking libzcloud</a></p>
+            <p class="topless"><a href="initialization.html" title="next chapter">Module Initialization</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="../sources/writing_plugins/xml_definition.txt">Show Source</a></li>
@@ -137,10 +183,10 @@ not contain any other elements.</p>
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../hacking_libzcloud.html" title="Hacking libzcloud"
+          <a href="initialization.html" title="Module Initialization"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../writing_plugins.html" title="Writing libzcloud Plugins"
+          <a href="build_process.html" title="Plugin Build Process"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
           <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
@@ -148,8 +194,8 @@ not contain any other elements.</p>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Jun 04, 2009.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
+      Last updated on Jul 31, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
     </div>
   </body>
 </html>

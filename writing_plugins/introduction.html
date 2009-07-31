@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Headers &mdash; libzcloud v1.0alpha documentation</title>
+    <title>Introduction &mdash; libzcloud v1.0alpha documentation</title>
     <link rel="stylesheet" href="../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -20,9 +20,9 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
-    <link rel="up" title="Hacking libzcloud" href="../hacking_libzcloud.html" />
-    <link rel="next" title="API Documentation" href="../api.html" />
-    <link rel="prev" title="Hacking libzcloud" href="../hacking_libzcloud.html" /> 
+    <link rel="up" title="Writing libzcloud Plugins" href="../writing_plugins.html" />
+    <link rel="next" title="Plugin Build Process" href="build_process.html" />
+    <link rel="prev" title="Writing libzcloud Plugins" href="../writing_plugins.html" /> 
   </head>
   <body>
     <div class="related">
@@ -32,13 +32,13 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../api.html" title="API Documentation"
+          <a href="build_process.html" title="Plugin Build Process"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../hacking_libzcloud.html" title="Hacking libzcloud"
+          <a href="../writing_plugins.html" title="Writing libzcloud Plugins"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
-          <li><a href="../hacking_libzcloud.html" accesskey="U">Hacking libzcloud</a> &raquo;</li> 
+          <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
       </ul>
     </div>  
     <div class="document">
@@ -47,31 +47,29 @@
           <div class="body">
             
   
-  <div class="section" id="id1">
-<span id="headers"></span><h1>Headers<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>There are four kinds of code: plugin, internal, test, and user code.  Plugins and
-user code should contain</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#include &quot;zcloud.h&quot;</span>
-</pre></div>
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<p>When beginning a new plugin, look at the existing libzcloud plugins for
+examples.  In particular, the <em>disk</em> plugin is intended as an example.</p>
+<p>At the moment, there is no libzcloud mailing list, but you are encouraged
+contact the developers directly by email or visit the IRC channel
+<tt class="docutils literal"><span class="pre">#libzcloud</span></tt> on Freenode with any questions.</p>
 </div>
-<p>while internal code should start with</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#include &quot;internal.h&quot;</span>
-</pre></div>
+<div class="section" id="local-and-external-plugins">
+<span id="index-2"></span><h2>Local and External Plugins<a class="headerlink" href="#local-and-external-plugins" title="Permalink to this headline">¶</a></h2>
+<p>A <em>local</em> plugin is one which is built alongside libzcloud.  <em>External</em> plugins
+are compiled separately, against an installed copy of libzcloud.  Both
+varieties of plugins are loaded with the same mechanism; the difference is only
+in how they are compiled and installed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Support for external plugins is not yet complete.  Libzcloud will eventually
+provide autoconf macros and other support to make development of external
+plugins very easy.</p>
 </div>
-<p>and test code should start with</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#include &quot;test.h&quot;</span>
-</pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">internal.h</span></tt> includes all of the public headers, as well as <tt class="docutils literal"><span class="pre">config.h</span></tt> and
-a number of common system headers (but not <tt class="docutils literal"><span class="pre">stdio.h</span></tt>).  In turn, <tt class="docutils literal"><span class="pre">test.h</span></tt>
-includes <tt class="docutils literal"><span class="pre">internal.h</span></tt> and adds some testing-specific functions.</p>
-<p>Individual internal headers are located under <tt class="docutils literal"><span class="pre">lib/internal</span></tt>, while individual public
-headers (for use by user code and plugins) are under <tt class="docutils literal"><span class="pre">lib/zcloud</span></tt>.</p>
-<p>Symbols defined in internal headers should be flagged with <tt class="docutils literal"><span class="pre">G_GNUC_INTERNAL</span></tt>,
-which (with compatible compilers) hides the symbols from visibility outside of
-<tt class="docutils literal"><span class="pre">libzcloud.la</span></tt>.  This forms a kind of library-wide <em>static</em> declaration: any
-internal functions can be called from anywhere inside libzcloud.la, but cannot
-be called by users or plugins.</p>
 </div>
 
 
@@ -80,13 +78,22 @@ be called by users or plugins.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Introduction</a><ul>
+<li><a class="reference external" href="#resources">Resources</a></li>
+<li><a class="reference external" href="#local-and-external-plugins">Local and External Plugins</a></li>
+</ul>
+</li>
+</ul>
+
             <h4>Previous topic</h4>
-            <p class="topless"><a href="../hacking_libzcloud.html" title="previous chapter">Hacking libzcloud</a></p>
+            <p class="topless"><a href="../writing_plugins.html" title="previous chapter">Writing libzcloud Plugins</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="../api.html" title="next chapter">API Documentation</a></p>
+            <p class="topless"><a href="build_process.html" title="next chapter">Plugin Build Process</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/hacking_libzcloud/headers.txt">Show Source</a></li>
+              <li><a href="../sources/writing_plugins/introduction.txt">Show Source</a></li>
             </ul>
           <h3>Quick search</h3>
             <form class="search" action="../search.html" method="get">
@@ -105,13 +112,13 @@ be called by users or plugins.</p>
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../api.html" title="API Documentation"
+          <a href="build_process.html" title="Plugin Build Process"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../hacking_libzcloud.html" title="Hacking libzcloud"
+          <a href="../writing_plugins.html" title="Writing libzcloud Plugins"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
-          <li><a href="../hacking_libzcloud.html" accesskey="U">Hacking libzcloud</a> &raquo;</li> 
+          <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
