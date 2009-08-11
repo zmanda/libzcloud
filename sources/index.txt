@@ -15,23 +15,25 @@ Table of Contents:
    :maxdepth: 2
 
    introduction
-   using_zcloud
    using_libzcloud
    writing_plugins
    hacking_libzcloud
    api
    plugins
 
-To Do
-=====
+..
+    re-add after launch:
+    using_zcloud
 
-* Descriptions of each class from the user's perspective
-* "How to write a plugin"
-* "Using libzcloud" example
-* Reference zcloud(1) for zcloud instructions
-* "Using zcloud" example
-* Developers' doc: testing, coding style, etc.
-* using_libzcloud/linking_and_compiling.rst (headers, pkg-config, etc.)
+..
+    TODO:
+    * Descriptions of each class from the user's perspective
+    * "How to write a plugin"
+    * "Using libzcloud" example
+    * Reference zcloud(1) for zcloud instructions
+    * "Using zcloud" example
+    * Developers' doc: testing, coding style, etc.
+    * using_libzcloud/linking_and_compiling.rst (headers, pkg-config, etc.)
 
 Indices and tables
 ==================
