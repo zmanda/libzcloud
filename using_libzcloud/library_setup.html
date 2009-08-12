@@ -1,5 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -17,8 +19,6 @@
     </script>
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
     <link rel="up" title="Using libzcloud" href="../using_libzcloud.html" />
     <link rel="next" title="Getting Module Information" href="module_info.html" />
@@ -41,19 +41,19 @@
           <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
       </ul>
     </div>  
+
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
             
-  
   <div class="section" id="library-setup">
 <h1>Library Setup<a class="headerlink" href="#library-setup" title="Permalink to this headline">¶</a></h1>
 <p>Before calling any other libzcloud functions, call <tt class="docutils literal"><span class="pre">zcloud_init</span></tt> to
 set up the library.</p>
 <dl class="cfunction">
 <dt id="zcloud_init">
-<!--[zcloud_init]-->gboolean <tt class="descname">zcloud_init</tt><big>(</big>GError<em> **error</em><big>)</big><a class="headerlink" href="#zcloud_init" title="Permalink to this definition">¶</a></dt>
+gboolean <tt class="descname">zcloud_init</tt><big>(</big>GError<em> **error</em><big>)</big><a class="headerlink" href="#zcloud_init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes libzcloud, including calling GLib&#8217;s <tt class="docutils literal"><span class="pre">g_thread_init</span></tt>
 and <tt class="docutils literal"><span class="pre">g_type_init</span></tt>.  This function loads and caches information
 about the zcloud modules installed.</p>
@@ -63,13 +63,9 @@ the module information, and is generally fatal.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>error</em> &#8211; error information</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>error</em> &#8211; error information</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">true on success</p>
-</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">true on success</td>
 </tr>
 </tbody>
 </table>
@@ -109,19 +105,29 @@ g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, null_log, NULL);</pre>
 </ul>
 
             <h4>Previous topic</h4>
-            <p class="topless"><a href="../using_libzcloud.html" title="previous chapter">Using libzcloud</a></p>
+            <p class="topless"><a href="../using_libzcloud.html"
+                                  title="previous chapter">Using libzcloud</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="module_info.html" title="next chapter">Getting Module Information</a></p>
+            <p class="topless"><a href="module_info.html"
+                                  title="next chapter">Getting Module Information</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/using_libzcloud/library_setup.txt">Show Source</a></li>
+              <li><a href="../sources/using_libzcloud/library_setup.txt"
+                     rel="nofollow">Show Source</a></li>
             </ul>
-          <h3>Quick search</h3>
-            <form class="search" action="../search.html" method="get">
-              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
-              <input type="hidden" name="check_keywords" value="yes" />
-              <input type="hidden" name="area" value="default" />
-            </form>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -131,21 +137,21 @@ g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, null_log, NULL);</pre>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
+             >index</a></li>
         <li class="right" >
           <a href="module_info.html" title="Getting Module Information"
-             accesskey="N">next</a> |</li>
+             >next</a> |</li>
         <li class="right" >
           <a href="../using_libzcloud.html" title="Using libzcloud"
-             accesskey="P">previous</a> |</li>
+             >previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
-          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
+          <li><a href="../using_libzcloud.html" >Using libzcloud</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
       Last updated on Aug 11, 2009.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
     </div>
   </body>
 </html>

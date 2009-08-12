@@ -1,5 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -17,8 +19,6 @@
     </script>
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
     <link rel="up" title="Writing libzcloud Plugins" href="../writing_plugins.html" />
     <link rel="next" title="Module Initialization" href="initialization.html" />
@@ -41,12 +41,12 @@
           <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
       </ul>
     </div>  
+
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
             
-  
   <div class="section" id="plugin-xml-definition">
 <span id="xml-definition"></span><h1>Plugin XML Definition<a class="headerlink" href="#plugin-xml-definition" title="Permalink to this headline">¶</a></h1>
 <p>Each module is accompanied by an XML file describing the plugins it contains.
@@ -74,10 +74,7 @@ instructions.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>basename</em> &#8211; the base name of this module</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>basename</em> &#8211; the base name of this module</td>
 </tr>
 </tbody>
 </table>
@@ -100,10 +97,7 @@ in the same directory as the XML file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><em>prefix</em> &#8211; the store-specifier prefix that identifies this plugin</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Parameter:</th><td class="field-body"><em>prefix</em> &#8211; the store-specifier prefix that identifies this plugin</td>
 </tr>
 </tbody>
 </table>
@@ -159,19 +153,29 @@ declarative, and not begin with &#8220;the&#8221;.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <h4>Previous topic</h4>
-            <p class="topless"><a href="build_process.html" title="previous chapter">Plugin Build Process</a></p>
+            <p class="topless"><a href="build_process.html"
+                                  title="previous chapter">Plugin Build Process</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="initialization.html" title="next chapter">Module Initialization</a></p>
+            <p class="topless"><a href="initialization.html"
+                                  title="next chapter">Module Initialization</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/writing_plugins/xml_definition.txt">Show Source</a></li>
+              <li><a href="../sources/writing_plugins/xml_definition.txt"
+                     rel="nofollow">Show Source</a></li>
             </ul>
-          <h3>Quick search</h3>
-            <form class="search" action="../search.html" method="get">
-              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
-              <input type="hidden" name="check_keywords" value="yes" />
-              <input type="hidden" name="area" value="default" />
-            </form>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -181,21 +185,21 @@ declarative, and not begin with &#8220;the&#8221;.</p>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
+             >index</a></li>
         <li class="right" >
           <a href="initialization.html" title="Module Initialization"
-             accesskey="N">next</a> |</li>
+             >next</a> |</li>
         <li class="right" >
           <a href="build_process.html" title="Plugin Build Process"
-             accesskey="P">previous</a> |</li>
+             >previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
-          <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
+          <li><a href="../writing_plugins.html" >Writing libzcloud Plugins</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
       Last updated on Aug 11, 2009.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
     </div>
   </body>
 </html>

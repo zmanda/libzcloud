@@ -1,5 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -17,8 +19,6 @@
     </script>
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="libzcloud v1.0alpha documentation" href="index.html" />
     <link rel="next" title="Using libzcloud" href="using_libzcloud.html" />
     <link rel="prev" title="libzcloud" href="index.html" /> 
@@ -39,12 +39,12 @@
         <li><a href="index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
       </ul>
     </div>  
+
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
             
-  
   <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <p>Libzcloud is an abstract interface to cloud-based key/value stores.  It
@@ -52,7 +52,10 @@ supports the basic operations: list keys, set a value (upload), get a value
 (download), and delete a value.</p>
 <p>The library provides an object called a &#8220;store,&#8221; with the various operations
 exposed as methods on that object.  The store is specified using a string that
-gives the cloud provider and any other information required to find the data.</p>
+gives the cloud provider and any other information required to find the data.
+libzcloud will automatically find and load the appropriate plugin for the prefix;
+if you&#8217;re interested in adding support for a cloud storage service, read
+<a class="reference external" href="writing_plugins.html"><em>Writing libzcloud Plugins</em></a>.</p>
 <p>Most of the store operations take a key as an index into the key/value store.
 The key is generally a printable string.  Values are represented as arbitrary
 byte streams.</p>
@@ -75,19 +78,29 @@ operations available from the cloud vendor.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <h4>Previous topic</h4>
-            <p class="topless"><a href="index.html" title="previous chapter">libzcloud</a></p>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">libzcloud</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="using_libzcloud.html" title="next chapter">Using libzcloud</a></p>
+            <p class="topless"><a href="using_libzcloud.html"
+                                  title="next chapter">Using libzcloud</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="sources/introduction.txt">Show Source</a></li>
+              <li><a href="sources/introduction.txt"
+                     rel="nofollow">Show Source</a></li>
             </ul>
-          <h3>Quick search</h3>
-            <form class="search" action="search.html" method="get">
-              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
-              <input type="hidden" name="check_keywords" value="yes" />
-              <input type="hidden" name="area" value="default" />
-            </form>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -97,20 +110,20 @@ operations available from the cloud vendor.</p>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
+             >index</a></li>
         <li class="right" >
           <a href="using_libzcloud.html" title="Using libzcloud"
-             accesskey="N">next</a> |</li>
+             >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="libzcloud"
-             accesskey="P">previous</a> |</li>
+             >previous</a> |</li>
         <li><a href="index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
       Last updated on Aug 11, 2009.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
     </div>
   </body>
 </html>
