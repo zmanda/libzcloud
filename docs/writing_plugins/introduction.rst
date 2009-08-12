@@ -20,9 +20,3 @@ A *local* plugin is one which is built alongside libzcloud.  *External* plugins
 are compiled separately, against an installed copy of libzcloud.  Both
 varieties of plugins are loaded with the same mechanism; the difference is only
 in how they are compiled and installed.
-
-.. note::
-   
-   Support for external plugins is not yet complete.  Libzcloud will eventually
-   provide autoconf macros and other support to make development of external
-   plugins very easy.

@@ -8,6 +8,9 @@ supports the basic operations: list keys, set a value (upload), get a value
 The library provides an object called a "store," with the various operations
 exposed as methods on that object.  The store is specified using a string that
 gives the cloud provider and any other information required to find the data.
+libzcloud will automatically find and load the appropriate plugin for the prefix;
+if you're interested in adding support for a cloud storage service, read
+:doc:`writing_plugins`.
 
 Most of the store operations take a key as an index into the key/value store.
 The key is generally a printable string.  Values are represented as arbitrary
