@@ -116,7 +116,7 @@ gerror_is_set(
     const gchar *msg)
 {
     gboolean success = TRUE;
-    if (!error)
+    if (!error || !*error)
         return fail(msg);
 
     if (expected_message_glob) {
@@ -140,9 +140,9 @@ gerror_is_set(
     return ok(success, msg);
 }
 
-#define ZC_INT_TYPE(T, FS) \
+#define ZC_INT_TYPE_NAME(T, N, FS) \
     gboolean \
-    is_ ##T ( \
+    is_ ##N ( \
         T got, \
         T expected, \
         const gchar *msg) \
@@ -156,7 +156,7 @@ gerror_is_set(
     } \
     \
     gboolean \
-    isnt_ ##T ( \
+    isnt_ ##N ( \
         T got, \
         T expected, \
         const gchar *msg) \
@@ -164,12 +164,38 @@ gerror_is_set(
         if (got != expected) { \
             return pass(msg); \
         } else { \
-            diag(" got: %" FS "; expected: %" FS , got, expected); \
+            diag(" unexpectedly got: %" FS, got); \
             return fail(msg); \
         } \
     }
   ZC_INT_TYPE_LIST
-#undef ZC_INT_TYPE
+#undef ZC_INT_TYPE_NAME
+
+gboolean
+is_null(
+    gconstpointer got,
+    const gchar *msg)
+{
+    if (got == NULL) {
+        return pass(msg);
+    } else {
+        diag(" got: %p; expected: NULL\n", got);
+        return fail(msg);
+    }
+}
+
+gboolean
+isnt_null(
+    gconstpointer got,
+    const gchar *msg)
+{
+    if (got != NULL) {
+        return pass(msg);
+    } else {
+        diag(" unexpectedly got: %p\n", got);
+        return fail(msg);
+    }
+}
 
 gboolean
 is_string(

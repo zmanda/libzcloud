@@ -20,87 +20,6 @@
 #include "internal.h"
 #include <openssl/md5.h>
 
-/* class mechanics */
-static void
-class_init(ZCloudGrowingMemoryDownloadConsumerClass *klass);
-
-/* prototypes for method implementations */
-static gsize
-write_impl(
-    ZCloudDownloadConsumer *self,
-    gconstpointer buffer,
-    gsize bytes,
-    GError **error);
-
-static gboolean
-reset_impl(
-    ZCloudDownloadConsumer *self,
-    GError **error);
-
-
-static guint8 *
-get_contents_impl(
-    ZCloudGrowingMemoryDownloadConsumer *self,
-    gsize *length);
-
-static void
-finalize_impl(GObject *o);
-
-GType
-zcloud_growing_memory_download_consumer_get_type(void)
-{
-    static GType type = 0;
-
-    if (G_UNLIKELY(type == 0)) {
-        static const GTypeInfo info = {
-            sizeof(ZCloudGrowingMemoryDownloadConsumerClass), /* class_size */
-            (GBaseInitFunc) NULL, /* base_init */
-            (GBaseFinalizeFunc) NULL, /* base_finalize */
-            (GClassInitFunc) class_init, /* class_init */
-            (GClassFinalizeFunc) NULL, /* class_finalize */
-            NULL, /*class_data */
-            sizeof(ZCloudGrowingMemoryDownloadConsumer), /* instance_size */
-            0, /* n_preallocs */
-            (GInstanceInitFunc) NULL, /* instance_init */
-            NULL /* value_table */
-        };
-
-        type = g_type_register_static(ZCLOUD_TYPE_DOWNLOAD_CONSUMER,
-                                      "ZCloudGrowingMemoryDownloadConsumer",
-                                      &info, (GTypeFlags) 0);
-    }
-
-    return type;
-}
-
-static void
-class_init(ZCloudGrowingMemoryDownloadConsumerClass *klass)
-{
-    GObjectClass *go_class = G_OBJECT_CLASS(klass);
-    ZCloudDownloadConsumerClass *up_class = ZCLOUD_DOWNLOAD_CONSUMER_CLASS(klass);
-
-    go_class->finalize = finalize_impl;
-    up_class->write = write_impl;
-    up_class->reset = reset_impl;
-    klass->get_contents = get_contents_impl;
-}
-
-
-ZCloudGrowingMemoryDownloadConsumer *
-zcloud_growing_memory_download_consumer(
-    guint max_buffer_length)
-{
-    ZCloudGrowingMemoryDownloadConsumer *ret;
-
-    ret = g_object_new(ZCLOUD_TYPE_GROWING_MEMORY_DOWNLOAD_CONSUMER, NULL);
-    ret->buffer = NULL;
-    ret->buffer_length = 0;
-    ret->max_buffer_length = max_buffer_length;
-    ret->buffer_position = 0;
-
-    return ret;
-}
-
 guint8 *
 zcloud_growing_memory_download_consumer_get_contents(
     ZCloudGrowingMemoryDownloadConsumer *self,
@@ -109,6 +28,15 @@ zcloud_growing_memory_download_consumer_get_contents(
     ZCloudGrowingMemoryDownloadConsumerClass *c = ZCLOUD_GROWING_MEMORY_DOWNLOAD_CONSUMER_GET_CLASS(self);
     g_assert(c->get_contents != NULL);
     return (c->get_contents)(self, length);
+}
+
+gchar *
+zcloud_growing_memory_download_consumer_get_contents_as_string(
+    ZCloudGrowingMemoryDownloadConsumer *self)
+{
+    ZCloudGrowingMemoryDownloadConsumerClass *c = ZCLOUD_GROWING_MEMORY_DOWNLOAD_CONSUMER_GET_CLASS(self);
+    g_assert(c->get_contents_as_string != NULL);
+    return (c->get_contents_as_string)(self);
 }
 
 static gsize
@@ -168,10 +96,72 @@ get_contents_impl(
     return ret;
 }
 
+static gchar *
+get_contents_as_string_impl(
+    ZCloudGrowingMemoryDownloadConsumer *self)
+{
+    return g_strndup((gchar *) self->buffer, self->buffer_position);
+}
+
 static void
 finalize_impl(GObject *o)
 {
     ZCloudGrowingMemoryDownloadConsumer *self = ZCLOUD_GROWING_MEMORY_DOWNLOAD_CONSUMER(o);
 
     g_free(self->buffer);
+}
+
+static void
+class_init(ZCloudGrowingMemoryDownloadConsumerClass *klass)
+{
+    GObjectClass *go_class = G_OBJECT_CLASS(klass);
+    ZCloudDownloadConsumerClass *up_class = ZCLOUD_DOWNLOAD_CONSUMER_CLASS(klass);
+
+    go_class->finalize = finalize_impl;
+    up_class->write = write_impl;
+    up_class->reset = reset_impl;
+    klass->get_contents = get_contents_impl;
+    klass->get_contents_as_string = get_contents_as_string_impl;
+}
+
+GType
+zcloud_growing_memory_download_consumer_get_type(void)
+{
+    static GType type = 0;
+
+    if (G_UNLIKELY(type == 0)) {
+        static const GTypeInfo info = {
+            sizeof(ZCloudGrowingMemoryDownloadConsumerClass), /* class_size */
+            (GBaseInitFunc) NULL, /* base_init */
+            (GBaseFinalizeFunc) NULL, /* base_finalize */
+            (GClassInitFunc) class_init, /* class_init */
+            (GClassFinalizeFunc) NULL, /* class_finalize */
+            NULL, /*class_data */
+            sizeof(ZCloudGrowingMemoryDownloadConsumer), /* instance_size */
+            0, /* n_preallocs */
+            (GInstanceInitFunc) NULL, /* instance_init */
+            NULL /* value_table */
+        };
+
+        type = g_type_register_static(ZCLOUD_TYPE_DOWNLOAD_CONSUMER,
+                                      "ZCloudGrowingMemoryDownloadConsumer",
+                                      &info, (GTypeFlags) 0);
+    }
+
+    return type;
+}
+
+ZCloudGrowingMemoryDownloadConsumer *
+zcloud_growing_memory_download_consumer(
+    guint max_buffer_length)
+{
+    ZCloudGrowingMemoryDownloadConsumer *ret;
+
+    ret = g_object_new(ZCLOUD_TYPE_GROWING_MEMORY_DOWNLOAD_CONSUMER, NULL);
+    ret->buffer = NULL;
+    ret->buffer_length = 0;
+    ret->max_buffer_length = max_buffer_length;
+    ret->buffer_position = 0;
+
+    return ret;
 }

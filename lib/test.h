@@ -59,12 +59,23 @@ gboolean isnt_string(const gchar *got, const gchar *expected, const gchar *msg);
 gboolean is_byte_array(const GByteArray *got, const GByteArray *expected, const gchar *msg);
 gboolean isnt_byte_array(const GByteArray *got, const GByteArray *expected, const gchar *msg);
 
+gboolean is_null(gconstpointer got, const gchar *msg);
+gboolean isnt_null(gconstpointer got, const gchar *msg);
+
 /* generate functions for integer types, comparable with == */
 #define ZC_INT_TYPE_LIST \
+    ZC_INT_TYPE_NAME(void *, pointer, "p") \
+    \
     ZC_INT_TYPE(char, "hhi") \
+    ZC_INT_TYPE_NAME(unsigned char, u_char, "hhu") \
     ZC_INT_TYPE(short, "hi") \
+    ZC_INT_TYPE_NAME(unsigned short, u_short, "hu") \
     ZC_INT_TYPE(int, "i") \
+    ZC_INT_TYPE_NAME(unsigned int, u_int, "u") \
     ZC_INT_TYPE(long, "li") \
+    ZC_INT_TYPE_NAME(unsigned long, u_long, "lu") \
+    ZC_INT_TYPE_NAME(long long, long_long, "lli") \
+    ZC_INT_TYPE_NAME(unsigned long long, u_long_long, "lli") \
     \
     ZC_INT_TYPE(gboolean, "i") \
     ZC_INT_TYPE(gchar, "hhi") \
@@ -87,11 +98,13 @@ gboolean isnt_byte_array(const GByteArray *got, const GByteArray *expected, cons
     ZC_INT_TYPE(gssize, G_GSSIZE_FORMAT) \
     ZC_INT_TYPE(goffset, G_GINT64_FORMAT)
 
-#define ZC_INT_TYPE(T, FS) \
-    gboolean is_##T(T got, T expected, const gchar *msg);  \
-    gboolean isnt_##T(T got, T expected, const gchar *msg);
+#define ZC_INT_TYPE(T, FS) ZC_INT_TYPE_NAME(T, T, FS)
+
+#define ZC_INT_TYPE_NAME(T, N, FS)                          \
+    gboolean is_##N(T got, T expected, const gchar *msg);  \
+    gboolean isnt_##N(T got, T expected, const gchar *msg);
   ZC_INT_TYPE_LIST
-#undef ZC_INT_TYPE
+#undef ZC_INT_TYPE_NAME
 
 /*
  * Utilities (test-util.c)
@@ -124,6 +137,7 @@ extern gint tests_failed, tests_passed, tests_run;
     TEST_MODULE(memory_upload_producer) \
     TEST_MODULE(growing_memory_download_consumer) \
     TEST_MODULE(fixed_memory_download_consumer) \
+    TEST_MODULE(slist_list_consumer) \
     TEST_MODULE(plugins) \
     TEST_MODULE(store)
 

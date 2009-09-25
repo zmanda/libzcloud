@@ -31,6 +31,7 @@ public_headers = \
 	zcloud/plugins.h \
 	zcloud/progress_listener.h \
 	zcloud/store.h \
+	zcloud/slist_list_consumer.h \
 	zcloud/upload_producer.h
 
 internal_headers = \
@@ -45,6 +46,7 @@ libzcloud_source = \
     memory_upload_producer.c \
     plugins.c \
     progress_listener.c \
+    slist_list_consumer.c \
     store.c \
     upload_producer.c \
     zcloud.c
@@ -56,7 +58,8 @@ test_source = \
 	growing_memory_download_consumer-test.c \
 	memory_upload_producer-test.c \
 	plugins-test.c \
-	store-test.c
+	store-test.c \
+	slist_list_consumer-test.c
 
 EXTRA_DIST = \
     libzcloud.pc.in

@@ -1,0 +1,25 @@
+<zcloud-module basename="s3">
+  <store-plugin prefix="s3">
+    <parameter name="access-key" type="string" nick="Access Key"
+               blurb="Access key to authenticate with" />
+    <parameter name="secret-key" type="string" nick="Secret Key"
+               blurb="Secret key to authenticate with" />
+    <parameter name="user-token" type="string" nick="User Token"
+               blurb="User token to authenticate with, if using a DevPay product" />
+    <parameter name="product-token" type="string" nick="Product Token"
+               blurb="Product token to authenticate with, if using a DevPay
+                      product" />
+<!-- boolean parameters not implemented yet
+    <parameter name="use-ssl" type="boolean" nick="Use SSL"
+               blurb="Whether or not to use SSL/TLS when connecting" />
+    <parameter name="verbose" type="boolean" nick="Verbose Logging"
+               blurb="Whether or not to print verbose debug information" />
+-->
+    <parameter name="ca-info" type="string" nick="CA Info"
+               blurb="When using SSL/TLS, The path to the X509 bundle of
+                      certificate authority certificates" />
+    <parameter name="bucket-location" type="string" nick="Bucket Location"
+               blurb="The location to create new buckets in, or ensure that
+                      existing buckets are in" />
+  </store-plugin>
+</zcloud-module>

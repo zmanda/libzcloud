@@ -28,6 +28,7 @@ test_growing_memory_download_consumer(void)
     const gchar *data_str = "The quick brown fox jumps over the lazy dog";
     gsize data_str_len, wrote, get_size;
     guint8 *buf;
+    gchar *str;
     gboolean ok;
 
     g_type_init();  /* TODO */
@@ -53,10 +54,16 @@ test_growing_memory_download_consumer(void)
     is_gchar((gchar) buf[0], 'T', "got back the one character we wrote");
     buf[0] = 'i';
     g_free(buf);
+
     buf = zcloud_growing_memory_download_consumer_get_contents(o, &get_size);
     is_gsize(get_size, 1, "buffer still has size 1");
     is_gchar((gchar) buf[0], 'T', "after changing a copy, the buffer contents remain unchanged");
     g_free(buf);
+
+    str = zcloud_growing_memory_download_consumer_get_contents_as_string(o);
+    is_gchar(str[0], 'T', "got back the one character we wrote (as string)");
+    is_gchar(str[1], '\0', "got back the one character we wrote (as string) w/ terminating NUL character");
+    g_free(str);
 
     wrote = zcloud_download_consumer_write(o_p, data_str+1, data_str_len, &err);
     gerror_is_clear(&err, "no error writing remaining bytes to buffer");

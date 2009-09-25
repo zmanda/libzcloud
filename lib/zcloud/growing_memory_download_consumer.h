@@ -45,6 +45,7 @@ typedef struct ZCloudGrowingMemoryDownloadConsumerClass_s {
     ZCloudDownloadConsumerClass parent_class;
 
     guint8 * (*get_contents)(ZCloudGrowingMemoryDownloadConsumer *self, gsize *length);
+    gchar * (*get_contents_as_string)(ZCloudGrowingMemoryDownloadConsumer *self);
 } ZCloudGrowingMemoryDownloadConsumerClass;
 
 /* constructor */
@@ -56,6 +57,10 @@ guint8 *
 zcloud_growing_memory_download_consumer_get_contents(
     ZCloudGrowingMemoryDownloadConsumer *self,
     gsize *length);
+
+gchar *
+zcloud_growing_memory_download_consumer_get_contents_as_string(
+    ZCloudGrowingMemoryDownloadConsumer *self);
 
 G_END_DECLS
 

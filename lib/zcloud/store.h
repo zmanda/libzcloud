@@ -52,34 +52,34 @@ typedef struct ZCloudStoreClass_s {
     /* general methods */
     gboolean (*create)(
         ZCloudStore *self,
-        gchar *key,
+        const gchar *key,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*upload)(
         ZCloudStore *self,
-        gchar *key,
+        const gchar *key,
         ZCloudUploadProducer *upload,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*download)(
         ZCloudStore *self,
-        gchar *key,
+        const gchar *key,
         ZCloudDownloadConsumer *download,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*delete)(
         ZCloudStore *self,
-        gchar *key,
+        const gchar *key,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*exists)(
         ZCloudStore *self,
-        gchar *key,
+        const gchar *key,
         ZCloudProgressListener *progress,
         GError **error);
     gboolean (*list)(
         ZCloudStore *self,
-        gchar *template,
+        const gchar *template,
         ZCloudListConsumer *list,
         ZCloudProgressListener *progress,
         GError **error);
@@ -119,39 +119,39 @@ gboolean zcloud_store_setup(
 
 gboolean zcloud_store_create(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_upload(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudUploadProducer *upload,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_download(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudDownloadConsumer *download,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_delete(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_exists(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudProgressListener *progress,
     GError **error);
 
 gboolean zcloud_store_list(
     ZCloudStore *self,
-    gchar *template,
+    const gchar *template,
     ZCloudListConsumer *list,
     ZCloudProgressListener *progress,
     GError **error);

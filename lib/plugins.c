@@ -269,7 +269,7 @@ markup_start_element(GMarkupParseContext *context,
                         "'store-plugin' attribute 'prefix' is required");
             return;
         }
-            
+
         /* check for duplicate prefix */
         if (zcloud_get_store_plugin_by_prefix(prefix)) {
             markup_error(state, context, error,
@@ -556,7 +556,7 @@ scan_plugin_dir(
 {
     GDir *dir;
     const gchar *elt;
-    
+
     g_debug("scanning plugin directory '%s'", dir_name);
     dir = g_dir_open(dir_name, 0, error);
     if (!dir)

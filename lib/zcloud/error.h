@@ -37,6 +37,9 @@ typedef enum ZCloudError_e {
     ZCERR_MODULE = 2,           /* error loading a module */
     ZCERR_PLUGIN = 3,           /* error from a plugin, if nothing else is more suitable */
     ZCERR_PARAMETER = 4,        /* parameter-related error */
+    ZCERR_EPHEMERAL = 5,        /* ephemeral network or service error */
+    ZCERR_LASTING = 6,          /* lasting network or service error */
+    ZCERR_MISSING = 7,          /* target is missing (a special kind of lasting error) */
 } ZCloudError;
 
 G_END_DECLS

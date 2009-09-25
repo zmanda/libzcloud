@@ -89,7 +89,7 @@ canonicalize_param_name(
 {
     gchar *p;
     gchar *rv = g_strdup(name);
-    
+
     for (p = rv; *p; p++) {
         if (g_ascii_isupper(*p))
             *p = g_ascii_tolower(*p);
@@ -206,7 +206,7 @@ zcloud_store_new(
 
     va_start(var_args, first_param_name);
     for (name = first_param_name; name; name = va_arg(var_args, const gchar*)) {
-        GParamSpec *spec;
+        GParamSpec *spec = NULL;
         gchar *errmsg = NULL;
         gchar *canon_name = NULL;
 
@@ -252,7 +252,7 @@ zcloud_store_new(
     /* finally, call store_new_finish with the collection of parameters */
     store = store_new_finish(plugin, suffix,
         plugin->paramspecs->len, params, error);
-    
+
 error:
     if (params) {
         guint i;
@@ -345,7 +345,7 @@ zcloud_store_setup(
 gboolean
 zcloud_store_create(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudProgressListener *progress,
     GError **error)
 {
@@ -357,62 +357,62 @@ zcloud_store_create(
 gboolean
 zcloud_store_upload(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudUploadProducer *upload,
     ZCloudProgressListener *progress,
     GError **error)
 {
-    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
-    g_assert(c->upload != NULL); \
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self);
+    g_assert(c->upload != NULL);
     return (c->upload)(self, key, upload, progress, error);
 }
 
 gboolean
 zcloud_store_download(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudDownloadConsumer *download,
     ZCloudProgressListener *progress,
     GError **error)
 {
-    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
-    g_assert(c->download != NULL); \
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self);
+    g_assert(c->download != NULL);
     return (c->download)(self, key, download, progress, error);
 }
 
 gboolean
 zcloud_store_delete(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudProgressListener *progress,
     GError **error)
 {
-    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
-    g_assert(c->delete != NULL); \
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self);
+    g_assert(c->delete != NULL);
     return (c->delete)(self, key, progress, error);
 }
 
 gboolean
 zcloud_store_exists(
     ZCloudStore *self,
-    gchar *key,
+    const gchar *key,
     ZCloudProgressListener *progress,
     GError **error)
 {
-    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
-    g_assert(c->exists != NULL); \
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self);
+    g_assert(c->exists != NULL);
     return (c->exists)(self, key, progress, error);
 }
 
 gboolean
 zcloud_store_list(
     ZCloudStore *self,
-    gchar *template,
+    const gchar *template,
     ZCloudListConsumer *list,
     ZCloudProgressListener *progress,
     GError **error)
 {
-    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self); \
-    g_assert(c->list != NULL); \
+    ZCloudStoreClass *c = ZCLOUD_STORE_GET_CLASS(self);
+    g_assert(c->list != NULL);
     return (c->list)(self, template, list, progress, error);
 }
