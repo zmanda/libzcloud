@@ -32,6 +32,6 @@ libs3_la_SOURCES = \
 	s3_store.h store.c\
 	util.h util.c
 
-bin_PROGRAMS = s3test
+TESTS = s3test
 s3test_SOURCES = s3test.c $(top_builddir)/lib/test-checks.c
 s3test_LDADD = $(top_builddir)/lib/libzcloud.la
