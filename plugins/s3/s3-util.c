@@ -16,25 +16,13 @@
  * GNU Lesser General Public License for more details.
  *  ***** END LICENSE BLOCK ***** */
 
+#include "zcloud.h"
+#include "s3-util.h"
 
-#ifdef HAVE_CONFIG_H
-/* use a relative path here to avoid conflicting with Perl's config.h. */
-#include "../config/config.h"
-#endif
-#ifdef HAVE_REGEX_H
-#include <sys/types.h>
-#include <regex.h>
-#endif
-#ifdef HAVE_AMANDA_H
-#include "amanda.h"
-#endif
-
-#include <glib.h>
 #include <openssl/md5.h>
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/bn.h>
-#include "s3-util.h"
 
 #ifdef HAVE_REGEX_H
 int

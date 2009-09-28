@@ -21,12 +21,15 @@
 #ifndef __S3_UTIL_H__
 #define __S3_UTIL_H__
 
+/* we use the system's regex.h, if present; otherwise the GLib regex
+ * library */
 #ifdef HAVE_REGEX_H
 #  ifdef HAVE_SYS_TYPES_H
 #  include <sys/types.h>
 #  endif
 #include <regex.h>
 #endif
+
 #include <glib.h>
 
 /*
