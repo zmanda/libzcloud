@@ -32,6 +32,8 @@ libs3_la_SOURCES = \
 	s3_store.h store.c\
 	util.h util.c
 
+TESTS_ENVIRONMENT = cp $(srcdir)/s3.xml $(builddir)/.libs && ZCPLUGINPATH=./.libs
 TESTS = s3test
+noinst_PROGRAMS = $(TESTS)
 s3test_SOURCES = s3test.c $(top_builddir)/lib/test-checks.c
 s3test_LDADD = $(top_builddir)/lib/libzcloud.la
