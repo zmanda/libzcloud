@@ -7,22 +7,22 @@ To list the keys in a store, use the store's :meth:`list <ZCloudStore.list>`
 method.
 
 This method takes a "key template", which some plugins can use to minimize the
-data transferred from the cloud.  In the template, `%s` will match any string.
-All other characters following a `%` character are reserved.  A literal `%`
-character can be escaped as `%%`.  For example:
+data transferred from the cloud.  In the template, ``%s`` will match any
+string.  All other characters following a ``%`` character are reserved.  A
+literal ``%`` character can be escaped as ``%%``.  For example:
 
-* `"My Files/Mostly.doc"` matches only a file with the given name.
-* `"My Files/%s"` matches any key beginning with `My Files/`, enabling a sort
+* ``"My Files/Mostly.doc"`` matches only a file with the given name.
+* ``"My Files/%s"`` matches any key beginning with ``My Files/``, enabling a sort
   of directory structure.
-* `"My Files/100%%.doc"` matches only `My Files/100%.doc`.
+* ``"My Files/100%%.doc"`` matches only ``My Files/100%.doc``.
 
 The template system is not yet finalized.
 
-The `list` method also takes a :class:`ListConsumer` instance to handle each
+The ``list`` method also takes a :class:`ListConsumer` instance to handle each
 returned key - see :ref:`list_consumers` for a list of ready-made
 :class:`ListConsumer` subclasses.
 
-A typical use of the `list` method might look like::
+A typical use of the ``list`` method might look like::
 
     gint
     count_keys(ZCloudStore *store, gchar *template)
