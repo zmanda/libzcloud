@@ -12,9 +12,9 @@ The behavior of an object is also governed by parameters which are given
 during construction.  These parameters may specify cloud access
 credentials, for example.
 
-The documentation for each plugin specifies the format of the store
-specifier and the plugin's parameters.  This information is also
-available at runtime - see :ref:`module-info`.
+The documentation for each plugin (see :ref:`included_plugins`) specifies the
+format of the store specifier and the plugin's parameters.  This information is
+also available at runtime - see :ref:`module-info`.
 
 Calling the Constructor
 -----------------------

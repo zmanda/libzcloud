@@ -15,6 +15,8 @@ Store
       Creates the key with an empty value.  This is not required by all store
       classes.
 
+      See :ref:`uploading_and_downloading`
+
       :param key: the key to create
       :type key: String
       :param progress: an optional :class:`ProgressListener`
@@ -29,6 +31,8 @@ Store
       to be uploaded. The :class:`Store` handles actually uploading the data
       to the storage service.
 
+      See :ref:`uploading_and_downloading`
+
       :param key: the key to store the data at
       :type key: String
       :param producer: an :class:`UploadProducer`
@@ -42,6 +46,8 @@ Store
       Download data from `key`. The ``consumer`` is responsible for
       "doing something useful" with the data received from the storage service.
       For example, it could save it to a file.
+
+      See :ref:`uploading_and_downloading`
 
       :param key: the key to fetch data from
       :type key: String
@@ -80,6 +86,8 @@ Store
       just use ``%s`` as a placeholder and ``%%`` to represent ``%``.
 
       TODO: that's not right..
+
+      See :ref:`listing_keys`
 
       :param template: the template to list matches for
       :param consumer: a :class:`DownloadConsumer`

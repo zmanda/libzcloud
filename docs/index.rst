@@ -16,6 +16,7 @@ Table of Contents:
 
    introduction
    using_libzcloud
+   included_plugins
    writing_plugins
    hacking_libzcloud
    api

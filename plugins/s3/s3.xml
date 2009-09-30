@@ -9,7 +9,7 @@
     <parameter name="product-token" type="string" nick="Product Token"
                blurb="Product token to authenticate with, if using a DevPay
                       product" />
-<!-- boolean parameters not implemented yet
+<!-- boolean parameters not implemented yet (nor documented)
     <parameter name="use-ssl" type="boolean" nick="Use SSL"
                blurb="Whether or not to use SSL/TLS when connecting" />
     <parameter name="verbose" type="boolean" nick="Verbose Logging"
