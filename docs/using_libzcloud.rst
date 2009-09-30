@@ -17,3 +17,11 @@ Source files using libzcloud functionality should begin with ::
    using_libzcloud/module_info
    using_libzcloud/creating_a_store
    using_libzcloud/uploading_and_downloading
+   using_libzcloud/listing_keys
+   using_libzcloud/testing_existence
+   using_libzcloud/deleting_keys
+   using_libzcloud/error_handling
+   using_libzcloud/upload_producers
+   using_libzcloud/download_consumers
+   using_libzcloud/list_consumers
+   using_libzcloud/progress_listeners

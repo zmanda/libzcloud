@@ -6,16 +6,10 @@ Store
    Stores represent a service that provides persistence of arbitrary blobs.
    An example is Amazon S3.
 
-   .. method:: setup(suffix, n_parameters, parameters, error)
-
-      Protected method - used during object construction.
-
    .. method:: create(key, progress, error)
 
       Creates the key with an empty value.  This is not required by all store
-      classes.
-
-      See :ref:`uploading_and_downloading`
+      classes.  See :ref:`uploading_and_downloading`.
 
       :param key: the key to create
       :type key: String
@@ -29,9 +23,7 @@ Store
       Upload some data.  ``producer`` will be consulted for metadata
       (e.g. MD5 hash and size) and is responsible for actually reading the data
       to be uploaded. The :class:`Store` handles actually uploading the data
-      to the storage service.
-
-      See :ref:`uploading_and_downloading`
+      to the storage service.  See :ref:`uploading_and_downloading`.
 
       :param key: the key to store the data at
       :type key: String
@@ -45,9 +37,7 @@ Store
 
       Download data from `key`. The ``consumer`` is responsible for
       "doing something useful" with the data received from the storage service.
-      For example, it could save it to a file.
-
-      See :ref:`uploading_and_downloading`
+      For example, it could save it to a file.  See :ref:`uploading_and_downloading`.
 
       :param key: the key to fetch data from
       :type key: String
@@ -59,7 +49,7 @@ Store
 
    .. method:: exists(key, progress, error)
 
-      Checks if `key` exists
+      Checks if `key` exists.  See :ref:`testing_existence`.
 
       :param key: the key to check
       :type key: String
@@ -70,7 +60,7 @@ Store
 
    .. method:: delete(key, progress, error)
 
-      Delete whatever is represented by `key`
+      Delete whatever is represented by `key`.  See :ref:`deleting_keys`.
 
       :param key: the key to delete
       :type key: String
@@ -83,11 +73,10 @@ Store
 
       List all keys matching `template`, calling
       :meth:`ListConsumer.got_result` for each one. The ``template`` should
-      just use ``%s`` as a placeholder and ``%%`` to represent ``%``.
+      just use ``%s`` as a placeholder and ``%%`` to represent ``%``.  See
+      :ref:`listing_keys`.
 
       TODO: that's not right..
-
-      See :ref:`listing_keys`
 
       :param template: the template to list matches for
       :param consumer: a :class:`DownloadConsumer`
@@ -95,5 +84,9 @@ Store
       :param error: optional storage for an error
       :returns: true (on success) or false (on failure)
       :rtype: boolean
+
+   .. method:: setup(suffix, n_parameters, parameters, error)
+
+      Protected method - used during object construction.
 
 
