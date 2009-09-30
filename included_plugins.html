@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Writing libzcloud Plugins &mdash; libzcloud v1.0alpha documentation</title>
+    <title>Included Plugins &mdash; libzcloud v1.0alpha documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -18,8 +18,8 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="libzcloud v1.0alpha documentation" href="index.html" />
-    <link rel="next" title="Introduction" href="writing_plugins/introduction.html" />
-    <link rel="prev" title="S3 Plugin" href="included_plugins/s3.html" /> 
+    <link rel="next" title="S3 Plugin" href="included_plugins/s3.html" />
+    <link rel="prev" title="Uploading and Downloading" href="using_libzcloud/uploading_and_downloading.html" /> 
   </head>
   <body>
     <div class="related">
@@ -29,10 +29,10 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="writing_plugins/introduction.html" title="Introduction"
+          <a href="included_plugins/s3.html" title="S3 Plugin"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="included_plugins/s3.html" title="S3 Plugin"
+          <a href="using_libzcloud/uploading_and_downloading.html" title="Uploading and Downloading"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
       </ul>
@@ -43,32 +43,18 @@
           <div class="body">
             
   
-  <div class="section" id="writing-libzcloud-plugins">
-<span id="writing-plugins"></span><h1>Writing libzcloud Plugins<a class="headerlink" href="#writing-libzcloud-plugins" title="Permalink to this headline">¶</a></h1>
-<p>This section gives an &#8220;insider&#8221; view of writing a libzcloud plugin.</p>
+  <div class="section" id="id1">
+<span id="included-plugins"></span><h1>Included Plugins<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Although zcloud is cloud-agnostic, each cloud uses a different syntax for its
+store specifier, and takes different parameters.</p>
 <ul>
-<li class="toctree-l1"><a class="reference" href="writing_plugins/introduction.html">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference" href="writing_plugins/introduction.html#resources">Resources</a></li>
-<li class="toctree-l2"><a class="reference" href="writing_plugins/introduction.html#local-and-external-plugins">Local and External Plugins</a></li>
+<li class="toctree-l1"><a class="reference" href="included_plugins/s3.html">S3 Plugin</a><ul>
+<li class="toctree-l2"><a class="reference" href="included_plugins/s3.html#terminology">Terminology</a></li>
+<li class="toctree-l2"><a class="reference" href="included_plugins/s3.html#storage-specifier">Storage Specifier</a><ul>
+<li class="toctree-l3"><a class="reference" href="included_plugins/s3.html#service-level-access">Service-level Access</a></li>
 </ul>
 </li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference" href="writing_plugins/build_process.html">Plugin Build Process</a><ul>
-<li class="toctree-l2"><a class="reference" href="writing_plugins/build_process.html#local-plugins">Local Plugins</a></li>
-<li class="toctree-l2"><a class="reference" href="writing_plugins/build_process.html#external-plugins">External Plugins</a></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference" href="writing_plugins/xml_definition.html">Plugin XML Definition</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference" href="writing_plugins/initialization.html">Module Initialization</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference" href="writing_plugins/store_subclass.html">Store Subclass</a><ul>
-<li class="toctree-l2"><a class="reference" href="writing_plugins/store_subclass.html#store-initialization">Store Initialization</a></li>
+<li class="toctree-l2"><a class="reference" href="included_plugins/s3.html#parameters">Parameters</a></li>
 </ul>
 </li>
 </ul>
@@ -81,12 +67,12 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <h4>Previous topic</h4>
-            <p class="topless"><a href="included_plugins/s3.html" title="previous chapter">S3 Plugin</a></p>
+            <p class="topless"><a href="using_libzcloud/uploading_and_downloading.html" title="previous chapter">Uploading and Downloading</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="writing_plugins/introduction.html" title="next chapter">Introduction</a></p>
+            <p class="topless"><a href="included_plugins/s3.html" title="next chapter">S3 Plugin</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="sources/writing_plugins.txt">Show Source</a></li>
+              <li><a href="sources/included_plugins.txt">Show Source</a></li>
             </ul>
           <h3>Quick search</h3>
             <form class="search" action="search.html" method="get">
@@ -105,10 +91,10 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="writing_plugins/introduction.html" title="Introduction"
+          <a href="included_plugins/s3.html" title="S3 Plugin"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="included_plugins/s3.html" title="S3 Plugin"
+          <a href="using_libzcloud/uploading_and_downloading.html" title="Uploading and Downloading"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
       </ul>

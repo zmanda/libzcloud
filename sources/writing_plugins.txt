@@ -1,3 +1,5 @@
+.. _writing_plugins:
+
 Writing libzcloud Plugins
 =========================
 

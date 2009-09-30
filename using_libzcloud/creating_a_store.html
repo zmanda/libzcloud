@@ -1,7 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -21,7 +19,7 @@
     <script type="text/javascript" src="../static/doctools.js"></script>
     <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
     <link rel="up" title="Using libzcloud" href="../using_libzcloud.html" />
-    <link rel="next" title="Writing libzcloud Plugins" href="../writing_plugins.html" />
+    <link rel="next" title="Uploading and Downloading" href="uploading_and_downloading.html" />
     <link rel="prev" title="Getting Module Information" href="module_info.html" /> 
   </head>
   <body>
@@ -32,7 +30,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../writing_plugins.html" title="Writing libzcloud Plugins"
+          <a href="uploading_and_downloading.html" title="Uploading and Downloading"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="module_info.html" title="Getting Module Information"
@@ -41,31 +39,31 @@
           <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
       </ul>
     </div>  
-
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
             
+  
   <div class="section" id="creating-a-store">
 <h1>Creating a Store<a class="headerlink" href="#creating-a-store" title="Permalink to this headline">¶</a></h1>
-<p id="index-0">A store object is described by a <em>store specifier</em>.  Each store
+<p id="index-6">A store object is described by a <em>store specifier</em>.  Each store
 specifier begins with a <em>prefix</em>, which identifies the plugin to use to
 access the store.  For example, Amazon S3 stores are specified with the
 prefix <tt class="docutils literal"><span class="pre">s3</span></tt>.</p>
 <p>The behavior of an object is also governed by parameters which are given
 during construction.  These parameters may specify cloud access
 credentials, for example.</p>
-<p>The documentation for each plugin specifies the format of the store
-specifier and the plugin&#8217;s parameters.  This information is also
-available at runtime - see <a class="reference external" href="module_info.html#module-info"><em>Getting Module Information</em></a>.</p>
+<p>The documentation for each plugin (see <a class="reference" href="../included_plugins.html#included-plugins"><em>Included Plugins</em></a>) specifies the
+format of the store specifier and the plugin&#8217;s parameters.  This information is
+also available at runtime - see <a class="reference" href="module_info.html#module-info"><em>Getting Module Information</em></a>.</p>
 <div class="section" id="calling-the-constructor">
 <h2>Calling the Constructor<a class="headerlink" href="#calling-the-constructor" title="Permalink to this headline">¶</a></h2>
-<p>To create a store object, call <a title="zcloud_store_new" class="reference internal" href="#zcloud_store_new"><tt class="xref docutils literal"><span class="pre">zcloud_store_new()</span></tt></a>:</p>
+<p>To create a store object, call <a title="zcloud_store_new" class="reference" href="#zcloud_store_new"><tt class="xref docutils literal"><span class="pre">zcloud_store_new</span></tt></a>:</p>
 <dl class="cfunction">
 <dt id="zcloud_store_new">
-<a title="ZCloudStore" class="reference external" href="../api/store.html#ZCloudStore">ZCloudStore</a> *<tt class="descname">zcloud_store_new</tt><big>(</big>const gchar<em> *storespec</em>, GError<em> **error</em>, const gchar<em> *first_param_name</em>, ...<big>)</big><a class="headerlink" href="#zcloud_store_new" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new <a title="ZCloudStore" class="reference external" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a> object with the parameters
+<!--[zcloud_store_new]--><a title="ZCloudStore" class="reference" href="../api/store.html#ZCloudStore">ZCloudStore</a> *<tt class="descname">zcloud_store_new</tt><big>(</big>const gchar<em> *storespec</em>, GError<em> **error</em>, const gchar<em> *first_param_name</em>, ...<big>)</big><a class="headerlink" href="#zcloud_store_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new <a title="ZCloudStore" class="reference" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a> object with the parameters
 specified by the NULL-terminated arguments.  Parameters are
 specified with a parameter name and value:</p>
 <div class="highlight-python"><pre>store = zcloud_store_new(spec, &amp;error,
@@ -95,16 +93,16 @@ specified with a parameter name and value:</p>
 </div>
 <div class="section" id="specifying-parameters-at-runtime">
 <h2>Specifying Parameters at Runtime<a class="headerlink" href="#specifying-parameters-at-runtime" title="Permalink to this headline">¶</a></h2>
-<p>A program calling <a title="zcloud_store_new" class="reference internal" href="#zcloud_store_new"><tt class="xref docutils literal"><span class="pre">zcloud_store_new()</span></tt></a> must hard-code the parameter
+<p>A program calling <a title="zcloud_store_new" class="reference" href="#zcloud_store_new"><tt class="xref docutils literal"><span class="pre">zcloud_store_new</span></tt></a> must hard-code the parameter
 names, and must convert any parameter values to the appropriate type.
 While this is convenient for applications designed to use a particular
 plugin, it is not appropriate to more general applications that wish to
 support arbitrary plugins.</p>
-<p>Such applications should use <a title="zcloud_store_newv" class="reference internal" href="#zcloud_store_newv"><tt class="xref docutils literal"><span class="pre">zcloud_store_newv()</span></tt></a>, instead:</p>
+<p>Such applications should use <a title="zcloud_store_newv" class="reference" href="#zcloud_store_newv"><tt class="xref docutils literal"><span class="pre">zcloud_store_newv</span></tt></a>, instead:</p>
 <dl class="cfunction">
 <dt id="zcloud_store_newv">
-<a title="ZCloudStore" class="reference external" href="../api/store.html#ZCloudStore">ZCloudStore</a> *<tt class="descname">zcloud_store_newv</tt><big>(</big>const gchar<em> *storespec</em>, gint<em> n_parameters</em>, GParameter<em> *parameters</em>, GError<em> **error</em><big>)</big><a class="headerlink" href="#zcloud_store_newv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new <a title="ZCloudStore" class="reference external" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a> object with the parameters
+<!--[zcloud_store_newv]--><a title="ZCloudStore" class="reference" href="../api/store.html#ZCloudStore">ZCloudStore</a> *<tt class="descname">zcloud_store_newv</tt><big>(</big>const gchar<em> *storespec</em>, gint<em> n_parameters</em>, GParameter<em> *parameters</em>, GError<em> **error</em><big>)</big><a class="headerlink" href="#zcloud_store_newv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new <a title="ZCloudStore" class="reference" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a> object with the parameters
 specified in <em>parameters</em>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -132,7 +130,7 @@ canonicalized (case lowered, non-alphanumeric characters replaced with
 required by the store plugin.</p>
 <p>Note that GLib does not have a facility to transform strings into other
 types.  An application supplying parameters to
-<a title="zcloud_store_newv" class="reference internal" href="#zcloud_store_newv"><tt class="xref docutils literal"><span class="pre">zcloud_store_newv()</span></tt></a> from a configuration file or command-line
+<a title="zcloud_store_newv" class="reference" href="#zcloud_store_newv"><tt class="xref docutils literal"><span class="pre">zcloud_store_newv</span></tt></a> from a configuration file or command-line
 arguments will need to handle this conversion itself.  (actually,
 eventually libzcloud will need to handle this, so some support is
 forthcoming - TODO)</p>
@@ -147,37 +145,27 @@ forthcoming - TODO)</p>
         <div class="sphinxsidebarwrapper">
             <h3><a href="../index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">Creating a Store</a><ul>
-<li><a class="reference external" href="#calling-the-constructor">Calling the Constructor</a></li>
-<li><a class="reference external" href="#specifying-parameters-at-runtime">Specifying Parameters at Runtime</a></li>
+<li><a class="reference" href="">Creating a Store</a><ul>
+<li><a class="reference" href="#calling-the-constructor">Calling the Constructor</a></li>
+<li><a class="reference" href="#specifying-parameters-at-runtime">Specifying Parameters at Runtime</a></li>
 </ul>
 </li>
 </ul>
 
             <h4>Previous topic</h4>
-            <p class="topless"><a href="module_info.html"
-                                  title="previous chapter">Getting Module Information</a></p>
+            <p class="topless"><a href="module_info.html" title="previous chapter">Getting Module Information</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="../writing_plugins.html"
-                                  title="next chapter">Writing libzcloud Plugins</a></p>
+            <p class="topless"><a href="uploading_and_downloading.html" title="next chapter">Uploading and Downloading</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/using_libzcloud/creating_a_store.txt"
-                     rel="nofollow">Show Source</a></li>
+              <li><a href="../sources/using_libzcloud/creating_a_store.txt">Show Source</a></li>
             </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+          <h3>Quick search</h3>
+            <form class="search" action="../search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
         </div>
       </div>
       <div class="clearer"></div>
@@ -187,21 +175,21 @@ forthcoming - TODO)</p>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
-             >index</a></li>
+             accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../writing_plugins.html" title="Writing libzcloud Plugins"
-             >next</a> |</li>
+          <a href="uploading_and_downloading.html" title="Uploading and Downloading"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="module_info.html" title="Getting Module Information"
-             >previous</a> |</li>
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
-          <li><a href="../using_libzcloud.html" >Using libzcloud</a> &raquo;</li> 
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Aug 11, 2009.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+      Last updated on Sep 30, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>
 </html>

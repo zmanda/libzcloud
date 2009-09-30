@@ -1,7 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -41,14 +39,14 @@
           <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
       </ul>
     </div>  
-
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-initialization">
-<span id="id1"></span><h1>Module Initialization<a class="headerlink" href="#module-initialization" title="Permalink to this headline">¶</a></h1>
+  
+  <div class="section" id="id1">
+<span id="module-initialization"></span><h1>Module Initialization<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <p>Libzcloud modules are loaded by GLib&#8217;s <em>GModule</em> library, which
 automatically runs <cite>g_module_check_init</cite> on load.  This is the
 appropriate time to register all plugins supplied with the module.  The
@@ -70,7 +68,7 @@ failure, which is exactly the semantics of
 <cite>zcloud_register_store_plugin</cite>.</p>
 <dl class="cfunction">
 <dt id="zcloud_register_store_plugin">
-gchar * <tt class="descname">zcloud_register_store_plugin</tt><big>(</big>const gchar<em> *module_name</em>, const gchar<em> *prefix</em>, GType<em> type</em><big>)</big><a class="headerlink" href="#zcloud_register_store_plugin" title="Permalink to this definition">¶</a></dt>
+<!--[zcloud_register_store_plugin]-->gchar * <tt class="descname">zcloud_register_store_plugin</tt><big>(</big>const gchar<em> *module_name</em>, const gchar<em> *prefix</em>, GType<em> type</em><big>)</big><a class="headerlink" href="#zcloud_register_store_plugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register store subclass <em>type</em> as the class to instantiate for
 prefix <em>prefix</em>, defined as part of the module <em>module_name</em>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -80,7 +78,7 @@ prefix <em>prefix</em>, defined as part of the module <em>module_name</em>.</p>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><em>module_name</em> &#8211; base name of the module being initialized</li>
 <li><em>prefix</em> &#8211; prefix corresponding to this plugin</li>
-<li><em>type</em> &#8211; type of a subclass of <a title="ZCloudStore" class="reference external" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a></li>
+<li><em>type</em> &#8211; type of a subclass of <a title="ZCloudStore" class="reference" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -100,29 +98,19 @@ prefix <em>prefix</em>, defined as part of the module <em>module_name</em>.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
             <h4>Previous topic</h4>
-            <p class="topless"><a href="xml_definition.html"
-                                  title="previous chapter">Plugin XML Definition</a></p>
+            <p class="topless"><a href="xml_definition.html" title="previous chapter">Plugin XML Definition</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="store_subclass.html"
-                                  title="next chapter">Store Subclass</a></p>
+            <p class="topless"><a href="store_subclass.html" title="next chapter">Store Subclass</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/writing_plugins/initialization.txt"
-                     rel="nofollow">Show Source</a></li>
+              <li><a href="../sources/writing_plugins/initialization.txt">Show Source</a></li>
             </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+          <h3>Quick search</h3>
+            <form class="search" action="../search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
         </div>
       </div>
       <div class="clearer"></div>
@@ -132,21 +120,21 @@ prefix <em>prefix</em>, defined as part of the module <em>module_name</em>.</p>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
-             >index</a></li>
+             accesskey="I">index</a></li>
         <li class="right" >
           <a href="store_subclass.html" title="Store Subclass"
-             >next</a> |</li>
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="xml_definition.html" title="Plugin XML Definition"
-             >previous</a> |</li>
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
-          <li><a href="../writing_plugins.html" >Writing libzcloud Plugins</a> &raquo;</li> 
+          <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Aug 11, 2009.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+      Last updated on Sep 30, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>
 </html>

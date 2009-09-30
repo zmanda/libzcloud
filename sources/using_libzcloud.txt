@@ -16,3 +16,4 @@ Source files using libzcloud functionality should begin with ::
    using_libzcloud/library_setup
    using_libzcloud/module_info
    using_libzcloud/creating_a_store
+   using_libzcloud/uploading_and_downloading

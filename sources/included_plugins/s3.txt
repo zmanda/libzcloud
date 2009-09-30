@@ -1,0 +1,54 @@
+S3 Plugin
+=========
+
+The S3 plugin provides access to the Amazon's Simple Storage Service, a part of
+the Amazon Web Services.  See http://aws.amazon.com/s3/ for documentation on
+the service itself.
+
+Terminology
+-----------
+
+This plugin represents an S3 bucket as a store.  Each key in the bucket is
+represented as a zcloud key.
+
+Storage Specifier
+-----------------
+
+A storage specifier with the prefix ``s3`` invokes the S3 plugin.  The
+remainder of the specifier is interpreted as an S3 bucket name.  So, to access
+the bucket named ``FROG-PICTURES``, use the storage specifier
+``s3:FROG-PICTURES``.
+
+Note that Amazon's limitations on bucket names apply here as well.
+
+Service-level Access
+''''''''''''''''''''
+
+The special storage specifier ``s3:`` (with no bucket name) allows the user to
+manipulate whole buckets.  The resulting store's :meth:`create
+<ZCloudStore.create>` method will create a new bucket with the given name,
+using the location from the store's ``bucket-location`` parameter.  The
+:meth:`exists <ZCloudStore.exists>` method tests whether the given bucket name
+exists.  The :meth:`delete <ZCloudStore.delete>` method deletes the given
+bucket.  Listing buckets is not yet supported.
+
+Parameters
+----------
+
+The S3 plugin has two required parameters:
+
+* ``access-key`` - the S3 access key
+* ``secret-key`` - the S3 secret key
+
+If you are using DevPay, you can also pass:
+
+* ``user-token``
+* ``product-token``
+
+For fine-grained control of the store:
+
+* ``ca-info`` -- path to the X509 bundle of certificate authority certificates
+  that should be used to verify the S3 endpoint
+* ``bucket-location`` -- the bucket location, as interpreted by Amazon S3, in
+  which this bucket should be created; if the bucket already exists the plugin
+  checks that the bucket's location matches this parameter

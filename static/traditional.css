@@ -1,11 +1,8 @@
 /**
- * Sphinx Doc Design
+ * Sphinx Doc Design -- traditional python.org style
  */
 
 body {
-    font-family: sans-serif;
-    font-size: 100%;
-    background-color: #11303d;
     color: #000;
     margin: 0;
     padding: 0;
@@ -13,17 +10,13 @@ body {
 
 /* :::: LAYOUT :::: */
 
-div.document {
-    background-color: #1c4e63;
-}
-
 div.documentwrapper {
     float: left;
     width: 100%;
 }
 
 div.bodywrapper {
-    margin: 0 0 0 230px;
+    margin: 0 230px 0 0;
 }
 
 div.body {
@@ -32,14 +25,15 @@ div.body {
 }
 
 div.sphinxsidebarwrapper {
-    padding: 10px 5px 0 10px;
+    border: 1px solid #99ccff;
+    padding: 10px;
+    margin: 10px 15px 10px 0;
 }
 
 div.sphinxsidebar {
-    float: left;
-    width: 230px;
+    float: right;
     margin-left: -100%;
-    font-size: 90%;
+    width: 230px;
 }
 
 div.clearer {
@@ -47,24 +41,20 @@ div.clearer {
 }
 
 div.footer {
-    color: #fff;
+    clear: both;
     width: 100%;
+    background-color: #99ccff;
     padding: 9px 0 9px 0;
     text-align: center;
-    font-size: 75%;
-}
-
-div.footer a {
-    color: #fff;
-    text-decoration: underline;
 }
 
 div.related {
-    background-color: #133f52;
-    color: #fff;
+    background-color: #99ccff;
+    color: #333;
     width: 100%;
+    height: 30px;
     line-height: 30px;
-    font-size: 90%;
+    border-bottom: 5px solid white;
 }
 
 div.related h3 {
@@ -79,6 +69,7 @@ div.related ul {
 
 div.related li {
     display: inline;
+    font-weight: bold;
 }
 
 div.related li.right {
@@ -86,35 +77,13 @@ div.related li.right {
     margin-right: 5px;
 }
 
-div.related a {
-    color: white;
-}
-
-/* ::: TOC :::: */
+/* ::: SIDEBAR :::: */
 div.sphinxsidebar h3 {
-    font-family: 'Trebuchet MS', sans-serif;
-    color: white;
-    font-size: 1.4em;
-    font-weight: normal;
     margin: 0;
-    padding: 0;
-}
-
-div.sphinxsidebar h3 a {
-    color: white;
 }
 
 div.sphinxsidebar h4 {
-    font-family: 'Trebuchet MS', sans-serif;
-    color: white;
-    font-size: 1.3em;
-    font-weight: normal;
     margin: 5px 0 0 0;
-    padding: 0;
-}
-
-div.sphinxsidebar p {
-    color: white;
 }
 
 div.sphinxsidebar p.topless {
@@ -123,15 +92,8 @@ div.sphinxsidebar p.topless {
 
 div.sphinxsidebar ul {
     margin: 10px;
+    margin-left: 15px;
     padding: 0;
-    list-style: none;
-    color: white;
-}
-
-div.sphinxsidebar ul ul,
-div.sphinxsidebar ul.want-points {
-    margin-left: 20px;
-    list-style: square;
 }
 
 div.sphinxsidebar ul ul {
@@ -139,32 +101,10 @@ div.sphinxsidebar ul ul {
     margin-bottom: 0;
 }
 
-div.sphinxsidebar a {
-    color: #98dbcc;
-}
-
 div.sphinxsidebar form {
     margin-top: 10px;
 }
 
-div.sphinxsidebar input {
-    border: 1px solid #98dbcc;
-    font-family: sans-serif;
-    font-size: 1em;
-}
-
-/* :::: MODULE CLOUD :::: */
-div.modulecloud {
-    margin: -5px 10px 5px 10px;
-    padding: 10px;
-    line-height: 160%;
-    border: 1px solid #cbe7e5;
-    background-color: #f2fbfd;
-}
-
-div.modulecloud a {
-    padding: 0 5px 0 5px;
-}
 
 /* :::: SEARCH :::: */
 ul.search {
@@ -196,10 +136,10 @@ ul.keywordmatches li.goodmatch a {
 /* :::: COMMON FORM STYLES :::: */
 
 div.actions {
-    padding: 5px 10px 5px 10px;
-    border-top: 1px solid #cbe7e5;
-    border-bottom: 1px solid #cbe7e5;
-    background-color: #e0f6f4;
+    border-top: 1px solid #aaa;
+    background-color: #ddd;
+    margin: 10px 0 0 -20px;
+    padding: 5px 0 5px 20px;
 }
 
 form dl {
@@ -222,8 +162,200 @@ div.error {
     margin: 5px 20px 0 0;
     padding: 5px;
     border: 1px solid #d00;
+    /*border: 2px solid #05171e;
+    background-color: #092835;
+    color: white;*/
     font-weight: bold;
 }
+
+/* :::: INLINE COMMENTS :::: */
+
+div.inlinecommentswrapper {
+    float: right;
+    max-width: 40%;
+}
+
+div.commentmarker {
+    float: right;
+    background-image: url(style/comment.png);
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    padding-top: 3px;
+}
+
+div.nocommentmarker {
+    float: right;
+    background-image: url(style/nocomment.png);
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+}
+
+div.inlinecomments {
+    margin-left: 10px;
+    margin-bottom: 5px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+div.inlinecomment {
+    border-top: 1px solid #ccc;
+    padding-top: 5px;
+    margin-top: 5px;
+}
+
+.inlinecomments p {
+    margin: 5px 0 5px 0;
+}
+
+.inlinecomments .head {
+    font-weight: bold;
+}
+
+.inlinecomments .meta {
+    font-style: italic;
+}
+
+
+/* :::: COMMENTS :::: */
+
+div#comments h3 {
+    border-top: 1px solid #aaa;
+    padding: 5px 20px 5px 20px;
+    margin: 20px -20px 20px -20px;
+    background-color: #ddd;
+}
+
+/*
+div#comments {
+    background-color: #ccc;
+    margin: 40px -20px -30px -20px;
+    padding: 0 0 1px 0;
+}
+
+div#comments h4 {
+    margin: 30px 0 20px 0;
+    background-color: #aaa;
+    border-bottom: 1px solid #09232e;
+    color: #333;
+}
+
+div#comments form {
+    display: block;
+    margin: 0 0 0 20px;
+}
+
+div#comments textarea {
+    width: 98%;
+    height: 160px;
+}
+
+div#comments div.help {
+    margin: 20px 20px 10px 0;
+    background-color: #ccc;
+    color: #333;
+}
+
+div#comments div.help p {
+    margin: 0;
+    padding: 0 0 10px 0;
+}
+
+div#comments input, div#comments textarea {
+    font-family: 'Bitstream Vera Sans', 'Arial', sans-serif;
+    font-size: 13px;
+    color: black;
+    background-color: #aaa;
+    border: 1px solid #092835;
+}
+
+div#comments input[type="reset"],
+div#comments input[type="submit"] {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px;
+    margin: 5px 5px 5px 0;
+    background-color: #666;
+    color: white;
+}
+
+div#comments div.comment {
+    margin: 10px 10px 10px 20px;
+    padding: 10px;
+    border: 1px solid #0f3646;
+    background-color: #aaa;
+    color: #333;
+}
+
+div#comments div.comment p {
+    margin: 5px 0 5px 0;
+}
+
+div#comments div.comment p.meta {
+    font-style: italic;
+    color: #444;
+    text-align: right;
+    margin: -5px 0 -5px 0;
+}
+
+div#comments div.comment h4 {
+    margin: -10px -10px 5px -10px;
+    padding: 3px;
+    font-size: 15px;
+    background-color: #888;
+    color: white;
+    border: 0;
+}
+
+div#comments div.comment pre,
+div#comments div.comment tt {
+    background-color: #ddd;
+    color: #111;
+    border: none;
+}
+
+div#comments div.comment a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+div#comments div.comment blockquote {
+    margin: 10px;
+    padding: 10px;
+    border-left: 1px solid #0f3646;
+    /*border: 1px solid #0f3646;
+    background-color: #071c25;*/
+}
+
+div#comments em.important {
+    color: #d00;
+    font-weight: bold;
+    font-style: normal;
+}*/
+
+/* :::: SUGGEST CHANGES :::: */
+div#suggest-changes-box input, div#suggest-changes-box textarea {
+    border: 1px solid #ccc;
+    background-color: white;
+    color: black;
+}
+
+div#suggest-changes-box textarea {
+    width: 99%;
+    height: 400px;
+}
+
+
+/* :::: PREVIEW :::: */
+div.preview {
+    background-image: url(style/preview.png);
+    padding: 0 20px 20px 20px;
+    margin-bottom: 30px;
+}
+
 
 /* :::: INDEX PAGE :::: */
 
@@ -236,16 +368,15 @@ table.contentstable p.biglink {
 }
 
 a.biglink {
-    font-size: 1.3em;
+    font-size: 1.5em;
 }
 
 span.linkdescr {
     font-style: italic;
     padding-top: 5px;
-    font-size: 90%;
 }
 
-/* :::: INDEX STYLES :::: */
+/* :::: GENINDEX STYLES :::: */
 
 table.indextable td {
     text-align: left;
@@ -272,32 +403,18 @@ img.toggler {
     cursor: pointer;
 }
 
-form.pfform {
-    margin: 10px 0 20px 0;
-}
-
 /* :::: GLOBAL STYLES :::: */
-
-.docwarning {
-    background-color: #ffe4e4;
-    padding: 10px;
-    margin: 0 -20px 0 -20px;
-    border-bottom: 1px solid #f66;
-}
 
 p.subhead {
     font-weight: bold;
     margin-top: 20px;
 }
 
-a {
-    color: #355f7c;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
+a:link:active           { color: #ff0000; }
+a:link:hover            { background-color: #bbeeff; }
+a:visited:hover         { background-color: #bbeeff; }
+a:visited               { color: #551a8b; }
+a:link                  { color: #0000bb; }
 
 div.body h1,
 div.body h2,
@@ -305,22 +422,20 @@ div.body h3,
 div.body h4,
 div.body h5,
 div.body h6 {
-    font-family: 'Trebuchet MS', sans-serif;
-    background-color: #f2f2f2;
-    font-weight: normal;
-    color: #20435c;
-    border-bottom: 1px solid #ccc;
-    margin: 20px -20px 10px -20px;
-    padding: 3px 0 3px 10px;
+    font-family: avantgarde, sans-serif;
+    font-weight: bold;
 }
 
-div.body h1 { margin-top: 0; font-size: 200%; }
-div.body h2 { font-size: 160%; }
-div.body h3 { font-size: 140%; }
+div.body h1 { font-size: 180%; }
+div.body h2 { font-size: 150%; }
+div.body h3 { font-size: 120%; }
 div.body h4 { font-size: 120%; }
-div.body h5 { font-size: 110%; }
-div.body h6 { font-size: 100%; }
 
+a.headerlink,
+a.headerlink,
+a.headerlink,
+a.headerlink,
+a.headerlink,
 a.headerlink {
     color: #c60f0f;
     font-size: 0.8em;
@@ -329,16 +444,20 @@ a.headerlink {
     visibility: hidden;
 }
 
-h1:hover > a.headerlink,
-h2:hover > a.headerlink,
-h3:hover > a.headerlink,
-h4:hover > a.headerlink,
-h5:hover > a.headerlink,
-h6:hover > a.headerlink,
-dt:hover > a.headerlink {
+*:hover > a.headerlink,
+*:hover > a.headerlink,
+*:hover > a.headerlink,
+*:hover > a.headerlink,
+*:hover > a.headerlink,
+*:hover > a.headerlink {
     visibility: visible;
 }
 
+a.headerlink:hover,
+a.headerlink:hover,
+a.headerlink:hover,
+a.headerlink:hover,
+a.headerlink:hover,
 a.headerlink:hover {
     background-color: #c60f0f;
     color: white;
@@ -346,11 +465,6 @@ a.headerlink:hover {
 
 div.body p, div.body dd, div.body li {
     text-align: justify;
-    line-height: 130%;
-}
-
-div.body p.caption {
-    text-align: inherit;
 }
 
 div.body td {
@@ -363,32 +477,9 @@ ul.fakelist {
     padding: 0;
 }
 
-.field-list ul {
-    padding-left: 1em;
-}
-
-.first {
-    margin-top: 0 !important;
-}
-
 /* "Footnotes" heading */
 p.rubric {
     margin-top: 30px;
-    font-weight: bold;
-}
-
-/* Sidebars */
-
-div.sidebar {
-    margin: 0 0 0.5em 1em;
-    border: 1px solid #ddb;
-    padding: 7px 7px 0 7px;
-    background-color: #ffe;
-    width: 40%;
-    float: right;
-}
-
-p.sidebar-title {
     font-weight: bold;
 }
 
@@ -397,7 +488,7 @@ p.sidebar-title {
 div.topic {
     background-color: #eee;
     border: 1px solid #ccc;
-    padding: 7px 7px 0 7px;
+    padding: 0 7px 0 7px;
     margin: 10px 0 10px 0;
 }
 
@@ -419,11 +510,15 @@ div.admonition dt {
     font-weight: bold;
 }
 
+div.admonition dd {
+    margin-bottom: 10px;
+}
+
 div.admonition dl {
     margin-bottom: 0;
 }
 
-div.admonition p.admonition-title + p {
+div.admonition p {
     display: inline;
 }
 
@@ -462,7 +557,7 @@ table.docutils {
 }
 
 table.docutils td, table.docutils th {
-    padding: 1px 8px 1px 0;
+    padding: 0 8px 2px 0;
     border-top: 0;
     border-left: 0;
     border-right: 0;
@@ -475,15 +570,6 @@ table.field-list td, table.field-list th {
 
 table.footnote td, table.footnote th {
     border: 0 !important;
-}
-
-.field-list ul {
-    margin: 0;
-    padding-left: 1em;
-}
-
-.field-list p {
-    margin: 0;
 }
 
 dl {
@@ -505,18 +591,13 @@ dd {
     margin-left: 30px;
 }
 
-.refcount {
-    color: #060;
-}
-
-dt:target,
-.highlight {
-    background-color: #fbe54e;
-}
-
 dl.glossary dt {
     font-weight: bold;
     font-size: 1.1em;
+}
+
+.refcount {
+    color: #060;
 }
 
 th {
@@ -525,34 +606,17 @@ th {
 }
 
 pre {
+    font-family: monospace;
     padding: 5px;
-    background-color: #efc;
-    color: #333;
-    border: 1px solid #ac9;
+    color: #00008b;
     border-left: none;
     border-right: none;
-    overflow: auto;
-}
-
-td.linenos pre {
-    padding: 5px 0px;
-    border: 0;
-    background-color: transparent;
-    color: #aaa;
-}
-
-table.highlighttable {
-    margin-left: 0.5em;
-}
-
-table.highlighttable td {
-    padding: 0 0.5em 0 0.5em;
 }
 
 tt {
+    font-family: monospace;
     background-color: #ecf0f3;
     padding: 0 1px 0 1px;
-    font-size: 0.95em;
 }
 
 tt.descname {
@@ -603,7 +667,7 @@ form.comment textarea {
     border: 1px solid #ccc;
     padding: 2px;
     font-family: sans-serif;
-    font-size: 100%;
+    font-size: 13px;
 }
 
 form.comment input[type="text"] {
@@ -616,35 +680,14 @@ form.comment textarea {
     margin-bottom: 10px;
 }
 
-.system-message {
-    background-color: #fda;
-    padding: 5px;
-    border: 3px solid red;
-}
-
-img.math {
-    vertical-align: middle;
-}
-
-div.math p {
-    text-align: center;
-}
-
-span.eqno {
-    float: right;
-}
-
-img.logo {
-    border: 0;
-}
-
 /* :::: PRINT :::: */
 @media print {
-    div.document,
-    div.documentwrapper,
-    div.bodywrapper {
+    div.documentwrapper {
+        width: 100%;
+    }
+
+    div.body {
         margin: 0;
-        width : 100%;
     }
 
     div.sphinxsidebar,
