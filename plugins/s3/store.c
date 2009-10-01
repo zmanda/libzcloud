@@ -1483,26 +1483,17 @@ exists_impl(
             self->bucket /* bucket */, key /* key */, NULL /* subresource */,
             NULL /* query */, NULL /* up_prod */, NULL /* down_con */,
             progress /* prog_lis */, result_handling /*result_handling*/,
-            &tmp_err /* error */);
+            error /* error */);
     } else {
         /* can't use HEAD on a bucket, so GET the location instead */
         perf_res = perform_request(self /* self */, "GET" /*verb*/,
             key /* bucket */, NULL /* key */, "location" /* subresource */,
             NULL /* query */, NULL /* up_prod */, NULL /* down_con */,
             progress /* prog_lis */, result_handling /*result_handling*/,
-            &tmp_err /* error */);
+            error /* error */);
     }
 
-    if (tmp_err) {
-        if (ZCLOUD_ERROR == tmp_err->domain && ZCERR_MISSING == tmp_err->code) {
-            g_clear_error(&tmp_err);
-        } else {
-            g_propagate_error(error, tmp_err);
-        }
-        return FALSE;
-    } else {
-        return TRUE;
-    }
+    return perf_res;
 }
 
 static gboolean

@@ -210,6 +210,8 @@ int main(int argc, char **argv)
                     "Stopping early to avoid data loss\n", test_bucket);
             goto end;
         }
+        /* error may be unexpected, but run the tests to learn more */
+        g_clear_error(&error);
 
         op_ok = zcloud_store_create(store, test_bucket, NULL, &error);
         is_gboolean(op_ok, TRUE, "create test bucket returned ok");
@@ -251,7 +253,8 @@ int main(int argc, char **argv)
 
         op_ok = zcloud_store_exists(test_store, test_key, NULL, &error);
         is_gboolean(op_ok, FALSE, "test key doesn't exist in empty bucket");
-        gerror_is_clear(&error, "testing for existence of test key (w/ empty bucket) didn't cause error");
+        gerror_is_set(&error, NULL, ZCERR_MISSING,
+            "testing for existence of test key (w/ empty bucket) caused the expected error");
 
         {
             ZCloudSListListConsumer *list_con = zcloud_slist_list_consumer();
