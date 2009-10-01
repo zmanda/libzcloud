@@ -18,17 +18,34 @@
 .SH NAME
 zcloud - Command-line interface to libzcloud
 .SH SYNOPSIS
-\fBzcloud\fR \fBprefix\fR
+\fBzcloud\fR \fBoperation\fR \fBstore-spec\fR \fB[key]\fR
 .SH DESCRIPTION
 \fBzcloud\fR provides command-line access to storage clouds via libzcloud.
 .PP
 At the moment, the entirety of its operation is to load a plugin based on
 the given prefix and try to instantiate a \fIStore\fR.
-.\" .SS OPTIONS
-.\" .IP "-o, --option"
-.\" What the option does
+.SS OPTIONS
+.IP "--plugin-path \fBpath\fR"
+You can use this to set the path that libzcloud will search for plugins.
+Overrides ZCPLUGINPATH.
+.IP "--param \fBname\fR=\fBvalue\fR"
+Set parameter \fBname\fR to \fBvalue\fR
+.SS OPERATIONS
+.IP "create"
+Create \fBkey\fR in the store.
+.IP "exists"
+Test to see if \fBkey\fR exists in the store.
+.IP "delete"
+Delete \fBkey\fR from the store.
+.SS EXIT STATUS
+For most operations, \fBzcloud\fR returns 0 if the operation was successful and
+1 if it was not. For the \fBexists\fR operation, 0 is returned if \fBkey\fR
+exists and 2 is returned if it does not; 1 indicates an error, as usual.
+.SS ENVIRONMENT VARIABLES
+.IP "ZCPLUGINPATH"
+The path that libzcloud will search for plugins.
 .SH SEE ALSO
-(add link to Sphinx documentation here)
+http://zmanda.github.com/libzcloud
 .SH AUTHORS
-This manual page was written by Dustin J. Mitchell <dustin@zmanda.com> and Nikolas
-Coukouma <atrus@zmanda.com>.
+This manual page was written by Dustin J. Mitchell <dustin@zmanda.com> and
+Nikolas Coukouma <atrus@zmanda.com>.
