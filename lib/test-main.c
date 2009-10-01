@@ -53,6 +53,8 @@ main(int argc, char **argv)
         return 1;
     }
 
+    /* die on anything worse than a message */
+    g_log_set_always_fatal(G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING);
     g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, null_log, NULL);
 
     for (t = all_tests; t->test_name; t++) {

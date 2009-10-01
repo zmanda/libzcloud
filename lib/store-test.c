@@ -166,6 +166,16 @@ test_store(void)
         g_object_unref(store);
     }
 
+    /* unkown paramater */
+    {
+        store = zcloud_store_new("fake:foo", &error,
+                "totally", "bogus",
+                NULL);
+        is_null(store, "create fake store with unknown properties in varargs");
+        gerror_is_set(&error, "*totally*", ZCERR_PARAMETER,
+            "create fake store with unknown properties in varargs");
+    }
+
     /* GParameter array */
     {
         guint i;
@@ -184,6 +194,29 @@ test_store(void)
         gerror_is_clear(&error, "create fake store with an array of properties:");
         is_string(fstore->param_str, "mystr", " param_str is set correctly");
         g_object_unref(store);
+
+        for (i = 0; i < G_N_ELEMENTS(params); i++) {
+            g_value_unset(&params[i].value);
+        }
+    }
+
+    /* GParameter array w/ unknown parameters */
+    {
+        guint i;
+        GParameter params[1];
+        bzero(params, sizeof(params));
+
+        i = 0;
+
+        params[i].name = "totally";
+        g_value_init(&params[i].value, G_TYPE_STRING);
+        g_value_set_string(&params[i].value, "bogus");
+        i++;
+
+        store = zcloud_store_newv("fake:foo", i, params, &error);
+        is_null(store, "create fake store with unknown parameters in parameter array");
+        gerror_is_set(&error, "*totally*", ZCERR_PARAMETER,
+            "create fake store with unknown properties in parameter array");
 
         for (i = 0; i < G_N_ELEMENTS(params); i++) {
             g_value_unset(&params[i].value);

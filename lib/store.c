@@ -111,6 +111,7 @@ zcloud_store_newv(
     ZCloudStorePlugin *plugin;
     ZCloudStore *store = NULL;
     GParameter *my_params = NULL;
+    GParamSpec *spec = NULL;
     guint i;
 
     plugin = store_new_begin(storespec, &suffix, error);
@@ -120,16 +121,19 @@ zcloud_store_newv(
     /* sadly, we need to re-do the nicely packaged parameters array,
      * to canonicalize the names, add default values, and transform any
      * values that require it. */
-    my_params = g_new(GParameter, plugin->paramspecs->len);
+    my_params = g_new0(GParameter, plugin->paramspecs->len);
     for (i = 0; i < plugin->paramspecs->len; i++) {
+        spec = (GParamSpec *) g_ptr_array_index(plugin->paramspecs, i);
         /* "borrow" a reference to the name from the paramspec */
-        my_params[i].name = ((GParamSpec *)g_ptr_array_index(plugin->paramspecs, i))->name;
+        my_params[i].name = spec->name;
+        g_value_init(&my_params[i].value, G_PARAM_SPEC_VALUE_TYPE(spec));
+        g_param_value_set_default(spec, &my_params[i].value);
     }
 
     for (i = 0; i < (guint)n_input_params; i++) {
         gchar *canon_name;
-        GParamSpec *spec = NULL;
         guint j;
+        spec = NULL;
 
         /* search for this parameter in my_params */
         canon_name = canonicalize_param_name(input_params[i].name);
@@ -147,22 +151,11 @@ zcloud_store_newv(
         }
 
         /* and try transforming the value */
-        bzero(&my_params[j].value, sizeof(my_params[j].value));
-        g_value_init(&my_params[j].value, spec->value_type);
         if (!g_param_value_convert(spec, &input_params[i].value,
                                    &my_params[j].value, TRUE)) {
             g_set_error(error, ZCLOUD_ERROR, ZCERR_PARAMETER,
                 "cannot convert parameter value for '%s'", input_params[i].name);
             goto error;
-        }
-    }
-
-    /* set the default value for any parameters not supplied */
-    for (i = 0; i < plugin->paramspecs->len; i++) {
-        if (G_VALUE_TYPE(&my_params[i].value) == G_TYPE_INVALID) {
-            GParamSpec *spec = (GParamSpec *)g_ptr_array_index(plugin->paramspecs, i);
-            g_value_init(&my_params[i].value, spec->value_type);
-            g_param_value_set_default(spec, &my_params[i].value);
         }
     }
 
@@ -190,6 +183,7 @@ zcloud_store_new(
     ZCloudStorePlugin *plugin = NULL;
     const gchar *suffix = NULL;
     GParameter *params;
+    GParamSpec *spec = NULL;
     const gchar *name;
     guint i;
 
@@ -200,15 +194,18 @@ zcloud_store_new(
     /* set up a new params array */
     params = g_new0(GParameter, plugin->paramspecs->len);
     for (i = 0; i < plugin->paramspecs->len; i++) {
+        spec = (GParamSpec *) g_ptr_array_index(plugin->paramspecs, i);
         /* "borrow" a reference to the name from the paramspec */
-        params[i].name = ((GParamSpec *)g_ptr_array_index(plugin->paramspecs, i))->name;
+        params[i].name = spec->name;
+        g_value_init(&params[i].value, G_PARAM_SPEC_VALUE_TYPE(spec));
+        g_param_value_set_default(spec, &params[i].value);
     }
 
     va_start(var_args, first_param_name);
     for (name = first_param_name; name; name = va_arg(var_args, const gchar*)) {
-        GParamSpec *spec = NULL;
         gchar *errmsg = NULL;
         gchar *canon_name = NULL;
+        spec = NULL;
 
         /* look up this parameter in the plugin's paramspecs */
         canon_name = canonicalize_param_name(name);
@@ -226,7 +223,6 @@ zcloud_store_new(
         }
 
         /* fill in the name and value of the parameter */
-        g_value_init(&params[i].value, G_PARAM_SPEC_VALUE_TYPE(spec));
         G_VALUE_COLLECT(&params[i].value, var_args, 0, &errmsg);
         if (errmsg) {
             g_set_error(error, ZCLOUD_ERROR, ZCERR_PARAMETER,
@@ -239,15 +235,6 @@ zcloud_store_new(
         }
     }
     va_end(var_args);
-
-    /* set the default value for any parameters not supplied */
-    for (i = 0; i < plugin->paramspecs->len; i++) {
-        if (G_VALUE_TYPE(&params[i].value) == G_TYPE_INVALID) {
-            GParamSpec *spec = (GParamSpec *)g_ptr_array_index(plugin->paramspecs, i);
-            g_value_init(&params[i].value, spec->value_type);
-            g_param_value_set_default(spec, &params[i].value);
-        }
-    }
 
     /* finally, call store_new_finish with the collection of parameters */
     store = store_new_finish(plugin, suffix,
