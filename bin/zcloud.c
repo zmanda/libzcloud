@@ -146,6 +146,8 @@ int main(int argc, char **argv)
             goto cleanup;
         }
         if (zcloud_store_create(store, key, NULL, &error)) {
+            fprintf(stderr, "Successfully created '%s' in '%s'\n", key,
+                store_spec);
             ret = 0;
         } else {
             fprintf(stderr, "Failed to create '%s' in '%s': %s\n", key,
@@ -158,12 +160,15 @@ int main(int argc, char **argv)
             goto cleanup;
         }
         if (zcloud_store_exists(store, key, NULL, &error)) {
+            fprintf(stderr, "'%s' exists in '%s'\n", key, store_spec);
             ret = 0;
         } else {
             if (ZCLOUD_ERROR == error->domain && ZCERR_MISSING == error->code) {
+                fprintf(stderr, "'%s' does not exist in '%s'\n", key, store_spec);
+                ret = 2;
+            } else {
                 fprintf(stderr, "Could not test for the existence of '%s' in '%s': %s\n",
                     key, store_spec, error->message);
-                ret = 2;
             }
             g_error_free(error);
         }
@@ -173,6 +178,8 @@ int main(int argc, char **argv)
             goto cleanup;
         }
         if (zcloud_store_delete(store, key, NULL, &error)) {
+            fprintf(stderr, "Successfully created '%s' in '%s'\n", key,
+                store_spec);
             ret = 0;
         } else {
             fprintf(stderr, "Failed to delete '%s' from '%s': %s\n", key,
