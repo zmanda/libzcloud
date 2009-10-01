@@ -534,7 +534,7 @@ get_plugin_dirs(void)
 {
     char *envstr = NULL;
 
-    if ((envstr = getenv("ZCPLUGINPATH")) && envstr[0] != '\0') {
+    if ((envstr = getenv(ZCLOUD_PLUGIN_PATH_ENV)) && envstr[0] != '\0') {
         return g_strsplit(envstr, ":", -1);
     } else {
         gchar **result = g_new0(gchar *, 2);

@@ -23,6 +23,8 @@
 
 G_BEGIN_DECLS
 
+#define ZCLOUD_PLUGIN_PATH_ENV "ZCPLUGINPATH"
+
 /*
  * Plugin registration
  */
