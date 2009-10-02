@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 
     const GOptionEntry entries[] = {
         {"plugin-path", 0, 0, G_OPTION_ARG_STRING, &plugin_path, "set the plugin path", "PATH"},
-        {"param", 0, 0, G_OPTION_ARG_CALLBACK, parse_param_arg, "set the plugin directory", "NAME=VALUE"},
+        {"param", 0, 0, G_OPTION_ARG_CALLBACK, parse_param_arg, "set store property NAME to VALUE", "NAME=VALUE"},
         {NULL},
     };
 
