@@ -82,11 +82,13 @@ int main(int argc, char **argv)
     gchar *plugin_path = NULL;
     ParamData param_data = PARAM_DATA_INIT;
     gboolean nul_suf = FALSE;
+    gchar *data = NULL;
 
     const GOptionEntry entries[] = {
         {"plugin-path", 0, 0, G_OPTION_ARG_STRING, &plugin_path, "set the plugin path", "PATH"},
         {"param", 0, 0, G_OPTION_ARG_CALLBACK, parse_param_arg, "set store property NAME to VALUE", "NAME=VALUE"},
         {"null", 0, 0, G_OPTION_ARG_CALLBACK, &nul_suf, "(list only) print NUL after each key instead of newline", NULL},
+        {"data", 0, 0, G_OPTION_ARG_CALLBACK, &data, "(upload only) upload STRING to the key", "STRING"},
         {NULL},
     };
 
@@ -97,6 +99,8 @@ int main(int argc, char **argv)
     GError *error = NULL;
     ZCloudStore *store;
     int ret = 1;
+
+    /* TODO: handle locale environment variables, calling setlocale() */
 
     /* die on anything worse than a message */
     g_log_set_always_fatal(G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING);
@@ -186,6 +190,28 @@ int main(int argc, char **argv)
             ret = 0;
         } else {
             fprintf(stderr, "Failed to delete '%s' from '%s': %s\n", key,
+                store_spec, error->message);
+            g_error_free(error);
+        }
+    } else if (!strcmp("upload", operation)) {
+        ZCloudUploadProducer *up_prod;
+        if (!key) {
+            fprintf(stderr, "You must supply a key for the operation '%s'\n", operation);
+            goto cleanup;
+        }
+        if (!data) {
+            fprintf(stderr, "You must supply --data for the operation '%s'\n", operation);
+            goto cleanup;
+        }
+
+        up_prod = ZCLOUD_UPLOAD_PRODUCER(
+            zcloud_memory_upload_producer(data, strlen(data)));
+        if (zcloud_store_upload(store, key, up_prod, NULL, &error)) {
+            fprintf(stderr, "Successfully uploaded data to '%s' in '%s'\n", key,
+                store_spec);
+            ret = 0;
+        } else {
+            fprintf(stderr, "Failed to upload data to '%s' in '%s'\n", key,
                 store_spec, error->message);
             g_error_free(error);
         }

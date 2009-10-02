@@ -32,6 +32,8 @@ Overrides ZCPLUGINPATH.
 Set parameter \fBname\fR to \fBvalue\fR.
 .IP "--null"
 (\fBlist\fR only) Print a NUL after each key.
+.IP "--string \fBsome_string\fR"
+(\fBupload\fR only) Upload \fBsome_string\fR, not including the terminating NUL.
 .SS OPERATIONS
 .IP "create"
 Create \fBkey\fR in the store.
@@ -39,6 +41,8 @@ Create \fBkey\fR in the store.
 Test to see if \fBkey\fR exists in the store.
 .IP "delete"
 Delete \fBkey\fR from the store.
+.IP "upload"
+Upload some data to \fBkey\fR in the store.
 .IP "list"
 List all keys in the store. If \fBkey\fR is supplied, it's used as a template
 and only keys matching it are printed.
