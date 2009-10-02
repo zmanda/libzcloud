@@ -26,6 +26,7 @@
 /* classes */
 #include "zcloud/store.h"
 #include "zcloud/download_consumer.h"
+#include "zcloud/fd_list_consumer.h"
 #include "zcloud/fixed_memory_download_consumer.h"
 #include "zcloud/growing_memory_download_consumer.h"
 #include "zcloud/list_consumer.h"
