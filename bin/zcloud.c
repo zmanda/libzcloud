@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "zcloud.h"
 
 typedef struct ParamData_s {
@@ -80,10 +81,12 @@ int main(int argc, char **argv)
 {
     gchar *plugin_path = NULL;
     ParamData param_data = PARAM_DATA_INIT;
+    gboolean nul_suf = FALSE;
 
     const GOptionEntry entries[] = {
         {"plugin-path", 0, 0, G_OPTION_ARG_STRING, &plugin_path, "set the plugin path", "PATH"},
         {"param", 0, 0, G_OPTION_ARG_CALLBACK, parse_param_arg, "set store property NAME to VALUE", "NAME=VALUE"},
+        {"null", 0, 0, G_OPTION_ARG_CALLBACK, &nul_suf, "(list only) print NUL after each key instead of newline", NULL},
         {NULL},
     };
 
@@ -182,6 +185,14 @@ int main(int argc, char **argv)
                 store_spec);
             ret = 0;
         } else {
+            fprintf(stderr, "Failed to delete '%s' from '%s': %s\n", key,
+                store_spec, error->message);
+            g_error_free(error);
+        }
+    } else if (!strcmp("list", operation)) {
+        ZCloudListConsumer *lc = ZCLOUD_LIST_CONSUMER(
+            zcloud_fd_list_consumer(STDOUT_FILENO, nul_suf? '\0' : '\n'));
+        if (!zcloud_store_list(store, key, lc, NULL, &error)) {
             fprintf(stderr, "Failed to delete '%s' from '%s': %s\n", key,
                 store_spec, error->message);
             g_error_free(error);

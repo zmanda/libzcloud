@@ -29,7 +29,9 @@ the given prefix and try to instantiate a \fIStore\fR.
 You can use this to set the path that libzcloud will search for plugins.
 Overrides ZCPLUGINPATH.
 .IP "--param \fBname\fR=\fBvalue\fR"
-Set parameter \fBname\fR to \fBvalue\fR
+Set parameter \fBname\fR to \fBvalue\fR.
+.IP "--null"
+(\fBlist\fR only) Print a NUL after each key.
 .SS OPERATIONS
 .IP "create"
 Create \fBkey\fR in the store.
@@ -37,6 +39,9 @@ Create \fBkey\fR in the store.
 Test to see if \fBkey\fR exists in the store.
 .IP "delete"
 Delete \fBkey\fR from the store.
+.IP "list"
+List all keys in the store. If \fBkey\fR is supplied, it's used as a template
+and only keys matching it are printed.
 .SS EXIT STATUS
 For most operations, \fBzcloud\fR returns 0 if the operation was successful and
 1 if it was not. For the \fBexists\fR operation, 0 is returned if \fBkey\fR
