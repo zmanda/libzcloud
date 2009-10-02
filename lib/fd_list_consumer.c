@@ -29,44 +29,42 @@ got_result_impl(
     ZCloudFDListConsumer *self = ZCLOUD_FD_LIST_CONSUMER(zself);
     size_t key_len, written;
     
-    if (self->fd < 0) return;
+    if (self->fd < 0 || !key) return;
 
-    if (key) {
-        key_len = strlen(key);
-        for (written = 0; written < key_len; /*nothing*/) {
-            size_t w_ret = write(self->fd, key+written, key_len-written);
-            if (w_ret < 0) {
-                if (EAGAIN == errno) {
-                    struct pollfd fds[] = {{self->fd, POLLOUT | POLLERR | POLLHUP | POLLNVAL, 0}};
-                    if (poll(fds, 1, -1) < 0) {
-                        if (EINTR != errno) {
-                            g_debug("an error ocurred while polling fd %d: %s",
-                                self->fd, strerror(errno));
-                            goto bad_fd;
-                        }
-                    } else if (fds[0].revents & POLLNVAL) {
-                        g_debug("fd %d is not open for reading (anymore?)",
-                            self->fd);
+    key_len = strlen(key);
+    for (written = 0; written < key_len; /*nothing*/) {
+        size_t w_ret = write(self->fd, key+written, key_len-written);
+        if (w_ret < 0) {
+            if (EAGAIN == errno) {
+                struct pollfd fds[] = {{self->fd, POLLOUT | POLLERR | POLLHUP | POLLNVAL, 0}};
+                if (poll(fds, 1, -1) < 0) {
+                    if (EINTR != errno) {
+                        g_debug("an error ocurred while polling fd %d: %s",
+                            self->fd, strerror(errno));
                         goto bad_fd;
-                    } else if (fds[0].revents & POLLHUP) {
-                        g_debug("fd %d has been closed", self->fd);
-                        goto bad_fd;
-                    } else if (fds[0].revents & POLLERR) {
-                        g_debug("fd %d is invalid?", self->fd);
-                        goto bad_fd;
-                    } else if (fds[0].revents & POLLOUT) {
-                        /* nothing */
-                    } else {
-                        g_assert_not_reached();
                     }
-                } else if (EINTR != errno) {
-                    g_debug("an error ocurred while writing to fd %d: %s",
-                        self->fd, strerror(errno));
+                } else if (fds[0].revents & POLLNVAL) {
+                    g_debug("fd %d is not open for reading (anymore?)",
+                        self->fd);
                     goto bad_fd;
+                } else if (fds[0].revents & POLLHUP) {
+                    g_debug("fd %d has been closed", self->fd);
+                    goto bad_fd;
+                } else if (fds[0].revents & POLLERR) {
+                    g_debug("fd %d is invalid?", self->fd);
+                    goto bad_fd;
+                } else if (fds[0].revents & POLLOUT) {
+                    /* nothing */
+                } else {
+                    g_assert_not_reached();
                 }
-            } else {
-                written += w_ret;
+            } else if (EINTR != errno) {
+                g_debug("an error ocurred while writing to fd %d: %s",
+                    self->fd, strerror(errno));
+                goto bad_fd;
             }
+        } else {
+            written += w_ret;
         }
     }
 
