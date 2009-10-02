@@ -21,6 +21,60 @@
 #include <string.h>
 #include "internal.h"
 
+/*
+ * writes buf_len bytes from buf to fd, even for non-blocking fds.
+ * returns -1 if the fd should not be used again (error). Otherwise,
+ * the number of bytes written (buf_len) will be returned.
+ */
+static ssize_t
+write_full(
+    int fd,
+    const guint8 *buf, 
+    size_t buf_len)
+{
+    size_t written;
+
+    g_assert(buf);
+
+    for (written = 0; written < buf_len; /*nothing*/) {
+        size_t w_ret = write(fd, buf+written, buf_len-written);
+        if (w_ret < 0) {
+            if (EAGAIN == errno) {
+                struct pollfd fds[] = {{fd, POLLOUT | POLLERR | POLLHUP | POLLNVAL, 0}};
+                if (poll(fds, 1, -1) < 0) {
+                    if (EINTR != errno) {
+                        g_debug("an error ocurred while polling fd %d: %s",
+                            fd, strerror(errno));
+                        return -1;
+                    }
+                } else if (fds[0].revents & POLLNVAL) {
+                    g_debug("fd %d is not open for reading (anymore?)",
+                        fd);
+                    return -1;
+                } else if (fds[0].revents & POLLHUP) {
+                    g_debug("fd %d has been closed", fd);
+                    return -1;
+                } else if (fds[0].revents & POLLERR) {
+                    g_debug("fd %d is invalid?", fd);
+                    return -1;
+                } else if (fds[0].revents & POLLOUT) {
+                    /* nothing */
+                } else {
+                    g_assert_not_reached();
+                }
+            } else if (EINTR != errno) {
+                g_debug("an error ocurred while writing to fd %d: %s",
+                    fd, strerror(errno));
+                return -1;
+            }
+        } else {
+            written += w_ret;
+        }
+    }
+
+    return written;
+}
+
 static void
 got_result_impl(
     ZCloudListConsumer *zself,
@@ -32,46 +86,10 @@ got_result_impl(
     if (self->fd < 0 || !key) return;
 
     key_len = strlen(key);
-    for (written = 0; written < key_len; /*nothing*/) {
-        size_t w_ret = write(self->fd, key+written, key_len-written);
-        if (w_ret < 0) {
-            if (EAGAIN == errno) {
-                struct pollfd fds[] = {{self->fd, POLLOUT | POLLERR | POLLHUP | POLLNVAL, 0}};
-                if (poll(fds, 1, -1) < 0) {
-                    if (EINTR != errno) {
-                        g_debug("an error ocurred while polling fd %d: %s",
-                            self->fd, strerror(errno));
-                        goto bad_fd;
-                    }
-                } else if (fds[0].revents & POLLNVAL) {
-                    g_debug("fd %d is not open for reading (anymore?)",
-                        self->fd);
-                    goto bad_fd;
-                } else if (fds[0].revents & POLLHUP) {
-                    g_debug("fd %d has been closed", self->fd);
-                    goto bad_fd;
-                } else if (fds[0].revents & POLLERR) {
-                    g_debug("fd %d is invalid?", self->fd);
-                    goto bad_fd;
-                } else if (fds[0].revents & POLLOUT) {
-                    /* nothing */
-                } else {
-                    g_assert_not_reached();
-                }
-            } else if (EINTR != errno) {
-                g_debug("an error ocurred while writing to fd %d: %s",
-                    self->fd, strerror(errno));
-                goto bad_fd;
-            }
-        } else {
-            written += w_ret;
-        }
-    }
-
-    if (0) {
-    bad_fd:
+    if (write_full(self->fd, key, key_len) < 0)
         self->fd = -1;
-    }
+    if (write_full(self->fd, &self->suffix, 1) < 0)
+        self->fd = -1;
 }
 
 static void
