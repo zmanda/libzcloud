@@ -37,7 +37,7 @@ reset_impl(
     ZCloudDownloadConsumer *self,
     GError **error);
 
-static guint8 *
+static gpointer
 get_contents_impl(
     ZCloudFixedMemoryDownloadConsumer *self,
     gsize *length);
@@ -82,8 +82,8 @@ class_init(ZCloudFixedMemoryDownloadConsumerClass *klass)
 
 ZCloudFixedMemoryDownloadConsumer *
 zcloud_fixed_memory_download_consumer(
-    guint8 *buffer,
-    guint buffer_length)
+    gpointer buffer,
+    gsize buffer_length)
 {
     ZCloudFixedMemoryDownloadConsumer *ret;
 
@@ -95,7 +95,7 @@ zcloud_fixed_memory_download_consumer(
     return ret;
 }
 
-guint8 *
+gpointer
 zcloud_fixed_memory_download_consumer_get_contents(
     ZCloudFixedMemoryDownloadConsumer *self,
     gsize *length)
@@ -113,7 +113,7 @@ write_impl(
     GError **error)
 {
     ZCloudFixedMemoryDownloadConsumer *self = ZCLOUD_FIXED_MEMORY_DOWNLOAD_CONSUMER(o);
-    guint length_wanted = self->buffer_position + bytes;
+    gsize length_wanted = self->buffer_position + bytes;
 
     if (length_wanted > self->buffer_length)
         bytes -= length_wanted - self->buffer_length;
@@ -136,7 +136,7 @@ static gboolean reset_impl(
     return TRUE;
 }
 
-static guint8 *
+static gpointer
 get_contents_impl(
     ZCloudFixedMemoryDownloadConsumer *self,
     gsize *length)

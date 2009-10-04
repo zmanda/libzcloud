@@ -83,7 +83,7 @@ class_init(ZCloudMemoryUploadProducerClass *klass)
 
 
 ZCloudMemoryUploadProducer *
-zcloud_memory_upload_producer(gconstpointer buffer, guint buffer_length)
+zcloud_memory_upload_producer(gconstpointer buffer, gsize buffer_length)
 {
     ZCloudMemoryUploadProducer *ret;
 

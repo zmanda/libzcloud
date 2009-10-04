@@ -36,24 +36,24 @@ typedef struct ZCloudFixedMemoryDownloadConsumer_s {
     ZCloudDownloadConsumer parent;
 
     guint8 *buffer;
-    guint buffer_length;
-    guint buffer_position;
+    gsize buffer_length;
+    gsize buffer_position;
 } ZCloudFixedMemoryDownloadConsumer;
 
 typedef struct ZCloudFixedMemoryDownloadConsumerClass_s {
     ZCloudDownloadConsumerClass parent_class;
 
-    guint8 * (*get_contents)(ZCloudFixedMemoryDownloadConsumer *self, gsize *length);
+    gpointer (*get_contents)(ZCloudFixedMemoryDownloadConsumer *self, gsize *length);
 } ZCloudFixedMemoryDownloadConsumerClass;
 
 /* constructor */
 /* Note: specifying 0 as max_buffer_length results in an unbounded buffer */
 ZCloudFixedMemoryDownloadConsumer *
 zcloud_fixed_memory_download_consumer(
-    guint8 *buffer,
-    guint buffer_length);
+    gpointer buffer,
+    gsize buffer_length);
 
-guint8 *
+gpointer
 zcloud_fixed_memory_download_consumer_get_contents(
     ZCloudFixedMemoryDownloadConsumer *self,
     gsize *length);

@@ -20,7 +20,7 @@
 #include "internal.h"
 #include <openssl/md5.h>
 
-guint8 *
+gpointer
 zcloud_growing_memory_download_consumer_get_contents(
     ZCloudGrowingMemoryDownloadConsumer *self,
     gsize *length)
@@ -47,12 +47,12 @@ write_impl(
     GError **error)
 {
     ZCloudGrowingMemoryDownloadConsumer *self = ZCLOUD_GROWING_MEMORY_DOWNLOAD_CONSUMER(o);
-    guint length_wanted = self->buffer_position + bytes;
+    gsize length_wanted = self->buffer_position + bytes;
 
     /* reallocate if necessary. We use exponential sizing to make this
      * happen less often. */
     if (length_wanted > self->buffer_length) {
-        guint new_length = MAX(length_wanted, self->buffer_length * 2);
+        gsize new_length = MAX(length_wanted, self->buffer_length * 2);
         if (self->max_buffer_length) {
             new_length = MIN(new_length, self->max_buffer_length);
         }
@@ -80,12 +80,12 @@ static gboolean reset_impl(
     return TRUE;
 }
 
-static guint8 *
+static gpointer
 get_contents_impl(
     ZCloudGrowingMemoryDownloadConsumer *self,
     gsize *length)
 {
-    guint8 *ret;
+    gpointer ret;
 
     if (length)
         *length = self->buffer_position;
@@ -153,7 +153,7 @@ zcloud_growing_memory_download_consumer_get_type(void)
 
 ZCloudGrowingMemoryDownloadConsumer *
 zcloud_growing_memory_download_consumer(
-    guint max_buffer_length)
+    gsize max_buffer_length)
 {
     ZCloudGrowingMemoryDownloadConsumer *ret;
 

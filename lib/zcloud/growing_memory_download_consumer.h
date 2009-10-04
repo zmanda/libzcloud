@@ -36,24 +36,24 @@ typedef struct ZCloudGrowingMemoryDownloadConsumer_s {
     ZCloudDownloadConsumer parent;
 
     guint8 *buffer;
-    guint buffer_length;
-    guint max_buffer_length;
-    guint buffer_position;
+    gsize buffer_length;
+    gsize max_buffer_length;
+    gsize buffer_position;
 } ZCloudGrowingMemoryDownloadConsumer;
 
 typedef struct ZCloudGrowingMemoryDownloadConsumerClass_s {
     ZCloudDownloadConsumerClass parent_class;
 
-    guint8 * (*get_contents)(ZCloudGrowingMemoryDownloadConsumer *self, gsize *length);
+    gpointer (*get_contents)(ZCloudGrowingMemoryDownloadConsumer *self, gsize *length);
     gchar * (*get_contents_as_string)(ZCloudGrowingMemoryDownloadConsumer *self);
 } ZCloudGrowingMemoryDownloadConsumerClass;
 
 /* constructor */
 /* Note: specifying 0 as max_buffer_length results in an unbounded buffer */
 ZCloudGrowingMemoryDownloadConsumer *
-zcloud_growing_memory_download_consumer(guint max_buffer_length);
+zcloud_growing_memory_download_consumer(gsize max_buffer_length);
 
-guint8 *
+gpointer
 zcloud_growing_memory_download_consumer_get_contents(
     ZCloudGrowingMemoryDownloadConsumer *self,
     gsize *length);
