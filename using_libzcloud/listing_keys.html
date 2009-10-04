@@ -17,7 +17,10 @@
     </script>
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" /> 
+    <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
+    <link rel="up" title="Using libzcloud" href="../using_libzcloud.html" />
+    <link rel="next" title="Testing for Existence" href="testing_existence.html" />
+    <link rel="prev" title="Uploading and Downloading" href="uploading_and_downloading.html" /> 
   </head>
   <body>
     <div class="related">
@@ -26,7 +29,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="testing_existence.html" title="Testing for Existence"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="uploading_and_downloading.html" title="Uploading and Downloading"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
       </ul>
     </div>  
     <div class="document">
@@ -35,9 +45,46 @@
           <div class="body">
             
   
-  <div class="section" id="listing-keys">
-<span id="uploading-and-downloading"></span><h1>Listing Keys<a class="headerlink" href="#listing-keys" title="Permalink to this headline">¶</a></h1>
-<p>To list the keys in a store, use the :meth:</p>
+  <div class="section" id="id1">
+<span id="listing-keys"></span><h1>Listing Keys<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>To list the keys in a store, use the store&#8217;s <a title="ZCloudStore.list" class="reference" href="../api/store.html#ZCloudStore.list"><tt class="xref docutils literal"><span class="pre">list</span></tt></a>
+method.</p>
+<p>This method takes a &#8220;key template&#8221;, which some plugins can use to minimize the
+data transferred from the cloud.  In the template, <tt class="docutils literal"><span class="pre">%s</span></tt> will match any
+string.  All other characters following a <tt class="docutils literal"><span class="pre">%</span></tt> character are reserved.  A
+literal <tt class="docutils literal"><span class="pre">%</span></tt> character can be escaped as <tt class="docutils literal"><span class="pre">%%</span></tt>.  For example:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">&quot;My</span> <span class="pre">Files/Mostly.doc&quot;</span></tt> matches only a file with the given name.</li>
+<li><tt class="docutils literal"><span class="pre">&quot;My</span> <span class="pre">Files/%s&quot;</span></tt> matches any key beginning with <tt class="docutils literal"><span class="pre">My</span> <span class="pre">Files/</span></tt>, enabling a sort
+of directory structure.</li>
+<li><tt class="docutils literal"><span class="pre">&quot;My</span> <span class="pre">Files/100%%.doc&quot;</span></tt> matches only <tt class="docutils literal"><span class="pre">My</span> <span class="pre">Files/100%.doc</span></tt>.</li>
+</ul>
+<p>The template system is not yet finalized.</p>
+<p>The <tt class="docutils literal"><span class="pre">list</span></tt> method also takes a <a title="ListConsumer" class="reference" href="../api/list_consumer.html#ListConsumer"><tt class="xref docutils literal"><span class="pre">ListConsumer</span></tt></a> instance to handle each
+returned key - see <a class="reference" href="list_consumers.html#list-consumers"><em>List Consumers</em></a> for a list of ready-made
+<a title="ListConsumer" class="reference" href="../api/list_consumer.html#ListConsumer"><tt class="xref docutils literal"><span class="pre">ListConsumer</span></tt></a> subclasses.</p>
+<p>A typical use of the <tt class="docutils literal"><span class="pre">list</span></tt> method might look like:</p>
+<div class="highlight-python"><pre>gint
+count_keys(ZCloudStore *store, gchar *template)
+{
+    ZCloudSListListConsumer *list_con;
+    GSList *l;
+    gint count = -1;
+
+    /* (another list consumer subclass might be more efficient..) */
+    list_con = zcloud_slist_list_consumer();
+
+    op_ok = zcloud_store_list(store, template,
+            ZCLOUD_LIST_CONSUMER(list_con), NULL, &amp;error);
+    if (op_ok) {
+        l = zcloud_slist_list_consumer_grab_contents(list_con);
+        count = g_slist_length(l);
+    }
+
+    g_object_unref(list_con);
+    return count;
+}</pre>
+</div>
 </div>
 
 
@@ -46,6 +93,10 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="uploading_and_downloading.html" title="previous chapter">Uploading and Downloading</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="testing_existence.html" title="next chapter">Testing for Existence</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="../sources/using_libzcloud/listing_keys.txt">Show Source</a></li>
@@ -66,12 +117,19 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="testing_existence.html" title="Testing for Existence"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="uploading_and_downloading.html" title="Uploading and Downloading"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Sep 30, 2009.
+      Last updated on Oct 04, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Download Consumers &mdash; libzcloud v1.0alpha documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0alpha',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
+    <link rel="up" title="Using libzcloud" href="../using_libzcloud.html" />
+    <link rel="next" title="List Consumers" href="list_consumers.html" />
+    <link rel="prev" title="Upload Producers" href="upload_producers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="list_consumers.html" title="List Consumers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="upload_producers.html" title="Upload Producers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="download-consumers">
+<h1>Download Consumers<a class="headerlink" href="#download-consumers" title="Permalink to this headline">¶</a></h1>
+<p>A download consumer is an object which processes data received from a store.
+Any subclass of <a title="DownloadConsumer" class="reference" href="../api/download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a> will work with any
+<a title="ZCloudStore" class="reference" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a> instance, but libzcloud provides a few common consumers
+which cover most uses.</p>
+<div class="section" id="fixed-memory-download-consumer">
+<h2>Fixed Memory Download Consumer<a class="headerlink" href="#fixed-memory-download-consumer" title="Permalink to this headline">¶</a></h2>
+<p>This consumer reads data into a fixed-length, preallocated buffer.  This is
+useful for small values that have a known maximum length.  If the store
+provides more data than permitted, then the consumer will signal an error
+condition and abort the download operation.</p>
+<p>The buffer is supplied to the constructor:</p>
+<dl class="cfunction">
+<dt id="zcloud_fixed_memory_download_consumer">
+<!--[zcloud_fixed_memory_download_consumer]-->ZCloudFixedMemoryDownloadConsumer *<tt class="descname">zcloud_fixed_memory_download_consumer</tt><big>(</big>gpointer<em> buffer</em>, gsize<em> buffer_length</em><big>)</big><a class="headerlink" href="#zcloud_fixed_memory_download_consumer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>buffer</em> &#8211; the buffer into which to read data</li>
+<li><em>buffer_length</em> &#8211; the buffer size</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a download consumer</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>When the download is complete, the size of the data and a pointer to the original buffer are available from the <tt class="docutils literal"><span class="pre">get_contents</span></tt> method:</p>
+<dl class="cfunction">
+<dt id="zcloud_fixed_memory_download_consumer_get_contents">
+<!--[zcloud_fixed_memory_download_consumer_get_contents]-->gpointer <tt class="descname">zcloud_fixed_memory_download_consumer_get_contents</tt><big>(</big>ZCloudFixedMemoryDownloadConsumer<em> *self</em>, gsize<em> *length</em><big>)</big><a class="headerlink" href="#zcloud_fixed_memory_download_consumer_get_contents" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>self</em> &#8211; download consumer</li>
+<li><em>length</em> &#8211; (output) size of the data in the buffer</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">pointer to the downloaded data (same as the constructor&#8217;s <tt class="docutils literal"><span class="pre">buffer</span></tt> argument)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="growing-memory-download-consumer">
+<h2>Growing Memory Download Consumer<a class="headerlink" href="#growing-memory-download-consumer" title="Permalink to this headline">¶</a></h2>
+<p>For values with more variability in size, the growing memory download consumer
+can avoid the need to allocate large amounts of memory unless the value is
+actually large.  This consumer will periodically resize its buffer to
+accomodate incoming data, up to the maximum buffer size specified to the
+constructor:</p>
+<dl class="cfunction">
+<dt id="zcloud_growing_memory_download_consumer">
+<!--[zcloud_growing_memory_download_consumer]-->ZCloudGrowingMemoryDownloadConsumer *<tt class="descname">zcloud_growing_memory_download_consumer</tt><big>(</big>gsize<em> max_buffer_length</em><big>)</big><a class="headerlink" href="#zcloud_growing_memory_download_consumer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>max_buffer_length</em> &#8211; maximum amount of data to accept, or 0 for no limit</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a download consumer</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Like the fixed memory download consumer, this consumer has a <tt class="docutils literal"><span class="pre">get_contents</span></tt>
+method.  However, this method returns a <em>newly allocated</em> buffer, which the
+caller must free.</p>
+<dl class="cfunction">
+<dt id="zcloud_growing_memory_download_consumer_get_contents">
+<!--[zcloud_growing_memory_download_consumer_get_contents]-->gpointer <tt class="descname">zcloud_growing_memory_download_consumer_get_contents</tt><big>(</big>ZCloudGrowingMemoryDownloadConsumer<em> *self</em>, gsize<em> *length</em><big>)</big><a class="headerlink" href="#zcloud_growing_memory_download_consumer_get_contents" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>self</em> &#8211; download consumer</li>
+<li><em>length</em> &#8211; (output) length of the returned data</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">newly allocated buffer containing the downloaded data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="cfunction">
+<dt id="zcloud_growing_memory_download_consumer_get_contents_as_string">
+<!--[zcloud_growing_memory_download_consumer_get_contents_as_string]-->gchar *<tt class="descname">zcloud_growing_memory_download_consumer_get_contents_as_string</tt><big>(</big>ZCloudGrowingMemoryDownloadConsumer<em> *self</em><big>)</big><a class="headerlink" href="#zcloud_growing_memory_download_consumer_get_contents_as_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <tt class="docutils literal"><span class="pre">get_contents</span></tt>, but returns the buffer as a string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>self</em> &#8211; download consumer</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">newly allocated, NUL-terminated string containing the downloaded data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Download Consumers</a><ul>
+<li><a class="reference" href="#fixed-memory-download-consumer">Fixed Memory Download Consumer</a></li>
+<li><a class="reference" href="#growing-memory-download-consumer">Growing Memory Download Consumer</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="upload_producers.html" title="previous chapter">Upload Producers</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="list_consumers.html" title="next chapter">List Consumers</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../sources/using_libzcloud/download_consumers.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="../search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="list_consumers.html" title="List Consumers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="upload_producers.html" title="Upload Producers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
+      Last updated on Oct 04, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
+    </div>
+  </body>
+</html>

@@ -53,16 +53,10 @@
 <dd><p>Stores represent a service that provides persistence of arbitrary blobs.
 An example is Amazon S3.</p>
 <dl class="method">
-<dt id="ZCloudStore.setup">
-<!--[ZCloudStore.setup]--><tt class="descname">setup</tt><big>(</big><em>suffix</em>, <em>n_parameters</em>, <em>parameters</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.setup" title="Permalink to this definition">¶</a></dt>
-<dd>Protected method - used during object construction.</dd></dl>
-
-<dl class="method">
 <dt id="ZCloudStore.create">
 <!--[ZCloudStore.create]--><tt class="descname">create</tt><big>(</big><em>key</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates the key with an empty value.  This is not required by all store
-classes.</p>
-<p>See <a class="reference" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a></p>
+classes.  See <a class="reference" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -90,8 +84,7 @@ classes.</p>
 <dd><p>Upload some data.  <tt class="docutils literal"><span class="pre">producer</span></tt> will be consulted for metadata
 (e.g. MD5 hash and size) and is responsible for actually reading the data
 to be uploaded. The <tt class="xref docutils literal"><span class="pre">Store</span></tt> handles actually uploading the data
-to the storage service.</p>
-<p>See <a class="reference" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a></p>
+to the storage service.  See <a class="reference" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -119,8 +112,7 @@ to the storage service.</p>
 <!--[ZCloudStore.download]--><tt class="descname">download</tt><big>(</big><em>key</em>, <em>consumer</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.download" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download data from <cite>key</cite>. The <tt class="docutils literal"><span class="pre">consumer</span></tt> is responsible for
 &#8220;doing something useful&#8221; with the data received from the storage service.
-For example, it could save it to a file.</p>
-<p>See <a class="reference" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a></p>
+For example, it could save it to a file.  See <a class="reference" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -146,7 +138,7 @@ For example, it could save it to a file.</p>
 <dl class="method">
 <dt id="ZCloudStore.exists">
 <!--[ZCloudStore.exists]--><tt class="descname">exists</tt><big>(</big><em>key</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.exists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if <cite>key</cite> exists</p>
+<dd><p>Checks if <cite>key</cite> exists.  See <a class="reference" href="../using_libzcloud/testing_existence.html#testing-existence"><em>Testing for Existence</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -171,7 +163,7 @@ For example, it could save it to a file.</p>
 <dl class="method">
 <dt id="ZCloudStore.delete">
 <!--[ZCloudStore.delete]--><tt class="descname">delete</tt><big>(</big><em>key</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete whatever is represented by <cite>key</cite></p>
+<dd><p>Delete whatever is represented by <cite>key</cite>.  See <a class="reference" href="../using_libzcloud/deleting_keys.html#deleting-keys"><em>Deleting Keys</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -198,9 +190,9 @@ For example, it could save it to a file.</p>
 <!--[ZCloudStore.list]--><tt class="descname">list</tt><big>(</big><em>template</em>, <em>consumer</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.list" title="Permalink to this definition">¶</a></dt>
 <dd><p>List all keys matching <cite>template</cite>, calling
 <a title="ListConsumer.got_result" class="reference" href="list_consumer.html#ListConsumer.got_result"><tt class="xref docutils literal"><span class="pre">ListConsumer.got_result()</span></tt></a> for each one. The <tt class="docutils literal"><span class="pre">template</span></tt> should
-just use <tt class="docutils literal"><span class="pre">%s</span></tt> as a placeholder and <tt class="docutils literal"><span class="pre">%%</span></tt> to represent <tt class="docutils literal"><span class="pre">%</span></tt>.</p>
+just use <tt class="docutils literal"><span class="pre">%s</span></tt> as a placeholder and <tt class="docutils literal"><span class="pre">%%</span></tt> to represent <tt class="docutils literal"><span class="pre">%</span></tt>.  See
+<a class="reference" href="../using_libzcloud/listing_keys.html#listing-keys"><em>Listing Keys</em></a>.</p>
 <p>TODO: that&#8217;s not right..</p>
-<p>See <em>listing_keys</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -222,6 +214,11 @@ just use <tt class="docutils literal"><span class="pre">%s</span></tt> as a plac
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="ZCloudStore.setup">
+<!--[ZCloudStore.setup]--><tt class="descname">setup</tt><big>(</big><em>suffix</em>, <em>n_parameters</em>, <em>parameters</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.setup" title="Permalink to this definition">¶</a></dt>
+<dd>Protected method - used during object construction.</dd></dl>
 
 </dd></dl>
 
@@ -269,7 +266,7 @@ just use <tt class="docutils literal"><span class="pre">%s</span></tt> as a plac
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Sep 30, 2009.
+      Last updated on Oct 04, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

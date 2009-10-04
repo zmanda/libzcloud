@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction &mdash; libzcloud v1.0alpha documentation</title>
+    <title>Error Handling &mdash; libzcloud v1.0alpha documentation</title>
     <link rel="stylesheet" href="../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -18,9 +18,9 @@
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
     <link rel="top" title="libzcloud v1.0alpha documentation" href="../index.html" />
-    <link rel="up" title="Writing libzcloud Plugins" href="../writing_plugins.html" />
-    <link rel="next" title="Plugin Build Process" href="build_process.html" />
-    <link rel="prev" title="Writing libzcloud Plugins" href="../writing_plugins.html" /> 
+    <link rel="up" title="Using libzcloud" href="../using_libzcloud.html" />
+    <link rel="next" title="Upload Producers" href="upload_producers.html" />
+    <link rel="prev" title="Deleting Keys" href="deleting_keys.html" /> 
   </head>
   <body>
     <div class="related">
@@ -30,13 +30,13 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="build_process.html" title="Plugin Build Process"
+          <a href="upload_producers.html" title="Upload Producers"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../writing_plugins.html" title="Writing libzcloud Plugins"
+          <a href="deleting_keys.html" title="Deleting Keys"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
-          <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
       </ul>
     </div>  
     <div class="document">
@@ -45,23 +45,9 @@
           <div class="body">
             
   
-  <div class="section" id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
-<p>When beginning a new plugin, look at the existing libzcloud plugins for
-examples.  In particular, the <em>disk</em> plugin is intended as an example.</p>
-<p>At the moment, there is no libzcloud mailing list, but you are encouraged
-contact the developers directly by email or visit the IRC channel
-<tt class="docutils literal"><span class="pre">#libzcloud</span></tt> on Freenode with any questions.</p>
-</div>
-<div class="section" id="local-and-external-plugins">
-<span id="index-2"></span><h2>Local and External Plugins<a class="headerlink" href="#local-and-external-plugins" title="Permalink to this headline">¶</a></h2>
-<p>A <em>local</em> plugin is one which is built alongside libzcloud.  <em>External</em> plugins
-are compiled separately, against an installed copy of libzcloud.  Both
-varieties of plugins are loaded with the same mechanism; the difference is only
-in how they are compiled and installed.</p>
-</div>
+  <div class="section" id="id1">
+<span id="error-handling"></span><h1>Error Handling<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>(GErrors and the transient/permanent differences)</p>
 </div>
 
 
@@ -70,22 +56,13 @@ in how they are compiled and installed.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference" href="">Introduction</a><ul>
-<li><a class="reference" href="#resources">Resources</a></li>
-<li><a class="reference" href="#local-and-external-plugins">Local and External Plugins</a></li>
-</ul>
-</li>
-</ul>
-
             <h4>Previous topic</h4>
-            <p class="topless"><a href="../writing_plugins.html" title="previous chapter">Writing libzcloud Plugins</a></p>
+            <p class="topless"><a href="deleting_keys.html" title="previous chapter">Deleting Keys</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="build_process.html" title="next chapter">Plugin Build Process</a></p>
+            <p class="topless"><a href="upload_producers.html" title="next chapter">Upload Producers</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
-              <li><a href="../sources/writing_plugins/introduction.txt">Show Source</a></li>
+              <li><a href="../sources/using_libzcloud/error_handling.txt">Show Source</a></li>
             </ul>
           <h3>Quick search</h3>
             <form class="search" action="../search.html" method="get">
@@ -104,13 +81,13 @@ in how they are compiled and installed.</p>
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="build_process.html" title="Plugin Build Process"
+          <a href="upload_producers.html" title="Upload Producers"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../writing_plugins.html" title="Writing libzcloud Plugins"
+          <a href="deleting_keys.html" title="Deleting Keys"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libzcloud v1.0alpha documentation</a> &raquo;</li>
-          <li><a href="../writing_plugins.html" accesskey="U">Writing libzcloud Plugins</a> &raquo;</li> 
+          <li><a href="../using_libzcloud.html" accesskey="U">Using libzcloud</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

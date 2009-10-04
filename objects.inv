@@ -12,7 +12,9 @@ ZCloudStore.upload method api/store.html
 loaded cmember using_libzcloud/module_info.html
 zcloud_register_store_plugin cfunction writing_plugins/initialization.html
 UploadProducer.get_size method api/upload_producer.html
+zcloud_growing_memory_download_consumer cfunction using_libzcloud/download_consumers.html
 ZCloudStore class api/store.html
+zcloud_fixed_memory_download_consumer_get_contents cfunction using_libzcloud/download_consumers.html
 zcloud_store_new cfunction using_libzcloud/creating_a_store.html
 xml_path cmember using_libzcloud/module_info.html
 DownloadConsumer class api/download_consumer.html
@@ -20,6 +22,7 @@ type cmember using_libzcloud/module_info.html
 ZCloudStore.delete method api/store.html
 ZCloudStore.download method api/store.html
 zcloud_get_store_plugin_by_prefix cfunction using_libzcloud/module_info.html
+zcloud_fixed_memory_download_consumer cfunction using_libzcloud/download_consumers.html
 ZCloudStore.setup method api/store.html
 zcloud_get_all_store_plugins cfunction using_libzcloud/module_info.html
 ZCloudStorePlugin ctype using_libzcloud/module_info.html
@@ -31,8 +34,10 @@ ProgressListener class api/progress_listener.html
 UploadProducer.read method api/upload_producer.html
 ListConsumer.got_result method api/list_consumer.html
 ListConsumer class api/list_consumer.html
+zcloud_growing_memory_download_consumer_get_contents_as_string cfunction using_libzcloud/download_consumers.html
 DownloadConsumer.reset method api/download_consumer.html
 ZCloudStore.create method api/store.html
+zcloud_growing_memory_download_consumer_get_contents cfunction using_libzcloud/download_consumers.html
 ZCloudStore.list method api/store.html
 UploadProducer.reset method api/upload_producer.html
 module_path cmember using_libzcloud/module_info.html
