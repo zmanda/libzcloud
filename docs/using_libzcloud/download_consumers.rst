@@ -18,7 +18,7 @@ condition and abort the download operation.
 
 The buffer is supplied to the constructor:
 
-.. cfunction:: ZCloudFixedMemoryDownloadConsumer *zcloud_fixed_memory_download_consumer(guint8 *buffer, guint buffer_length)
+.. cfunction:: ZCloudFixedMemoryDownloadConsumer *zcloud_fixed_memory_download_consumer(gpointer buffer, gsize buffer_length)
 
     :param buffer: the buffer into which to read data
     :param buffer_length: the buffer size
@@ -26,7 +26,7 @@ The buffer is supplied to the constructor:
 
 When the download is complete, the size of the data and a pointer to the original buffer are available from the ``get_contents`` method:
 
-.. cfunction:: guint8 *zcloud_fixed_memory_download_consumer_get_contents(ZCloudFixedMemoryDownloadConsumer *self, gsize *length)
+.. cfunction:: gpointer zcloud_fixed_memory_download_consumer_get_contents(ZCloudFixedMemoryDownloadConsumer *self, gsize *length)
 
     :param self: download consumer
     :param length: (output) size of the data in the buffer
@@ -41,7 +41,7 @@ actually large.  This consumer will periodically resize its buffer to
 accomodate incoming data, up to the maximum buffer size specified to the
 constructor:
 
-.. cfunction:: ZCloudGrowingMemoryDownloadConsumer *zcloud_growing_memory_download_consumer(guint max_buffer_length)
+.. cfunction:: ZCloudGrowingMemoryDownloadConsumer *zcloud_growing_memory_download_consumer(gsize max_buffer_length)
 
     :param max_buffer_length: maximum amount of data to accept, or 0 for no limit
     :returns: a download consumer
@@ -50,7 +50,7 @@ Like the fixed memory download consumer, this consumer has a ``get_contents``
 method.  However, this method returns a *newly allocated* buffer, which the
 caller must free.
 
-.. cfunction:: guint8 *zcloud_growing_memory_download_consumer_get_contents(ZCloudGrowingMemoryDownloadConsumer *self, gsize *length)
+.. cfunction:: gpointer zcloud_growing_memory_download_consumer_get_contents(ZCloudGrowingMemoryDownloadConsumer *self, gsize *length)
 
     :param self: download consumer
     :param length: (output) length of the returned data
