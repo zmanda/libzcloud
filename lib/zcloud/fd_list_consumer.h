@@ -36,7 +36,7 @@ typedef struct ZCloudFDListConsumer_s {
     ZCloudListConsumer parent;
 
     int fd;
-    gchar *suffix;
+    gchar suffix;
 } ZCloudFDListConsumer;
 
 typedef struct ZCloudFDListConsumerClass_s {

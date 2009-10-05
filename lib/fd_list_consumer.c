@@ -29,7 +29,7 @@
 static ssize_t
 write_full(
     int fd,
-    const guint8 *buf, 
+    gconstpointer *buf,
     size_t buf_len)
 {
     size_t written;
@@ -81,14 +81,14 @@ got_result_impl(
     const gchar *key)
 {
     ZCloudFDListConsumer *self = ZCLOUD_FD_LIST_CONSUMER(zself);
-    size_t key_len, written;
-    
+    size_t key_len;
+
     if (self->fd < 0 || !key) return;
 
     key_len = strlen(key);
-    if (write_full(self->fd, key, key_len) < 0)
+    if (write_full(self->fd, (gpointer) key, key_len) < 0)
         self->fd = -1;
-    if (write_full(self->fd, &self->suffix, 1) < 0)
+    if (write_full(self->fd, (gpointer) &self->suffix, 1) < 0)
         self->fd = -1;
 }
 
