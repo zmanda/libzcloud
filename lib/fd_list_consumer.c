@@ -39,30 +39,7 @@ write_full(
     for (written = 0; written < buf_len; /*nothing*/) {
         size_t w_ret = write(fd, buf+written, buf_len-written);
         if (w_ret < 0) {
-            if (EAGAIN == errno) {
-                struct pollfd fds[] = {{fd, POLLOUT | POLLERR | POLLHUP | POLLNVAL, 0}};
-                if (poll(fds, 1, -1) < 0) {
-                    if (EINTR != errno) {
-                        g_debug("an error ocurred while polling fd %d: %s",
-                            fd, strerror(errno));
-                        return -1;
-                    }
-                } else if (fds[0].revents & POLLNVAL) {
-                    g_debug("fd %d is not open for reading (anymore?)",
-                        fd);
-                    return -1;
-                } else if (fds[0].revents & POLLHUP) {
-                    g_debug("fd %d has been closed", fd);
-                    return -1;
-                } else if (fds[0].revents & POLLERR) {
-                    g_debug("fd %d is invalid?", fd);
-                    return -1;
-                } else if (fds[0].revents & POLLOUT) {
-                    /* nothing */
-                } else {
-                    g_assert_not_reached();
-                }
-            } else if (EINTR != errno) {
+            if (EINTR != errno) {
                 g_debug("an error ocurred while writing to fd %d: %s",
                     fd, strerror(errno));
                 return -1;
