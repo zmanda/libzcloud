@@ -32,7 +32,7 @@ write_full(
     g_assert(buf);
 
     for (written = 0; written < buf_len; /*nothing*/) {
-        size_t w_ret = write(fd, buf+written, buf_len-written);
+        ssize_t w_ret = write(fd, buf+written, buf_len-written);
         if (w_ret < 0) {
             if (EINTR != errno) {
                 g_set_error(error, ZCLOUD_ERROR, ZCERR_UNKNOWN,

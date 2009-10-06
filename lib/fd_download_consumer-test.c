@@ -71,8 +71,7 @@ test_fd_download_consumer(void)
 
     is_goffset(lseek(file_fd, 0, SEEK_SET), 0, "moved to beginning of file (after reset)");
 
-    read_buf = g_malloc(test_text_len+2);
-    is_gssize(read(file_fd, read_buf, test_text_len+2), test_text_len+1,
+    is_gssize(read(file_fd, read_buf, test_text_len+2), 0,
         "read right number of bytes back (after reset)");
 
     close(file_fd);
