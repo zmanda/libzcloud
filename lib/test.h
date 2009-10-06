@@ -134,12 +134,13 @@ extern gint tests_failed, tests_passed, tests_run;
 
 /* list of all test modules */
 #define ALL_TESTS \
-    TEST_MODULE(memory_upload_producer) \
     TEST_MODULE(growing_memory_download_consumer) \
-    TEST_MODULE(fixed_memory_download_consumer) \
-    TEST_MODULE(slist_list_consumer) \
+    TEST_MODULE(fd_download_consumer) \
     TEST_MODULE(fd_list_consumer) \
+    TEST_MODULE(fixed_memory_download_consumer) \
+    TEST_MODULE(memory_upload_producer) \
     TEST_MODULE(plugins) \
+    TEST_MODULE(slist_list_consumer) \
     TEST_MODULE(store)
 
 /* generate test module prototypes */

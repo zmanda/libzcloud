@@ -16,41 +16,7 @@
  * GNU Lesser General Public License for more details.
  *  ***** END LICENSE BLOCK ***** */
 
-#include <errno.h>
-#include <poll.h>
-#include <string.h>
 #include "internal.h"
-
-/*
- * writes buf_len bytes from buf to fd, even for non-blocking fds.
- * returns -1 if the fd should not be used again (error). Otherwise,
- * the number of bytes written (buf_len) will be returned.
- */
-static ssize_t
-write_full(
-    int fd,
-    gconstpointer *buf,
-    size_t buf_len)
-{
-    size_t written;
-
-    g_assert(buf);
-
-    for (written = 0; written < buf_len; /*nothing*/) {
-        size_t w_ret = write(fd, buf+written, buf_len-written);
-        if (w_ret < 0) {
-            if (EINTR != errno) {
-                g_debug("an error ocurred while writing to fd %d: %s",
-                    fd, strerror(errno));
-                return -1;
-            }
-        } else {
-            written += w_ret;
-        }
-    }
-
-    return written;
-}
 
 static void
 got_result_impl(
@@ -58,15 +24,23 @@ got_result_impl(
     const gchar *key)
 {
     ZCloudFDListConsumer *self = ZCLOUD_FD_LIST_CONSUMER(zself);
-    size_t key_len;
+    gsize key_len;
+    GError *tmp_err = NULL;
 
     if (self->fd < 0 || !key) return;
 
     key_len = strlen(key);
-    if (write_full(self->fd, (gpointer) key, key_len) < 0)
+    if (!write_full(self->fd, key, key_len, &tmp_err))
+        goto write_failed;
+    if (!write_full(self->fd, &self->suffix, 1, &tmp_err))
+        goto write_failed;
+
+write_failed:
+    if (tmp_err) {
         self->fd = -1;
-    if (write_full(self->fd, (gpointer) &self->suffix, 1) < 0)
-        self->fd = -1;
+        g_debug("Failed to write: %s", tmp_err->message);
+        g_clear_error(&tmp_err);
+    }
 }
 
 static void

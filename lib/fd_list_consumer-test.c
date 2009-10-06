@@ -71,8 +71,11 @@ test_fd_list_consumer(void)
     void (*prev_handler)(int);
 
     if (pipe(fds) < 0) {
-        fprintf(stderr, "error occurred creating pipe (%s); aborting",
+        gchar *tmp = g_strdup_printf("error occurred creating pipe (%s); aborting",
             strerror(errno));
+        fail(tmp);
+        g_free(tmp);
+        return;
     }
 
     o = zcloud_fd_list_consumer(fds[1], '\n');
@@ -106,5 +109,6 @@ test_fd_list_consumer(void)
     signal(SIGPIPE, prev_handler);
     pass("tried writing to closed pipe and din't explode");
 
+    close(fds[1]);
     g_object_unref(o);
 }

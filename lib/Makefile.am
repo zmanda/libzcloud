@@ -24,6 +24,7 @@
 public_headers = \
 	zcloud/download_consumer.h \
 	zcloud/error.h \
+	zcloud/fd_download_consumer.h \
 	zcloud/fd_list_consumer.h \
 	zcloud/fixed_memory_download_consumer.h \
 	zcloud/growing_memory_download_consumer.h \
@@ -36,11 +37,14 @@ public_headers = \
 	zcloud/upload_producer.h
 
 internal_headers = \
+    internal/fd-util.h \
     internal/plugins.h
 
 libzcloud_source = \
     download_consumer.c \
     error.c \
+    fd-util.c \
+    fd_download_consumer.c \
     fd_list_consumer.c \
     fixed_memory_download_consumer.c \
     growing_memory_download_consumer.c \
@@ -56,6 +60,7 @@ libzcloud_source = \
 test_source = \
 	test-checks.c \
 	test-util.c \
+	fd_download_consumer-test.c \
 	fd_list_consumer-test.c \
 	fixed_memory_download_consumer-test.c \
 	growing_memory_download_consumer-test.c \

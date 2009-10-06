@@ -85,6 +85,7 @@
 #include "zcloud.h"
 
 /* include internal headers */
+#include "internal/fd-util.h"
 #include "internal/plugins.h"
 
 #endif
