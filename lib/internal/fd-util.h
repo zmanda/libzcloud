@@ -33,6 +33,20 @@ write_full(
     gsize buf_len,
     GError **error);
 
+/*
+ * reads buf_len bytes from fd int buf. Return TRUE if successful. Otherwise,
+ * returns FALSE and sets error. bytes_read, if non-NULL, will be set to the
+ * number of bytes read.
+ */
+G_GNUC_INTERNAL
+gboolean
+read_full(
+    int fd,
+    gconstpointer buf,
+    gsize buf_len,
+    gsize *bytes_read,
+    GError **error);
+
 G_END_DECLS
 
 #endif

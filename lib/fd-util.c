@@ -30,6 +30,7 @@ write_full(
     size_t written;
 
     g_assert(buf);
+    g_assert(buf_len < SSIZE_MAX);
 
     for (written = 0; written < buf_len; /*nothing*/) {
         ssize_t w_ret = write(fd, buf+written, buf_len-written);
@@ -43,6 +44,36 @@ write_full(
         } else {
             written += w_ret;
         }
+    }
+
+    return TRUE;
+}
+
+gboolean
+read_full(
+    int fd,
+    gconstpointer buf,
+    gsize buf_len,
+    gsize *bytes_read_out,
+    GError **error)
+{
+    gsize bytes_read;
+    g_assert(buf);
+    g_assert(buf_len < SSIZE_MAX);
+
+    if(bytes_read_out) *bytes_read_out = 0;
+    for (bytes_read = 0; bytes_read < buf_len; /* nothing */) {
+        ssize_t read_ret = read(fd, buf, buf_len);
+        if (read_ret < 0) {
+            if (EINTR == errno) continue;
+            g_set_error(error, ZCLOUD_ERROR, ZCERR_UNKNOWN,
+                "an error occurred while reading from fd %d: %s", fd, strerror(errno));
+            return FALSE;
+        }
+
+        if (0 == read_ret) break;
+        bytes_read += read_ret;
+        if (bytes_read_out) *bytes_read_out = bytes_read;
     }
 
     return TRUE;

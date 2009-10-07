@@ -56,8 +56,12 @@ gboolean gerror_is_set(GError **error, const gchar *expected_message_glob,
 /* compare two objects of the same, given type */
 gboolean is_string(const gchar *got, const gchar *expected, const gchar *msg);
 gboolean isnt_string(const gchar *got, const gchar *expected, const gchar *msg);
+
 gboolean is_byte_array(const GByteArray *got, const GByteArray *expected, const gchar *msg);
 gboolean isnt_byte_array(const GByteArray *got, const GByteArray *expected, const gchar *msg);
+
+gboolean is_md5(GByteArray *got, const gchar *bytestring, const gchar *msg);
+gboolean isnt_md5(GByteArray *got, const gchar *bytestring, const gchar *msg);
 
 gboolean is_null(gconstpointer got, const gchar *msg);
 gboolean isnt_null(gconstpointer got, const gchar *msg);
@@ -137,6 +141,7 @@ extern gint tests_failed, tests_passed, tests_run;
     TEST_MODULE(growing_memory_download_consumer) \
     TEST_MODULE(fd_download_consumer) \
     TEST_MODULE(fd_list_consumer) \
+    TEST_MODULE(fd_upload_producer) \
     TEST_MODULE(fixed_memory_download_consumer) \
     TEST_MODULE(memory_upload_producer) \
     TEST_MODULE(plugins) \

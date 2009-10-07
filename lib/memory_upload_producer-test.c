@@ -19,22 +19,6 @@
 
 #include "test.h"
 
-static gboolean
-is_md5(
-    GByteArray *got,
-    const gchar *bytestring,
-    const gchar *msg)
-{
-    gboolean rv;
-    GByteArray *arr = g_byte_array_sized_new(16);
-    g_byte_array_append(arr, (const guint8 *)bytestring, 16);
-
-    rv = is_byte_array(got, arr, msg);
-
-    g_byte_array_free(arr, 1);
-    return rv;
-}
-
 void
 test_memory_upload_producer(void)
 {
