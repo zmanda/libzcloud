@@ -16,9 +16,14 @@
  * GNU Lesser General Public License for more details.
  *  ***** END LICENSE BLOCK ***** */
 
+#include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
+
 #include "zcloud.h"
 
 typedef struct ParamData_s {
@@ -83,12 +88,16 @@ int main(int argc, char **argv)
     ParamData param_data = PARAM_DATA_INIT;
     gboolean nul_suf = FALSE;
     gchar *data = NULL;
+    gchar *filename = NULL;
+    gboolean append = FALSE;
 
     const GOptionEntry entries[] = {
         {"plugin-path", 0, 0, G_OPTION_ARG_STRING, &plugin_path, "set the plugin path", "PATH"},
         {"param", 0, 0, G_OPTION_ARG_CALLBACK, parse_param_arg, "set store property NAME to VALUE", "NAME=VALUE"},
-        {"null", 0, 0, G_OPTION_ARG_CALLBACK, &nul_suf, "(list only) print NUL after each key instead of newline", NULL},
-        {"data", 0, 0, G_OPTION_ARG_CALLBACK, &data, "(upload only) upload STRING to the key", "STRING"},
+        {"append", 0, 0, G_OPTION_ARG_NONE, &nul_suf, "(download only) append to FILENAME (instead of clobbering it outright)", NULL},
+        {"data", 0, 0, G_OPTION_ARG_STRING, &data, "(upload only) upload STRING to the key", "STRING"},
+        {"filename", 0, 0, G_OPTION_ARG_STRING, &filename, "(download and upload only) download to, or upload from, FILENAME", "FILENAME"},
+        {"null", 0, 0, G_OPTION_ARG_NONE, &nul_suf, "(list only) print NUL after each key instead of newline", NULL},
         {NULL},
     };
 
@@ -99,6 +108,11 @@ int main(int argc, char **argv)
     GError *error = NULL;
     ZCloudStore *store;
     int ret = 1;
+
+    ZCloudUploadProducer *up_prod = NULL;
+    ZCloudDownloadConsumer *down_con = NULL;
+    ZCloudListConsumer *list_con = NULL;
+    int file_fd = -1;
 
     /* TODO: handle locale environment variables, calling setlocale() */
 
@@ -134,11 +148,43 @@ int main(int argc, char **argv)
     store_spec = argv[2];
     if (argc > 3) key = argv[3];
 
+    /* validate options based on the operation */
+    if (!key && strcmp("list", operation)) {
+        fprintf(stderr, "You must supply a key for the operation '%s'\n", operation);
+        goto cleanup;
+    }
+    if (nul_suf && strcmp("list", operation)) {
+        fprintf(stderr, "Operation '%s' does not accept --null option\n", operation);
+        goto cleanup;
+    }
+    if (data && strcmp("upload", operation)) {
+        fprintf(stderr, "Operation '%s' does not accept --data option\n", operation);
+        goto cleanup;
+    }
+    if (append && strcmp("download", operation)) {
+        fprintf(stderr, "Operation '%s' does not accept --append option\n", operation);
+        goto cleanup;
+    }
+    if (filename && strcmp("upload", operation) && strcmp("download", operation)) {
+        fprintf(stderr, "Operation '%s' does not accept --filename option\n", operation);
+        goto cleanup;
+    }
+    if (data && filename) {
+        fprintf(stderr, "You must specify only one of the --filename and --data options\n");
+        goto cleanup;
+    }
+    if (append && !filename) {
+        fprintf(stderr, "--append can only be specified with --filename\n");
+        goto cleanup;
+    }
+
+    /* try to apply --plugin-path */
     if (plugin_path && setenv(ZCLOUD_PLUGIN_PATH_ENV, plugin_path, 1) < 0) {
         fprintf(stderr, "setting " ZCLOUD_PLUGIN_PATH_ENV " failed\n");
         goto cleanup;
     }
 
+    /* now try to create the store, including any --param stuff we got */
     store = zcloud_store_newv(store_spec, param_data.n_params, param_data.params, &error);
     if (!store) {
         fprintf(stderr, "Could not load store '%s': %s\n", store_spec,
@@ -147,11 +193,8 @@ int main(int argc, char **argv)
         goto cleanup;
     }
 
+    /* onto the actual operations! */
     if (!strcmp("create", operation)) {
-        if (!key) {
-            fprintf(stderr, "You must supply a key for the operation '%s'\n", operation);
-            goto cleanup;
-        }
         if (zcloud_store_create(store, key, NULL, &error)) {
             fprintf(stderr, "Successfully created '%s' in '%s'\n", key,
                 store_spec);
@@ -161,11 +204,8 @@ int main(int argc, char **argv)
                 store_spec, error->message);
             g_error_free(error);
         }
+
     } else if (!strcmp("exists", operation)) {
-        if (!key) {
-            fprintf(stderr, "You must supply a key for the operation '%s'\n", operation);
-            goto cleanup;
-        }
         if (zcloud_store_exists(store, key, NULL, &error)) {
             fprintf(stderr, "'%s' exists in '%s'\n", key, store_spec);
             ret = 0;
@@ -179,13 +219,10 @@ int main(int argc, char **argv)
             }
             g_error_free(error);
         }
+
     } else if (!strcmp("delete", operation)) {
-        if (!key) {
-            fprintf(stderr, "You must supply a key for the operation '%s'\n", operation);
-            goto cleanup;
-        }
         if (zcloud_store_delete(store, key, NULL, &error)) {
-            fprintf(stderr, "Successfully created '%s' in '%s'\n", key,
+            fprintf(stderr, "Successfully deleted '%s' in '%s'\n", key,
                 store_spec);
             ret = 0;
         } else {
@@ -193,42 +230,89 @@ int main(int argc, char **argv)
                 store_spec, error->message);
             g_error_free(error);
         }
-    } else if (!strcmp("upload", operation)) {
-        ZCloudUploadProducer *up_prod;
-        if (!key) {
-            fprintf(stderr, "You must supply a key for the operation '%s'\n", operation);
-            goto cleanup;
-        }
-        if (!data) {
-            fprintf(stderr, "You must supply --data for the operation '%s'\n", operation);
-            goto cleanup;
-        }
 
-        up_prod = ZCLOUD_UPLOAD_PRODUCER(
-            zcloud_memory_upload_producer(data, strlen(data)));
+    } else if (!strcmp("upload", operation)) {
+        /* create appropriate upload producer */
+        if (data) {
+            up_prod = ZCLOUD_UPLOAD_PRODUCER(
+                zcloud_memory_upload_producer(data, strlen(data)));
+        } else if (filename) {
+            file_fd = open(filename, O_RDONLY);
+            if (file_fd < 0) {
+                fprintf(stderr, "could not open filename '%s' for reading: %s\n",
+                    filename, strerror(errno));
+                goto cleanup;
+            }
+            up_prod = ZCLOUD_UPLOAD_PRODUCER(
+                zcloud_fd_upload_producer(file_fd));
+        } else {
+            up_prod = ZCLOUD_UPLOAD_PRODUCER(
+                zcloud_fd_upload_producer(STDIN_FILENO));
+        }
+        /* now do it! */
         if (zcloud_store_upload(store, key, up_prod, NULL, &error)) {
             fprintf(stderr, "Successfully uploaded data to '%s' in '%s'\n", key,
                 store_spec);
             ret = 0;
         } else {
-            fprintf(stderr, "Failed to upload data to '%s' in '%s'\n", key,
+            fprintf(stderr, "Failed to upload data to '%s' in '%s': %s\n", key,
                 store_spec, error->message);
             g_error_free(error);
         }
+
+    } else if (!strcmp("download", operation)) {
+        if (filename) {
+            if (append) {
+                file_fd = open(filename, O_WRONLY|O_APPEND);
+            } else {
+                /* create with mode 666, modified by umask */
+                file_fd = creat(filename, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+            }
+            if (file_fd < 0) {
+                fprintf(stderr, "could not open filename '%s' for writing: %s\n",
+                    filename, strerror(errno));
+                goto cleanup;
+            }
+            down_con = ZCLOUD_DOWNLOAD_CONSUMER(
+                zcloud_fd_download_consumer(file_fd));
+        } else {
+            down_con = ZCLOUD_DOWNLOAD_CONSUMER(
+                zcloud_fd_download_consumer(STDOUT_FILENO));
+        }
+        /* now do it! */
+        if (zcloud_store_download(store, key, down_con, NULL, &error)) {
+            fprintf(stderr, "Successfully downloaded data from '%s' in '%s'\n", key,
+                store_spec);
+            ret = 0;
+        } else {
+            fprintf(stderr, "Failed to download data from '%s' in '%s': %s\n", key,
+                store_spec, error->message);
+            g_error_free(error);
+            if (filename && !append) {
+                unlink(filename);
+            }
+        }
+
     } else if (!strcmp("list", operation)) {
-        ZCloudListConsumer *lc = ZCLOUD_LIST_CONSUMER(
+        list_con = ZCLOUD_LIST_CONSUMER(
             zcloud_fd_list_consumer(STDOUT_FILENO, nul_suf? '\0' : '\n'));
-        if (!zcloud_store_list(store, key, lc, NULL, &error)) {
+        if (!zcloud_store_list(store, key, list_con, NULL, &error)) {
             fprintf(stderr, "Failed to delete '%s' from '%s': %s\n", key,
                 store_spec, error->message);
             g_error_free(error);
         }
+
     } else {
         fprintf(stderr, "unknown operation %s\n", operation);
     }
 
-cleanup:
-    /* this frees main_group */
-    g_option_context_free(context);
+cleanup:    
+    g_option_context_free(context); /* this frees main_group */
+    if (store) g_object_unref(store);
+    if (up_prod) g_object_unref(up_prod);
+    if (down_con) g_object_unref(down_con);
+    if (list_con) g_object_unref(list_con);
+    if (file_fd >= 0) close(file_fd);
+
     return ret;
 }

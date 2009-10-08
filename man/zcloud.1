@@ -24,17 +24,23 @@ zcloud - Command-line interface to libzcloud
 .PP
 At the moment, the entirety of its operation is to load a plugin based on
 the given prefix and try to instantiate a \fIStore\fR.
-.SS OPTIONS
+.SH OPTIONS
 .IP "--plugin-path \fBpath\fR"
 You can use this to set the path that libzcloud will search for plugins.
 Overrides ZCPLUGINPATH.
 .IP "--param \fBname\fR=\fBvalue\fR"
 Set parameter \fBname\fR to \fBvalue\fR.
+.IP "--append"
+(\fBdownload\fR only) Append data to the end of the file, instead of clobbering
+it. Requires that \fB--filename\fR be given too.
+.IP "--filename \fBsome_file_name\fR"
+(\fBupload\fR and \fBdownload\fR only) download to, or upload from,
+\fBsome_file_name\fR.
 .IP "--null"
 (\fBlist\fR only) Print a NUL after each key.
-.IP "--string \fBsome_string\fR"
+.IP "--data \fBsome_string\fR"
 (\fBupload\fR only) Upload \fBsome_string\fR, not including the terminating NUL.
-.SS OPERATIONS
+.SH OPERATIONS
 .IP "create"
 Create \fBkey\fR in the store.
 .IP "exists"
@@ -42,15 +48,17 @@ Test to see if \fBkey\fR exists in the store.
 .IP "delete"
 Delete \fBkey\fR from the store.
 .IP "upload"
-Upload some data to \fBkey\fR in the store.
+Upload some data to \fBkey\fR in the store. Reads from stdin by default.
+.IP "download"
+Download data from \fBkey\fR in the store. Writes to stdout by default.
 .IP "list"
 List all keys in the store. If \fBkey\fR is supplied, it's used as a template
 and only keys matching it are printed.
-.SS EXIT STATUS
+.SH EXIT STATUS
 For most operations, \fBzcloud\fR returns 0 if the operation was successful and
 1 if it was not. For the \fBexists\fR operation, 0 is returned if \fBkey\fR
 exists and 2 is returned if it does not; 1 indicates an error, as usual.
-.SS ENVIRONMENT VARIABLES
+.SH ENVIRONMENT VARIABLES
 .IP "ZCPLUGINPATH"
 The path that libzcloud will search for plugins.
 .SH SEE ALSO
