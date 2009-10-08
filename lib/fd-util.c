@@ -52,7 +52,7 @@ write_full(
 gboolean
 read_full(
     int fd,
-    gconstpointer buf,
+    gpointer buf,
     gsize buf_len,
     gsize *bytes_read_out,
     GError **error)

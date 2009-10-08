@@ -42,7 +42,7 @@ G_GNUC_INTERNAL
 gboolean
 read_full(
     int fd,
-    gconstpointer buf,
+    gpointer buf,
     gsize buf_len,
     gsize *bytes_read,
     GError **error);

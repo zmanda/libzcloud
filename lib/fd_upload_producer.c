@@ -77,11 +77,6 @@ get_size_impl(ZCloudUploadProducer *o, GError **error)
             "fd %d claims its size less than zero", self->fd);
         return 0;
     }
-    if (st.st_size > (off_t) G_MAXSIZE) {
-        g_set_error(error, ZCLOUD_ERROR, ZCERR_UNKNOWN,
-            "fd %d size won't fit in gsize type", self->fd);
-        return 0;
-    }
 
     return (gsize) st.st_size;
 }
