@@ -316,6 +316,14 @@ int main(int argc, char **argv)
             isnt_null(g_slist_find_custom(l, test_key, (GCompareFunc) strcmp),
                 "found the test key in the bucket listing (wild)");
 
+            op_ok = zcloud_store_list(test_store, NULL, ZCLOUD_LIST_CONSUMER(list_con), NULL, &error);
+            is_gboolean(op_ok, TRUE, "listing keys for empty bucket (implicit wild)");
+            gerror_is_clear(&error, "listing keys for empty bucket didn't cause error (implicit wild)");
+
+            l = zcloud_slist_list_consumer_grab_contents(list_con);
+            isnt_null(g_slist_find_custom(l, test_key, (GCompareFunc) strcmp),
+                "found the test key in the bucket listing (implicit wild)");
+
             g_object_unref(list_con);
             list_con = zcloud_slist_list_consumer();
 

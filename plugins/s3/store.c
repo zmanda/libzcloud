@@ -1761,7 +1761,7 @@ list_impl(
     ZCloudGrowingMemoryDownloadConsumer *down_con = zcloud_growing_memory_download_consumer(MAX_RESPONSE_LEN);
     guint8 *body_raw;
     gsize body_len;
-    gchar *reg_pat = g_malloc(strlen(template)*2+3);
+    gchar *reg_pat;
     gsize i, j, k;
 
     if (!self->bucket) {
@@ -1777,6 +1777,8 @@ list_impl(
     thunk.next_marker = NULL;
 
     /* TODO: figure out appropriate prefix for more effecient listing */
+    if(!template) template = "%s";
+    reg_pat = g_malloc(strlen(template)*2+3);
     reg_pat[0] = '^';
     k = 1;
     for (i = 0; template[i]; i++) {
