@@ -47,6 +47,72 @@
   
   <div class="section" id="id1">
 <span id="list-consumers"></span><h1>List Consumers<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>A list consumer is an object which processes each key enumerated by the
+<a title="ZCloudStore" class="reference external" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a> instance. Any subclass of <a title="ListConsumer" class="reference external" href="../api/list_consumer.html#ListConsumer"><tt class="xref docutils literal"><span class="pre">ListConsumer</span></tt></a> will work,
+but libzcloud provides a few common consumers.</p>
+<div class="section" id="singly-linked-list-list-consumer">
+<h2>Singly-Linked-List List Consumer<a class="headerlink" href="#singly-linked-list-list-consumer" title="Permalink to this headline">¶</a></h2>
+<p>This consumer prepends each key to a singly-linked list.</p>
+<dl class="cfunction">
+<dt id="zcloud_slist_list_consumer">
+<!--[zcloud_slist_list_consumer]-->ZCloudSListListConsumer *<tt class="descname">zcloud_slist_list_consumer</tt><big>(</big>void<big>)</big><a class="headerlink" href="#zcloud_slist_list_consumer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a list consumer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="cfunction">
+<dt id="zcloud_slist_list_consumer_grab_contents">
+<!--[zcloud_slist_list_consumer_grab_contents]-->GSList *<tt class="descname">zcloud_slist_list_consumer_grab_contents</tt><big>(</big>ZCloudSListListConsumer<em> *self</em><big>)</big><a class="headerlink" href="#zcloud_slist_list_consumer_grab_contents" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>self</em> &#8211; a list consumer</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a pointer the the head of the list. Note that the returned list
+will be freed when the list consumer is destroyed.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="fd-list-consumer">
+<h2>FD List Consumer<a class="headerlink" href="#fd-list-consumer" title="Permalink to this headline">¶</a></h2>
+<p>This consumer simply writes each key, followed by a single character suffix,
+to a file descriptor, which the caller is responsible for opening and closing.
+The file descriptor <em>must</em> be blocking.</p>
+<dl class="cfunction">
+<dt id="zcloud_fd_list_consumer">
+<!--[zcloud_fd_list_consumer]-->ZCloudFDListConsumer *<tt class="descname">zcloud_fd_list_consumer</tt><big>(</big>int<em> fd</em>, gchar<em> suffix</em><big>)</big><a class="headerlink" href="#zcloud_fd_list_consumer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>fd</em> &#8211; the file descriptor to use</li>
+<li><em>suffix</em> &#8211; the character to write after each key</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list consumer</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -55,6 +121,15 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">List Consumers</a><ul>
+<li><a class="reference external" href="#singly-linked-list-list-consumer">Singly-Linked-List List Consumer</a></li>
+<li><a class="reference external" href="#fd-list-consumer">FD List Consumer</a></li>
+</ul>
+</li>
+</ul>
+
             <h4>Previous topic</h4>
             <p class="topless"><a href="download_consumers.html" title="previous chapter">Download Consumers</a></p>
             <h4>Next topic</h4>
@@ -91,7 +166,7 @@
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

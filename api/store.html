@@ -52,18 +52,21 @@
 <!--[ZCloudStore]-->class <tt class="descname">ZCloudStore</tt><a class="headerlink" href="#ZCloudStore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stores represent a service that provides persistence of arbitrary blobs.
 An example is Amazon S3.</p>
+<p>All of the methods listed below will return true on success and false on failure.
+If they return false, they will set the <tt class="docutils literal"><span class="pre">error</span></tt> pointer to a GError object
+(assuming one was provided).</p>
 <dl class="method">
 <dt id="ZCloudStore.create">
 <!--[ZCloudStore.create]--><tt class="descname">create</tt><big>(</big><em>key</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates the key with an empty value.  This is not required by all store
-classes.  See <a class="reference" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a>.</p>
+classes.  See <a class="reference external" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><em>key</em> (String) &#8211; the key to create</li>
-<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
 <li><em>error</em> &#8211; optional storage for an error</li>
 </ul>
 </td>
@@ -84,15 +87,15 @@ classes.  See <a class="reference" href="../using_libzcloud/uploading_and_downlo
 <dd><p>Upload some data.  <tt class="docutils literal"><span class="pre">producer</span></tt> will be consulted for metadata
 (e.g. MD5 hash and size) and is responsible for actually reading the data
 to be uploaded. The <tt class="xref docutils literal"><span class="pre">Store</span></tt> handles actually uploading the data
-to the storage service.  See <a class="reference" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a>.</p>
+to the storage service.  See <a class="reference external" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><em>key</em> (String) &#8211; the key to store the data at</li>
-<li><em>producer</em> &#8211; an <a title="UploadProducer" class="reference" href="upload_producer.html#UploadProducer"><tt class="xref docutils literal"><span class="pre">UploadProducer</span></tt></a></li>
-<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>producer</em> &#8211; an <a title="UploadProducer" class="reference external" href="upload_producer.html#UploadProducer"><tt class="xref docutils literal"><span class="pre">UploadProducer</span></tt></a></li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
 <li><em>error</em> &#8211; optional storage for an error</li>
 </ul>
 </td>
@@ -112,15 +115,15 @@ to the storage service.  See <a class="reference" href="../using_libzcloud/uploa
 <!--[ZCloudStore.download]--><tt class="descname">download</tt><big>(</big><em>key</em>, <em>consumer</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.download" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download data from <cite>key</cite>. The <tt class="docutils literal"><span class="pre">consumer</span></tt> is responsible for
 &#8220;doing something useful&#8221; with the data received from the storage service.
-For example, it could save it to a file.  See <a class="reference" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a>.</p>
+For example, it could save it to a file.  See <a class="reference external" href="../using_libzcloud/uploading_and_downloading.html#uploading-and-downloading"><em>Uploading and Downloading</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><em>key</em> (String) &#8211; the key to fetch data from</li>
-<li><em>consumer</em> &#8211; a <a title="DownloadConsumer" class="reference" href="download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a></li>
-<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>consumer</em> &#8211; a <a title="DownloadConsumer" class="reference external" href="download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a></li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
 <li><em>error</em> &#8211; optional storage for an error</li>
 </ul>
 </td>
@@ -138,19 +141,19 @@ For example, it could save it to a file.  See <a class="reference" href="../usin
 <dl class="method">
 <dt id="ZCloudStore.exists">
 <!--[ZCloudStore.exists]--><tt class="descname">exists</tt><big>(</big><em>key</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.exists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if <cite>key</cite> exists.  See <a class="reference" href="../using_libzcloud/testing_existence.html#testing-existence"><em>Testing for Existence</em></a>.</p>
+<dd><p>Checks if <cite>key</cite> exists. See <a class="reference external" href="../using_libzcloud/testing_existence.html#testing-existence"><em>Testing for Existence</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><em>key</em> (String) &#8211; the key to check</li>
-<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
 <li><em>error</em> &#8211; optional storage for an error</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true (on success) or false (on failure)</p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">true (on success) or false (on failure or non-existence)</p>
 </td>
 </tr>
 <tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
@@ -163,14 +166,14 @@ For example, it could save it to a file.  See <a class="reference" href="../usin
 <dl class="method">
 <dt id="ZCloudStore.delete">
 <!--[ZCloudStore.delete]--><tt class="descname">delete</tt><big>(</big><em>key</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete whatever is represented by <cite>key</cite>.  See <a class="reference" href="../using_libzcloud/deleting_keys.html#deleting-keys"><em>Deleting Keys</em></a>.</p>
+<dd><p>Delete whatever is represented by <cite>key</cite>.  See <a class="reference external" href="../using_libzcloud/deleting_keys.html#deleting-keys"><em>Deleting Keys</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><em>key</em> (String) &#8211; the key to delete</li>
-<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
 <li><em>error</em> &#8211; optional storage for an error</li>
 </ul>
 </td>
@@ -188,19 +191,18 @@ For example, it could save it to a file.  See <a class="reference" href="../usin
 <dl class="method">
 <dt id="ZCloudStore.list">
 <!--[ZCloudStore.list]--><tt class="descname">list</tt><big>(</big><em>template</em>, <em>consumer</em>, <em>progress</em>, <em>error</em><big>)</big><a class="headerlink" href="#ZCloudStore.list" title="Permalink to this definition">¶</a></dt>
-<dd><p>List all keys matching <cite>template</cite>, calling
-<a title="ListConsumer.got_result" class="reference" href="list_consumer.html#ListConsumer.got_result"><tt class="xref docutils literal"><span class="pre">ListConsumer.got_result()</span></tt></a> for each one. The <tt class="docutils literal"><span class="pre">template</span></tt> should
-just use <tt class="docutils literal"><span class="pre">%s</span></tt> as a placeholder and <tt class="docutils literal"><span class="pre">%%</span></tt> to represent <tt class="docutils literal"><span class="pre">%</span></tt>.  See
-<a class="reference" href="../using_libzcloud/listing_keys.html#listing-keys"><em>Listing Keys</em></a>.</p>
-<p>TODO: that&#8217;s not right..</p>
+<dd><p>List all keys, calling <a title="ListConsumer.got_result" class="reference external" href="list_consumer.html#ListConsumer.got_result"><tt class="xref docutils literal"><span class="pre">ListConsumer.got_result()</span></tt></a> for each one.
+If a <tt class="docutils literal"><span class="pre">template</span></tt> is provided, only keys that fit it will be reported.
+The <tt class="docutils literal"><span class="pre">template</span></tt> should use <tt class="docutils literal"><span class="pre">%s</span></tt> as a placeholder/wildcard and <tt class="docutils literal"><span class="pre">%%</span></tt>
+to represent <tt class="docutils literal"><span class="pre">%</span></tt>.  See <a class="reference external" href="../using_libzcloud/listing_keys.html#listing-keys"><em>Listing Keys</em></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><em>template</em> &#8211; the template to list matches for</li>
-<li><em>consumer</em> &#8211; a <a title="DownloadConsumer" class="reference" href="download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a></li>
-<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
+<li><em>consumer</em> &#8211; a <a title="DownloadConsumer" class="reference external" href="download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a></li>
+<li><em>progress</em> &#8211; an optional <a title="ProgressListener" class="reference external" href="progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a></li>
 <li><em>error</em> &#8211; optional storage for an error</li>
 </ul>
 </td>
@@ -266,7 +268,7 @@ just use <tt class="docutils literal"><span class="pre">%s</span></tt> as a plac
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

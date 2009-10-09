@@ -53,19 +53,24 @@
 <dd><dl class="method">
 <dt id="UploadProducer.read">
 <!--[UploadProducer.read]--><tt class="descname">read</tt><big>(</big><em>buffer</em>, <em>bytes</em>, <em>error</em><big>)</big><a class="headerlink" href="#UploadProducer.read" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>This method handles reading data from whatever the source actually is,
+storing <tt class="docutils literal"><span class="pre">bytes</span></tt> number of bytes in <tt class="docutils literal"><span class="pre">buffer</span></tt>. <tt class="docutils literal"><span class="pre">buffer</span></tt> will be a
+provided by the caller and will be large enough to hold the requested
+number of bytes.</p>
+<p>To indicate an error, zero is returned and <tt class="docutils literal"><span class="pre">error</span></tt> must be set.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><em>buffer</em> &#8211; storage for the read bytes
-(large enough to hold the requested number of bytes)</li>
+<li><em>buffer</em> &#8211; storage for the read bytes</li>
 <li><em>bytes</em> &#8211; the requested number of bytes to read</li>
 <li><em>error</em> &#8211; optional storage for an error</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the number of bytes actually read and copied into <tt class="docutils literal"><span class="pre">buffer</span></tt></p>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the number of bytes actually read and copied into <tt class="docutils literal"><span class="pre">buffer</span></tt> or
+zero on error.</p>
 </td>
 </tr>
 </tbody>
@@ -75,8 +80,10 @@
 <dl class="method">
 <dt id="UploadProducer.reset">
 <!--[UploadProducer.reset]--><tt class="descname">reset</tt><big>(</big><em>error</em><big>)</big><a class="headerlink" href="#UploadProducer.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset the producer. The next call to <a title="UploadProducer.read" class="reference" href="#UploadProducer.read"><tt class="xref docutils literal"><span class="pre">read</span></tt></a> should return the
-same data as the first one.</p>
+<dd><p>Reset the producer. After this is finished, the next call to
+<a title="UploadProducer.read" class="reference internal" href="#UploadProducer.read"><tt class="xref docutils literal"><span class="pre">read</span></tt></a> should return the same data as the
+first one.</p>
+<p>If an error occurs, <tt class="docutils literal"><span class="pre">error</span></tt> must be set.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -96,7 +103,14 @@ same data as the first one.</p>
 <dl class="method">
 <dt id="UploadProducer.get_size">
 <!--[UploadProducer.get_size]--><tt class="descname">get_size</tt><big>(</big><em>error</em><big>)</big><a class="headerlink" href="#UploadProducer.get_size" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>This method should indicate how many bytes are available from this upload
+producer. The <a title="ZCloudStore" class="reference external" href="store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">store</span></tt></a> should not try to read more
+bytes than are reported here.</p>
+<p>A special case is the size of zero; if <tt class="docutils literal"><span class="pre">error</span></tt> is set, then the <a title="ZCloudStore" class="reference external" href="store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">store</span></tt></a>
+may assume that the number of bytes is simply not known up-front. If <tt class="docutils literal"><span class="pre">error</span></tt>
+is not set, then the store must interpret the zero as the number of bytes
+available</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -115,7 +129,11 @@ same data as the first one.</p>
 <dl class="method">
 <dt id="UploadProducer.calculate_md5">
 <!--[UploadProducer.calculate_md5]--><tt class="descname">calculate_md5</tt><big>(</big><em>error</em><big>)</big><a class="headerlink" href="#UploadProducer.calculate_md5" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>If null is returned, <tt class="docutils literal"><span class="pre">error</span></tt> must be set.</p>
+<p>The MD5 hash is represented as a GByteArray with exactly
+<tt class="docutils literal"><span class="pre">ZCLOUD_MD5_HASH_BYTE_LEN</span></tt> bytes. Note that these are bytes and not
+hexadecimal characters representing bytes.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -178,7 +196,7 @@ null on error</p>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

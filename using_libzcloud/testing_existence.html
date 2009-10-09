@@ -47,6 +47,19 @@
   
   <div class="section" id="testing-for-existence">
 <span id="testing-existence"></span><h1>Testing for Existence<a class="headerlink" href="#testing-for-existence" title="Permalink to this headline">¶</a></h1>
+<p>To determine for whether or not a key is present within a store, without
+downloading its contents, use the <a title="ZCloudStore.exists" class="reference external" href="../api/store.html#ZCloudStore.exists"><tt class="xref docutils literal"><span class="pre">exists</span></tt></a> method.
+Note that you need to check the error&#8217;s domain and code if false is returned.</p>
+<p>So, typically code will look something like:</p>
+<div class="highlight-python"><pre>exists_ok = zcloud_store_exists(store, some_key, NULL, &amp;error)
+if (exists_ok)
+   printf("key %s exists\n", some_key)
+else if (ZCLOUD_ERROR == error-&gt;domain &amp;&amp; ZCERR_MISSING == error-&gt;code)
+   printf("key %s does not exist\n", some_key);
+else
+   printf("an error occurred while seeing if key %s exists: %s\n",
+       some_key, error-&gt;message);</pre>
+</div>
 </div>
 
 
@@ -91,7 +104,7 @@
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

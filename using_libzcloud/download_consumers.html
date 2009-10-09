@@ -45,18 +45,18 @@
           <div class="body">
             
   
-  <div class="section" id="download-consumers">
-<h1>Download Consumers<a class="headerlink" href="#download-consumers" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="id1">
+<span id="download-consumers"></span><h1>Download Consumers<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <p>A download consumer is an object which processes data received from a store.
-Any subclass of <a title="DownloadConsumer" class="reference" href="../api/download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a> will work with any
-<a title="ZCloudStore" class="reference" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a> instance, but libzcloud provides a few common consumers
+Any subclass of <a title="DownloadConsumer" class="reference external" href="../api/download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a> will work with any
+<a title="ZCloudStore" class="reference external" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a> instance, but libzcloud provides a few common consumers
 which cover most uses.</p>
 <div class="section" id="fixed-memory-download-consumer">
 <h2>Fixed Memory Download Consumer<a class="headerlink" href="#fixed-memory-download-consumer" title="Permalink to this headline">¶</a></h2>
 <p>This consumer reads data into a fixed-length, preallocated buffer.  This is
 useful for small values that have a known maximum length.  If the store
 provides more data than permitted, then the consumer will signal an error
-condition and abort the download operation.</p>
+condition and the store will abort the download operation.</p>
 <p>The buffer is supplied to the constructor:</p>
 <dl class="cfunction">
 <dt id="zcloud_fixed_memory_download_consumer">
@@ -170,6 +170,32 @@ caller must free.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="fd-download-consumer">
+<h2>FD Download Consumer<a class="headerlink" href="#fd-download-consumer" title="Permalink to this headline">¶</a></h2>
+<p>This consumer simply writes to a file descriptor, which the caller is
+responsible for opening and closing. The file descriptor <em>must</em> be blocking.
+It may or may not be seekable. If it isn&#8217;t, <a title="DownloadConsumer.reset" class="reference external" href="../api/download_consumer.html#DownloadConsumer.reset"><tt class="xref docutils literal"><span class="pre">reset</span></tt></a>
+will return an error; this implies that downloads can not be retried.</p>
+<dl class="cfunction">
+<dt id="zcloud_fd_download_consumer">
+<!--[zcloud_fd_download_consumer]-->ZCloudFDDownloadConsumer *<tt class="descname">zcloud_fd_download_consumer</tt><big>(</big>int<em> fd</em><big>)</big><a class="headerlink" href="#zcloud_fd_download_consumer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>fd</em> &#8211; the file descriptor to use</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a download consumer</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -180,9 +206,10 @@ caller must free.</p>
         <div class="sphinxsidebarwrapper">
             <h3><a href="../index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference" href="">Download Consumers</a><ul>
-<li><a class="reference" href="#fixed-memory-download-consumer">Fixed Memory Download Consumer</a></li>
-<li><a class="reference" href="#growing-memory-download-consumer">Growing Memory Download Consumer</a></li>
+<li><a class="reference external" href="">Download Consumers</a><ul>
+<li><a class="reference external" href="#fixed-memory-download-consumer">Fixed Memory Download Consumer</a></li>
+<li><a class="reference external" href="#growing-memory-download-consumer">Growing Memory Download Consumer</a></li>
+<li><a class="reference external" href="#fd-download-consumer">FD Download Consumer</a></li>
 </ul>
 </li>
 </ul>
@@ -223,7 +250,7 @@ caller must free.</p>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

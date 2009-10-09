@@ -47,14 +47,14 @@
   
   <div class="section" id="getting-module-information">
 <span id="module-info"></span><h1>Getting Module Information<a class="headerlink" href="#getting-module-information" title="Permalink to this headline">¶</a></h1>
-<p>Among other things, <a title="zcloud_init" class="reference" href="library_setup.html#zcloud_init"><tt class="xref docutils literal"><span class="pre">zcloud_init</span></tt></a> gathers basic information about the
+<p>Among other things, <a title="zcloud_init" class="reference external" href="library_setup.html#zcloud_init"><tt class="xref docutils literal"><span class="pre">zcloud_init</span></tt></a> gathers basic information about the
 available plugins.  It does this in such a way that those plugins are not
 actually loaded, so it is quick and does not require that all dependencies of
 all plugins be available.</p>
 <p>Information on available plugins is available from either of these functions:</p>
 <dl class="cfunction">
 <dt id="zcloud_get_store_plugin_by_prefix">
-<!--[zcloud_get_store_plugin_by_prefix]--><a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin">ZCloudStorePlugin</a> *<tt class="descname">zcloud_get_store_plugin_by_prefix</tt><big>(</big>const gchar<em> *prefix</em><big>)</big><a class="headerlink" href="#zcloud_get_store_plugin_by_prefix" title="Permalink to this definition">¶</a></dt>
+<!--[zcloud_get_store_plugin_by_prefix]--><a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a> *<tt class="descname">zcloud_get_store_plugin_by_prefix</tt><big>(</big>const gchar<em> *prefix</em><big>)</big><a class="headerlink" href="#zcloud_get_store_plugin_by_prefix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the plugin object for the given prefix.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -80,7 +80,7 @@ all plugins be available.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a GSList of pointers to <a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin"><tt class="xref docutils literal"><span class="pre">ZCloudStorePlugin</span></tt></a> objects</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a GSList of pointers to <a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin"><tt class="xref docutils literal"><span class="pre">ZCloudStorePlugin</span></tt></a> objects</td>
 </tr>
 </tbody>
 </table>
@@ -94,22 +94,22 @@ all plugins be available.</p>
 <dd><p>Information about a single libzcloud plugin</p>
 <dl class="cmember">
 <dt id="prefix">
-<!--[prefix]-->gchar *<a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">prefix</tt><a class="headerlink" href="#prefix" title="Permalink to this definition">¶</a></dt>
+<!--[prefix]-->gchar *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">prefix</tt><a class="headerlink" href="#prefix" title="Permalink to this definition">¶</a></dt>
 <dd>The prefix for this plugin</dd></dl>
 
 <dl class="cmember">
 <dt id="module">
-<!--[module]--><a title="ZCloudModule" class="reference" href="#ZCloudModule">ZCloudModule</a> *<a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">module</tt><a class="headerlink" href="#module" title="Permalink to this definition">¶</a></dt>
+<!--[module]--><a title="ZCloudModule" class="reference internal" href="#ZCloudModule">ZCloudModule</a> *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">module</tt><a class="headerlink" href="#module" title="Permalink to this definition">¶</a></dt>
 <dd>Information about the module that will define this plugin</dd></dl>
 
 <dl class="cmember">
 <dt id="type">
-<!--[type]-->GType <a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">type</tt><a class="headerlink" href="#type" title="Permalink to this definition">¶</a></dt>
+<!--[type]-->GType <a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">type</tt><a class="headerlink" href="#type" title="Permalink to this definition">¶</a></dt>
 <dd>The type of the store class that will be instantiated for this plugin</dd></dl>
 
 <dl class="cmember">
 <dt id="paramspecs">
-<!--[paramspecs]-->GPtrArray *<a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">paramspecs</tt><a class="headerlink" href="#paramspecs" title="Permalink to this definition">¶</a></dt>
+<!--[paramspecs]-->GPtrArray *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">paramspecs</tt><a class="headerlink" href="#paramspecs" title="Permalink to this definition">¶</a></dt>
 <dd>A list of <tt class="docutils literal"><span class="pre">GParamSpec</span></tt> objects describing the parameters for this plugin.
 The GLib documentation has the complete story on these objects.  Briefly,
 the parameter name is availble in <tt class="docutils literal"><span class="pre">spec.name</span></tt>, the expected type is in
@@ -127,22 +127,22 @@ the parameter name is availble in <tt class="docutils literal"><span class="pre"
 <dd><p>Information about a module implementing plugins</p>
 <dl class="cmember">
 <dt id="basename">
-<!--[basename]-->gchar *<a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">basename</tt><a class="headerlink" href="#basename" title="Permalink to this definition">¶</a></dt>
+<!--[basename]-->gchar *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">basename</tt><a class="headerlink" href="#basename" title="Permalink to this definition">¶</a></dt>
 <dd>Base name of this module</dd></dl>
 
 <dl class="cmember">
 <dt id="module_path">
-<!--[module_path]-->gchar *<a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">module_path</tt><a class="headerlink" href="#module_path" title="Permalink to this definition">¶</a></dt>
+<!--[module_path]-->gchar *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">module_path</tt><a class="headerlink" href="#module_path" title="Permalink to this definition">¶</a></dt>
 <dd>Full pathname to the loadable shared object</dd></dl>
 
 <dl class="cmember">
 <dt id="xml_path">
-<!--[xml_path]-->gchar *<a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">xml_path</tt><a class="headerlink" href="#xml_path" title="Permalink to this definition">¶</a></dt>
-<dd>Full pathname of the <a class="reference" href="../writing_plugins/xml_definition.html#xml-definition"><em>XML file</em></a> defining this module</dd></dl>
+<!--[xml_path]-->gchar *<a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">xml_path</tt><a class="headerlink" href="#xml_path" title="Permalink to this definition">¶</a></dt>
+<dd>Full pathname of the <a class="reference external" href="../writing_plugins/xml_definition.html#xml-definition"><em>XML file</em></a> defining this module</dd></dl>
 
 <dl class="cmember">
 <dt id="loaded">
-<!--[loaded]-->gboolean <a title="ZCloudStorePlugin" class="reference" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">loaded</tt><a class="headerlink" href="#loaded" title="Permalink to this definition">¶</a></dt>
+<!--[loaded]-->gboolean <a title="ZCloudStorePlugin" class="reference internal" href="#ZCloudStorePlugin">ZCloudStorePlugin</a>.<tt class="descname">loaded</tt><a class="headerlink" href="#loaded" title="Permalink to this definition">¶</a></dt>
 <dd>True if this module has been loaded</dd></dl>
 
 </dd></dl>
@@ -158,9 +158,9 @@ the parameter name is availble in <tt class="docutils literal"><span class="pre"
         <div class="sphinxsidebarwrapper">
             <h3><a href="../index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference" href="">Getting Module Information</a><ul>
-<li><a class="reference" href="#plugin-information">Plugin Information</a></li>
-<li><a class="reference" href="#module-information">Module Information</a></li>
+<li><a class="reference external" href="">Getting Module Information</a><ul>
+<li><a class="reference external" href="#plugin-information">Plugin Information</a></li>
+<li><a class="reference external" href="#module-information">Module Information</a></li>
 </ul>
 </li>
 </ul>
@@ -201,7 +201,7 @@ the parameter name is availble in <tt class="docutils literal"><span class="pre"
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

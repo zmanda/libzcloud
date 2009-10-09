@@ -1,4 +1,4 @@
-.. download_consumers:
+.. _download_consumers:
 
 Download Consumers
 ==================
@@ -14,7 +14,7 @@ Fixed Memory Download Consumer
 This consumer reads data into a fixed-length, preallocated buffer.  This is
 useful for small values that have a known maximum length.  If the store
 provides more data than permitted, then the consumer will signal an error
-condition and abort the download operation.
+condition and the store will abort the download operation.
 
 The buffer is supplied to the constructor:
 
@@ -62,3 +62,16 @@ caller must free.
 
     :param self: download consumer
     :returns: newly allocated, NUL-terminated string containing the downloaded data
+
+FD Download Consumer
+--------------------
+
+This consumer simply writes to a file descriptor, which the caller is
+responsible for opening and closing. The file descriptor *must* be blocking.
+It may or may not be seekable. If it isn't, :meth:`reset <DownloadConsumer.reset>`
+will return an error; this implies that downloads can not be retried.
+
+.. cfunction:: ZCloudFDDownloadConsumer *zcloud_fd_download_consumer(int fd)
+
+    :param fd: the file descriptor to use
+    :returns: a download consumer

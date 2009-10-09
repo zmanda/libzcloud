@@ -47,12 +47,12 @@
   
   <div class="section" id="store-subclass">
 <h1>Store Subclass<a class="headerlink" href="#store-subclass" title="Permalink to this headline">¶</a></h1>
-<p>Each plugin is linked to a particular subclass of <a title="ZCloudStore" class="reference" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a>,
-indicated by the type registered during <a class="reference" href="initialization.html#module-initialization"><em>Module Initialization</em></a>.</p>
+<p>Each plugin is linked to a particular subclass of <a title="ZCloudStore" class="reference external" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a>,
+indicated by the type registered during <a class="reference external" href="initialization.html#module-initialization"><em>Module Initialization</em></a>.</p>
 <div class="section" id="store-initialization">
 <h2>Store Initialization<a class="headerlink" href="#store-initialization" title="Permalink to this headline">¶</a></h2>
-<p>When a user invokes <a title="zcloud_store_new" class="reference" href="../using_libzcloud/creating_a_store.html#zcloud_store_new"><tt class="xref docutils literal"><span class="pre">zcloud_store_new</span></tt></a> or
-<a title="zcloud_store_newv" class="reference" href="../using_libzcloud/creating_a_store.html#zcloud_store_newv"><tt class="xref docutils literal"><span class="pre">zcloud_store_newv</span></tt></a>, the new store object is initialized with
+<p>When a user invokes <a title="zcloud_store_new" class="reference external" href="../using_libzcloud/creating_a_store.html#zcloud_store_new"><tt class="xref docutils literal"><span class="pre">zcloud_store_new</span></tt></a> or
+<a title="zcloud_store_newv" class="reference external" href="../using_libzcloud/creating_a_store.html#zcloud_store_newv"><tt class="xref docutils literal"><span class="pre">zcloud_store_newv</span></tt></a>, the new store object is initialized with
 this process:</p>
 <ul class="simple">
 <li>Examine the store specifier, splitting at the colon into a <em>prefix</em>
@@ -61,12 +61,12 @@ and <em>suffix</em></li>
 has not already been loaded.</li>
 <li>Instantiate the type registered for the prefix, using <tt class="docutils literal"><span class="pre">g_object_new</span></tt>,
 but without passing any GLib parameters.</li>
-<li>Invoke the <a title="ZCloudStore.setup" class="reference" href="../api/store.html#ZCloudStore.setup"><tt class="xref docutils literal"><span class="pre">setup()</span></tt></a> method with a normalized set of
+<li>Invoke the <a title="ZCloudStore.setup" class="reference external" href="../api/store.html#ZCloudStore.setup"><tt class="xref docutils literal"><span class="pre">setup()</span></tt></a> method with a normalized set of
 parameters.</li>
 </ul>
 <p>Parameters are passed to setup in an array of <tt class="docutils literal"><span class="pre">GParameter</span></tt> structs,
 each of which has members <tt class="docutils literal"><span class="pre">name</span></tt> and <tt class="docutils literal"><span class="pre">value</span></tt>.  All parameters
-specified in the <a class="reference" href="xml_definition.html#xml-definition"><em>XML file</em></a> are present, with no
+specified in the <a class="reference external" href="xml_definition.html#xml-definition"><em>XML file</em></a> are present, with no
 duplicates, but they are not given in any particular order.  The
 <tt class="docutils literal"><span class="pre">name</span></tt> member is normalized, as described in the  so it is safe to use
 <tt class="docutils literal"><span class="pre">strcmp</span></tt>.  The <tt class="docutils literal"><span class="pre">value</span></tt> member has the type specified in the
@@ -82,8 +82,8 @@ duplicates, but they are not given in any particular order.  The
         <div class="sphinxsidebarwrapper">
             <h3><a href="../index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference" href="">Store Subclass</a><ul>
-<li><a class="reference" href="#store-initialization">Store Initialization</a></li>
+<li><a class="reference external" href="">Store Subclass</a><ul>
+<li><a class="reference external" href="#store-initialization">Store Initialization</a></li>
 </ul>
 </li>
 </ul>
@@ -124,7 +124,7 @@ duplicates, but they are not given in any particular order.  The
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

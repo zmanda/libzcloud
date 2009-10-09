@@ -1,3 +1,5 @@
+.. _creating_a_store:
+
 Creating a Store
 ================
 
@@ -14,7 +16,7 @@ credentials, for example.
 
 The documentation for each plugin (see :ref:`included_plugins`) specifies the
 format of the store specifier and the plugin's parameters.  This information is
-also available at runtime - see :ref:`module-info`.
+also available at runtime - see :ref:`module_info`.
 
 Calling the Constructor
 -----------------------

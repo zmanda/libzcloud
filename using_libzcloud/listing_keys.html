@@ -47,7 +47,7 @@
   
   <div class="section" id="id1">
 <span id="listing-keys"></span><h1>Listing Keys<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>To list the keys in a store, use the store&#8217;s <a title="ZCloudStore.list" class="reference" href="../api/store.html#ZCloudStore.list"><tt class="xref docutils literal"><span class="pre">list</span></tt></a>
+<p>To list the keys in a store, use the store&#8217;s <a title="ZCloudStore.list" class="reference external" href="../api/store.html#ZCloudStore.list"><tt class="xref docutils literal"><span class="pre">list</span></tt></a>
 method.</p>
 <p>This method takes a &#8220;key template&#8221;, which some plugins can use to minimize the
 data transferred from the cloud.  In the template, <tt class="docutils literal"><span class="pre">%s</span></tt> will match any
@@ -60,9 +60,9 @@ of directory structure.</li>
 <li><tt class="docutils literal"><span class="pre">&quot;My</span> <span class="pre">Files/100%%.doc&quot;</span></tt> matches only <tt class="docutils literal"><span class="pre">My</span> <span class="pre">Files/100%.doc</span></tt>.</li>
 </ul>
 <p>The template system is not yet finalized.</p>
-<p>The <tt class="docutils literal"><span class="pre">list</span></tt> method also takes a <a title="ListConsumer" class="reference" href="../api/list_consumer.html#ListConsumer"><tt class="xref docutils literal"><span class="pre">ListConsumer</span></tt></a> instance to handle each
-returned key - see <a class="reference" href="list_consumers.html#list-consumers"><em>List Consumers</em></a> for a list of ready-made
-<a title="ListConsumer" class="reference" href="../api/list_consumer.html#ListConsumer"><tt class="xref docutils literal"><span class="pre">ListConsumer</span></tt></a> subclasses.</p>
+<p>The <tt class="docutils literal"><span class="pre">list</span></tt> method also takes a <a title="ListConsumer" class="reference external" href="../api/list_consumer.html#ListConsumer"><tt class="xref docutils literal"><span class="pre">ListConsumer</span></tt></a> instance to handle each
+returned key - see <a class="reference external" href="list_consumers.html#list-consumers"><em>List Consumers</em></a> for a list of ready-made
+<a title="ListConsumer" class="reference external" href="../api/list_consumer.html#ListConsumer"><tt class="xref docutils literal"><span class="pre">ListConsumer</span></tt></a> subclasses.</p>
 <p>A typical use of the <tt class="docutils literal"><span class="pre">list</span></tt> method might look like:</p>
 <div class="highlight-python"><pre>gint
 count_keys(ZCloudStore *store, gchar *template)
@@ -129,7 +129,7 @@ count_keys(ZCloudStore *store, gchar *template)
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

@@ -47,7 +47,33 @@
   
   <div class="section" id="id1">
 <span id="error-handling"></span><h1>Error Handling<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>(GErrors and the transient/permanent differences)</p>
+<p>Errors are reported using GLib&#8217;s GError structs. The errors from libzcloud
+should use <tt class="docutils literal"><span class="pre">ZCLOUD_ERROR</span></tt> as their domain and a code from <tt class="docutils literal"><span class="pre">ZCloudError</span></tt>.</p>
+<p>The currently defined <tt class="docutils literal"><span class="pre">ZCloudError</span></tt> codes are:</p>
+<dl class="docutils">
+<dt>ZCERR_NONE</dt>
+<dd>No Error</dd>
+<dt>ZCERR_UNKNOWN</dt>
+<dd>An unknown error occurred .</dd>
+<dt>ZCERR_MODULE</dt>
+<dd>Error loading a module</dd>
+<dt>ZCERR_PLUGIN</dt>
+<dd>Error from a plugin, if nothing else is more suitable</dd>
+<dt>ZCERR_PARAMETER</dt>
+<dd>An invalid parameter was given to the store or method.</dd>
+<dt>ZCERR_EPHEMERAL</dt>
+<dd>An ephemeral network or service error. For example, if a service is busy
+then requests might time out; just retrying at a later time is likely to
+succeed.</dd>
+<dt>ZCERR_LASTING</dt>
+<dd>Lasting network or service error. These usually require some action to
+be taken for them to go away. For example, if the authentication
+credentials for the store are incorrect.</dd>
+<dt>ZCERR_MISSING</dt>
+<dd>The requested object (or perhaps its container) is missing. Callers may
+choose to handle this case differently from other lasting errors.</dd>
+</dl>
+<p>Other codes may be added in the future.</p>
 </div>
 
 
@@ -92,7 +118,7 @@
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

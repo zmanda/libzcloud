@@ -1,3 +1,5 @@
+.. _library_setup:
+
 Library Setup
 =============
 

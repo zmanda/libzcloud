@@ -49,10 +49,10 @@
 <span id="uploading-and-downloading"></span><h1>Uploading and Downloading<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="uploading">
 <h2>Uploading<a class="headerlink" href="#uploading" title="Permalink to this headline">¶</a></h2>
-<p>To assign a value to a particular key in the store, use the <a title="ZCloudStore.upload" class="reference" href="../api/store.html#ZCloudStore.upload"><tt class="xref docutils literal"><span class="pre">upload</span></tt></a> method.  The method takes a key name, an
-<a title="UploadProducer" class="reference" href="../api/upload_producer.html#UploadProducer"><tt class="xref docutils literal"><span class="pre">UploadProducer</span></tt></a>, and a <a title="ProgressListener" class="reference" href="../api/progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a> (which can be NULL if
+<p>To assign a value to a particular key in the store, use the <a title="ZCloudStore.upload" class="reference external" href="../api/store.html#ZCloudStore.upload"><tt class="xref docutils literal"><span class="pre">upload</span></tt></a> method.  The method takes a key name, an
+<a title="UploadProducer" class="reference external" href="../api/upload_producer.html#UploadProducer"><tt class="xref docutils literal"><span class="pre">UploadProducer</span></tt></a>, and a <a title="ProgressListener" class="reference external" href="../api/progress_listener.html#ProgressListener"><tt class="xref docutils literal"><span class="pre">ProgressListener</span></tt></a> (which can be NULL if
 none is required).   Any upload producer will work, but libzcloud includes a
-number of common producers for your convenience &#8211; see <a class="reference" href="upload_producers.html#upload-producers"><em>Upload Producers</em></a>.</p>
+number of common producers for your convenience &#8211; see <a class="reference external" href="upload_producers.html#upload-producers"><em>Upload Producers</em></a>.</p>
 <p>A typical upload of an in-memory buffer looks something like this:</p>
 <div class="highlight-python"><pre>gboolean
 upload_buffer(ZCloudStore *store, gchar *key,
@@ -71,13 +71,13 @@ upload_buffer(ZCloudStore *store, gchar *key,
     return op_ok;
  }</pre>
 </div>
-<p>Note that the <a title="ZCloudStore.create" class="reference" href="../api/store.html#ZCloudStore.create"><tt class="xref docutils literal"><span class="pre">create</span></tt></a> method will create a new,
+<p>Note that the <a title="ZCloudStore.create" class="reference external" href="../api/store.html#ZCloudStore.create"><tt class="xref docutils literal"><span class="pre">create</span></tt></a> method will create a new,
 empty key.  It&#8217;s not clear how this is useful.</p>
 </div>
 <div class="section" id="downloading">
 <h2>Downloading<a class="headerlink" href="#downloading" title="Permalink to this headline">¶</a></h2>
-<p>The <a title="ZCloudStore.download" class="reference" href="../api/store.html#ZCloudStore.download"><tt class="xref docutils literal"><span class="pre">download</span></tt></a> method fetches the value associated
-with a particular key, feeding it to a <a title="DownloadConsumer" class="reference" href="../api/download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a>.</p>
+<p>The <a title="ZCloudStore.download" class="reference external" href="../api/store.html#ZCloudStore.download"><tt class="xref docutils literal"><span class="pre">download</span></tt></a> method fetches the value associated
+with a particular key, feeding it to a <a title="DownloadConsumer" class="reference external" href="../api/download_consumer.html#DownloadConsumer"><tt class="xref docutils literal"><span class="pre">DownloadConsumer</span></tt></a>.</p>
 <p>Code to download into a buffer might look like:</p>
 <div class="highlight-python"><pre>gboolean
 get_key(ZCloudStore *store, gchar *key,
@@ -115,9 +115,9 @@ get_key(ZCloudStore *store, gchar *key,
         <div class="sphinxsidebarwrapper">
             <h3><a href="../index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference" href="">Uploading and Downloading</a><ul>
-<li><a class="reference" href="#uploading">Uploading</a></li>
-<li><a class="reference" href="#downloading">Downloading</a></li>
+<li><a class="reference external" href="">Uploading and Downloading</a><ul>
+<li><a class="reference external" href="#uploading">Uploading</a></li>
+<li><a class="reference external" href="#downloading">Downloading</a></li>
 </ul>
 </li>
 </ul>
@@ -158,7 +158,7 @@ get_key(ZCloudStore *store, gchar *key,
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

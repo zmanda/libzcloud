@@ -47,7 +47,59 @@
   
   <div class="section" id="id1">
 <span id="upload-producers"></span><h1>Upload Producers<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>(subsection for each predefined upload producer)</p>
+<p>A upload producer is an object which provides data received for a store to upload.
+Any subclass of <a title="UploadProducer" class="reference external" href="../api/upload_producer.html#UploadProducer"><tt class="xref docutils literal"><span class="pre">UploadProducer</span></tt></a> will work with any <a title="ZCloudStore" class="reference external" href="../api/store.html#ZCloudStore"><tt class="xref docutils literal"><span class="pre">ZCloudStore</span></tt></a>
+instance, but libzcloud provides a few common producers which cover most uses.</p>
+<div class="section" id="memory-upload-producer">
+<h2>Memory Upload Producer<a class="headerlink" href="#memory-upload-producer" title="Permalink to this headline">¶</a></h2>
+<p>This consumer reads a fixed-length, preallocated buffer.</p>
+<dl class="cfunction">
+<dt id="zcloud_memory_upload_procuer">
+<!--[zcloud_memory_upload_procuer]-->ZCloudMemoryUploadProducer *<tt class="descname">zcloud_memory_upload_procuer</tt><big>(</big>gpointer<em> buffer</em>, gsize<em> buffer_length</em><big>)</big><a class="headerlink" href="#zcloud_memory_upload_procuer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>buffer</em> &#8211; the buffer to read data from.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an upload producer</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="fd-upload-producer">
+<h2>FD Upload Producer<a class="headerlink" href="#fd-upload-producer" title="Permalink to this headline">¶</a></h2>
+<p>This consumer simply reads a file descriptor, which the caller is
+responsible for opening and closing. The file descriptor <em>must</em> be blocking.
+It may or may not be seekable. If it isn&#8217;t, <tt class="xref docutils literal"><span class="pre">reset</span></tt>
+and <tt class="xref docutils literal"><span class="pre">calculate_md5</span></tt> will return an error;
+this implies that uploads can not be retried or the integrity verified.</p>
+<dl class="cfunction">
+<dt id="zcloud_fd_upload_procuer">
+<!--[zcloud_fd_upload_procuer]-->ZCloudFDUploadProducer *<tt class="descname">zcloud_fd_upload_procuer</tt><big>(</big>int<em> fd</em><big>)</big><a class="headerlink" href="#zcloud_fd_upload_procuer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>fd</em> &#8211; the file descriptor to use</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an upload producer</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -56,6 +108,15 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Upload Producers</a><ul>
+<li><a class="reference external" href="#memory-upload-producer">Memory Upload Producer</a></li>
+<li><a class="reference external" href="#fd-upload-producer">FD Upload Producer</a></li>
+</ul>
+</li>
+</ul>
+
             <h4>Previous topic</h4>
             <p class="topless"><a href="error_handling.html" title="previous chapter">Error Handling</a></p>
             <h4>Next topic</h4>
@@ -92,7 +153,7 @@
     </div>
     <div class="footer">
       &copy; Copyright 2009-2009, Zmanda, Inc. (www.zmanda.com).
-      Last updated on Oct 04, 2009.
+      Last updated on Oct 09, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.2.
     </div>
   </body>

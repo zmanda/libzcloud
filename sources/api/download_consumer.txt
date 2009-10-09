@@ -12,7 +12,7 @@ Download Consumer
 
    .. method:: reset(error)
 
-      Reset the consumer. All previous calls to :meth:`write <DownloadConsumer.write>` should be "forgotten"
+      Reset the consumer. All previous calls to :meth:`write <DownloadConsumer.write>` should be "forgotten".
 
       :param error: optional storage for an error
       :returns: true on success and false on error
