@@ -6,6 +6,10 @@ Store
    Stores represent a service that provides persistence of arbitrary blobs.
    An example is Amazon S3.
 
+   All of the methods listed below will return true on success and false on failure.
+   If they return false, they will set the ``error`` pointer to a GError object
+   (assuming one was provided).
+
    .. method:: create(key, progress, error)
 
       Creates the key with an empty value.  This is not required by all store
@@ -71,12 +75,10 @@ Store
 
    .. method:: list(template, consumer, progress, error)
 
-      List all keys matching `template`, calling
-      :meth:`ListConsumer.got_result` for each one. The ``template`` should
-      just use ``%s`` as a placeholder and ``%%`` to represent ``%``.  See
-      :ref:`listing_keys`.
-
-      TODO: that's not right..
+      List all keys, calling :meth:`ListConsumer.got_result` for each one.
+      If a ``template`` is provided, only keys that fit it will be reported.
+      The ``template`` should use ``%s`` as a placeholder/wildcard and ``%%``
+      to represent ``%``.  See :ref:`listing_keys`.
 
       :param template: the template to list matches for
       :param consumer: a :class:`DownloadConsumer`

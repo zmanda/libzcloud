@@ -1,4 +1,4 @@
-.. _module-info:
+.. _module_info:
 
 Getting Module Information
 ==========================
