@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #  -*- Mode: makefile; tab-width: 4; indent-tabs-mode: nil -*- */
 #  vi: set tabstop=4 shiftwidth=4 expandtab: */
 # ***** BEGIN LICENSE BLOCK *****
