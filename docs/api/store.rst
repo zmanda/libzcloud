@@ -53,13 +53,13 @@ Store
 
    .. method:: exists(key, progress, error)
 
-      Checks if `key` exists.  See :ref:`testing_existence`.
+      Checks if `key` exists. See :ref:`testing_existence`.
 
       :param key: the key to check
       :type key: String
       :param progress: an optional :class:`ProgressListener`
       :param error: optional storage for an error
-      :returns: true (on success) or false (on failure)
+      :returns: true (on success) or false (on failure or non-existence)
       :rtype: boolean
 
    .. method:: delete(key, progress, error)
